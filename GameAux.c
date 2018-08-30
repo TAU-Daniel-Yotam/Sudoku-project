@@ -1,10 +1,16 @@
 #include "GameAux.h"
 
 int readFromFile2(FILE *file,Game * game,int mode,int markError) {
-    int a, b, num, i, j;
+    int a, b, num, i, j,eof;
     Cell **index;
-    fscanf(file, "%d", &a);
-    fscanf(file, "%d", &b);
+    eof=fscanf(file, "%d", &a);
+    if(!eof){
+        printError(game,SOLVE_IO_ERROR);
+    }
+    eof=fscanf(file, "%d", &b);
+    if(!eof){
+        printError(game,SOLVE_IO_ERROR);
+    }
     initGame(game,mode,markError,b,a);
     index = createBoard(a,b);
     game->board = index;
