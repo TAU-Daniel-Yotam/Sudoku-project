@@ -192,13 +192,17 @@ void createValuesArray(Game*game,int x,int y,int* values){
     int i=1,j=0;
     for(;i<DIM;i++){
         game->board[x][y].value=i;
-        checkBlock(game,x,y)*checkRow(game,y)*checkColumns(game,x);
+        checkBlock(game,x,y);
+        checkRow(game,y);
+        checkColumns(game,x);
         if(!game->board[x][y].isInValid){
             values[j]=i;
             j++;
         }
         game->board[x][y].value=0;
-        checkBlock(game,x,y)*checkRow(game,y)*checkColumns(game,x);
+        checkBlock(game,x,y);
+        checkRow(game,y);
+        checkColumns(game,x);
     }
 }
 
