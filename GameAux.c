@@ -62,20 +62,19 @@ int checkRange(Game* game,int a){
 }
 
 
-int checkBlock(Game * game,int x,int y){
-    int i=0,j;
+void checkBlock(Game * game,int x,int y){
+    int i,j;
+    i=0;
     while (x%game->blockHeight != 1)x--;
     while (y%game->blockWidth != 1)y--;
     int ** table=(int**)calloc((unsigned int)DIM, sizeof(int*));
     if(table==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
-        return 0;
     }
     for(i=0;i<DIM;i++){
         table[i]=(int*)calloc(2, sizeof(int));
         if(table[i]==NULL){
             printError(game,MEMORY_ALLOC_ERROR);
-            return 0;
         }
     }
     for (i=0;i<game->blockHeight;i++){
@@ -94,8 +93,7 @@ int checkBlock(Game * game,int x,int y){
             }
         }
     }
-    freeMemory(table,DIM,2);
-    return 1;
+    freeMemory((void**)table,DIM,2);
 }
 
 void freeMemory(void ** array,int size,int size2){
@@ -109,12 +107,11 @@ void freeMemory(void ** array,int size,int size2){
 }
 
 
-int checkRow(Game * game,int x) {
+void checkRow(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
     if(line==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
-        return 0;
     }
     for (i = 0; i < DIM; i++) {
         if (line[game->board[x][i].value - 1] >0) {
@@ -129,16 +126,14 @@ int checkRow(Game * game,int x) {
         }
     }
     free(line);
-    return 1;
 }
 
 
-int checkColumns(Game * game,int x) {
+void checkColumns(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
     if(line==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
-        return 0;
     }
     for (i = 0; i < DIM; i++) {
         if (line[game->board[i][x].value - 1] != 0) {
@@ -153,7 +148,6 @@ int checkColumns(Game * game,int x) {
         }
     }
     free(line);
-    return 1;
 }
 int fillXvalues(Game*game,int x){
     int tries,count,i,j,size;
