@@ -96,7 +96,7 @@ void checkBlock(Game * game,int x,int y){
                 game->board[x + i][j + y].isInValid = 1;
             }
             else{
-                game->board[table[game->board[i+x][j+y].value-1][0]-1,table[game->board[i+x][j+y].value-1][1]-1]->isInValid=1;
+                game->board[table[game->board[i+x][j+y].value-1][0]-1][table[game->board[i+x][j+y].value-1][1]-1].isInValid=1;
                 table[game->board[i+x][j+y].value-1][0]=-1;
                 game->board[i+x][y+j].isInValid=1;
             }
