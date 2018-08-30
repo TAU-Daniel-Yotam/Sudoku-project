@@ -64,10 +64,10 @@ int checkRange(Game* game,int a){
 
 void checkBlock(Game * game,int x,int y){
     int i,j;
-    i=0;
+    int ** table;
     while (x%game->blockHeight != 1)x--;
     while (y%game->blockWidth != 1)y--;
-    int ** table=(int**)calloc((unsigned int)DIM, sizeof(int*));
+    table=(int**)calloc((unsigned int)DIM, sizeof(int*));
     if(table==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
     }
