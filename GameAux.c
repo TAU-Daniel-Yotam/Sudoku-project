@@ -16,7 +16,10 @@ int readFromFile2(FILE *file,Game * game,int mode,int markError) {
     game->board = index;
     for (i = 0; i < a * b; i++) {
         for (j = 0; j < a * b; j++) {
-            fscanf(file, "%d", &num);
+            eof=fscanf(file, "%d", &num);
+            if(!eof){
+                printError(game,SOLVE_IO_ERROR);
+            }
             game->board[i][j].value = num;
             if (getc(file) == '.')
                 game->board[i][j].isFixed = 1;
