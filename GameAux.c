@@ -347,8 +347,12 @@ void freeBoard(Game*game){
     free(game->board);
 }
 
+
+/* temporary implementation  */
 int     checkInvalid(Game* game, int x, int y, int value){
-    return 1;
+    if(game->mode==1 || x==2 || y==3 || value==4)
+        return 1;
+    return 0;
 }
 
 /*
