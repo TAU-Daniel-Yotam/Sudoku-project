@@ -347,6 +347,9 @@ void freeBoard(Game*game){
     free(game->board);
 }
 
+int     checkInvalid(Game* game, int x, int y, int value){
+    return 1;
+}
 
 /*
 void clearBoard(Game*game){
