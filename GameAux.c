@@ -1,6 +1,6 @@
 #include "GameAux.h"
-
-int readFromFile2(FILE *file,Game * game,int mode,int markError) {
+//check
+int readFromFile2(FILE *file,Game * game,int mode) {
     int a, b, num, i, j,eof;
     Cell **index;
     eof=fscanf(file, "%d", &a);
@@ -11,7 +11,7 @@ int readFromFile2(FILE *file,Game * game,int mode,int markError) {
     if(!eof){
         printError(game,SOLVE_IO_ERROR);
     }
-    initGame(game,mode,markError,b,a);
+    initGame(game,mode,b,a);
     index = createBoard(a,b);
     game->board = index;
     for (i = 0; i < a * b; i++) {
@@ -27,16 +27,19 @@ int readFromFile2(FILE *file,Game * game,int mode,int markError) {
     }
     return 1;
 }
-
-void initGame(Game * game,int mode,int markError,int blockHeight,int blockWidth){
+//check
+void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     game->blockWidth=blockWidth;
     game->blockHeight=blockHeight;
     game->mode=mode;
-    game->markError=markError;
-    freeList(game->list);
+    if(game->list!=NULL)
+        freeList(game->list);
     game->list=createList();
+    if(game->board!=NULL){
+        freeBoard(game);
+    }
 }
-
+//check
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
@@ -63,19 +66,29 @@ void printDashes(int blockWidth,int blockHeight){
             printf("\n");
     }
 }
+/*type:
+ 0-x or y
+ 1-z*/
 
-
-int checkRange(Game* game,int a){
-    if(a<0 || a>game->blockHeight*game->blockHeight) return 0;
+//check
+int checkRange(Game* game,int a,int type){
+    if((a<0 || a>
+            game->blockHeight*game->blockHeight)&&type==1) return 0;
+    if((a<=0 || a>=
+              game->blockHeight*game->blockHeight)&&type==0) return 0;
     return 1;
 }
+//check
+int isInvalid(Cell * cell){
+return cell->isInValidInColumns||cell->isInValidInBlock||cell->isInValidInRow;
 
-
+}
+//check
 void checkBlock(Game * game,int x,int y){
     int i,j;
     int ** table;
-    while (x%game->blockHeight != 1)x--;
-    while (y%game->blockWidth != 1)y--;
+    while (x%game->blockHeight != 0)x--;
+    while (y%game->blockWidth != 0)y--;
     table=(int**)calloc((unsigned int)DIM, sizeof(int*));
     if(table==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
@@ -88,34 +101,39 @@ void checkBlock(Game * game,int x,int y){
     }
     for (i=0;i<game->blockHeight;i++){
         for(j=0;j<game->blockWidth;j++){
+            if(game->board[i+x][j+y].value==0){
+                game->board[i+x][j+y].isInValidInBlock=0;
+                continue;
+            }
             if (table[game->board[i+x][j+y].value-1][0]==0){
                 table[game->board[i+x][j+y].value-1][0]=x+i+1;
                 table[game->board[i+x][j+y].value-1][1]=y+j+1;
+                game->board[i+x][j+y].isInValidInBlock=0;
             }
-            if (table[game->board[i+x][j+y].value-1][0]==-1) {
-                game->board[x + i][j + y].isInValid = 1;
+            else if (table[game->board[i+x][j+y].value-1][0]==-1) {
+                game->board[x + i][j + y].isInValidInBlock= 1;
             }
             else{
-                game->board[table[game->board[i+x][j+y].value-1][0]-1][table[game->board[i+x][j+y].value-1][1]-1].isInValid=1;
+                game->board[table[game->board[i+x][j+y].value-1][0]-1][table[game->board[i+x][j+y].value-1][1]-1].isInValidInBlock=1;
                 table[game->board[i+x][j+y].value-1][0]=-1;
-                game->board[i+x][y+j].isInValid=1;
+                game->board[i+x][y+j].isInValidInBlock=1;
             }
         }
     }
     freeMemory((void**)table,DIM,2);
 }
-
+//check
 void freeMemory(void ** array,int size,int size2){
     int i,j;
-    for(i=0;i<size;i++){
-        for(j=0;j<size2;j++){
-            free(array[j]);
-        }
+    for(i=0;i<size;i++) {
         free(array[i]);
     }
+            free(array);
+
+    printf("h");
 }
 
-
+//check
 void checkRow(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
@@ -123,21 +141,29 @@ void checkRow(Game * game,int x) {
         printError(game,MEMORY_ALLOC_ERROR);
     }
     for (i = 0; i < DIM; i++) {
-        if (line[game->board[x][i].value - 1] >0) {
-            game->board[x][line[game->board[x][i].value - 1] - 1].isInValid = 1;
-            line[game->board[x][line[game->board[x][i].value - 1]-1].value]= -1;
-            game->board[x][i].isInValid = 1;
+        if (game->board[x][i].value==0){
+            game->board[x][i].isInValidInRow=0;
+            continue;
+        }
 
-        } else if (line[game->board[x][i].value - 1] == -1) {
-            game->board[x][i].isInValid = 1;
-        } else {
+        if (line[game->board[x][i].value - 1] >0) {
+            game->board[x][line[game->board[x][i].value - 1] - 1].isInValidInRow = 1;
+            line[game->board[x][i].value - 1]=-1;
+            game->board[x][i].isInValidInRow = 1;
+
+        }
+        else if (line[game->board[x][i].value - 1] == -1) {
+            game->board[x][i].isInValidInRow = 1;
+        }
+        else {
             line[game->board[x][i].value - 1] = i + 1;
+            game->board[x][i].isInValidInRow=0;
         }
     }
     free(line);
 }
 
-
+//check
 void checkColumns(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
@@ -145,15 +171,20 @@ void checkColumns(Game * game,int x) {
         printError(game,MEMORY_ALLOC_ERROR);
     }
     for (i = 0; i < DIM; i++) {
-        if (line[game->board[i][x].value - 1] != 0) {
-            game->board[line[i] - 1][x].isInValid = 1;
-            line[game->board[i][x].value - 1] = -1;
-            game->board[i][x].isInValid = 1;
+        if (game->board[i][x].value==0){
+            game->board[i][x].isInValidInColumns=0;
+            continue;
+        }
+        if (line[game->board[i][x].value - 1] >0) {
+            game->board[line[game->board[i][x].value - 1] - 1][x].isInValidInColumns = 1;
+            line[game->board[i][x].value - 1]=-1;
+            game->board[i][x].isInValidInColumns = 1;
 
         } else if (line[game->board[i][x].value - 1] == -1) {
-            game->board[i][x].isInValid = 1;
+            game->board[i][x].isInValidInColumns = 1;
         } else {
             line[game->board[i][x].value - 1] = i + 1;
+            game->board[i][x].isInValidInColumns=0;
         }
     }
     free(line);
@@ -187,6 +218,7 @@ int fillXvalues(Game*game,int x){
     if(count<x) tries++;
     return tries;
 }
+//check
 int checkEmpty(Game*game){
     int i,j;
     for(i=0;i<DIM;i++){
@@ -204,7 +236,7 @@ void createValuesArray(Game*game,int x,int y,int* values){
         checkBlock(game,x,y);
         checkRow(game,y);
         checkColumns(game,x);
-        if(!game->board[x][y].isInValid){
+        if(!isInvalid(&(game->board[x][y]))){
             values[j]=i;
             j++;
         }
@@ -233,13 +265,13 @@ void createListDataGenerate(Game*game,int**listData){
         }
     }
 }
-
+//check
 int checkError(Game *game) {
 
     int i,j;
     for (i=0;i<DIM;i++){
         for(j=0;j<DIM;j++){
-            if(game->board[i][j].isInValid){
+            if(isInvalid(&(game->board[i][j]))){
                 return 0;
             }
         }
@@ -247,7 +279,7 @@ int checkError(Game *game) {
     return 1;
 
 }
-
+//check
 int writeToFile(Game *game, FILE *file) {
     Cell **index;
     int i, j;
@@ -269,7 +301,7 @@ int writeToFile(Game *game, FILE *file) {
     return 1;
 }
 
-
+//check
 int**copyBoard(Game*game){
     int size,i,j;
     int**board;
@@ -316,29 +348,30 @@ void fillValues(Game*game,int**values,int size){
         printf("Cell <%d,%d> set to %d\n",values[i][0],values[i][1],values[i][3]);
     }
 }
-
-void updateCellValidity(Game*game){
-    int i,j;
-    for (i=0;i<DIM;i++) {
+//check
+void updateCellValidity(Game*game) {
+    int i, j;
+    for (i = 0; i < DIM; i++) {
         checkRow(game, i);
     }
-    for ( j=0;j<DIM;j++) {
+    for (j = 0; j < DIM; j++) {
         checkColumns(game, j);
     }
-    for(i=0;i<DIM;i++){
-        for(j=0;DIM;j++){
-            if(i%game->blockHeight==0 &&j%game->blockWidth==0){
-                checkBlock(game,i,j);
+    for (i = 0; i < DIM; i++) {
+        for (j = 0; j<DIM; j++) {
+            if (i % game->blockHeight == 0 && j % game->blockWidth == 0) {
+                checkBlock(game, i, j);
             }
+
         }
     }
 }
-
+//check
 void freeGame(Game*game){
     freeBoard(game);
     freeList(game->list);
 }
-
+//check
 void freeBoard(Game*game){
     int i;
     for(i=0;i<DIM;i++){
@@ -348,11 +381,21 @@ void freeBoard(Game*game){
 }
 
 
-/* temporary implementation 2 */
-int     checkInvalid(Game* game, int x, int y, int value){
-    if(game->mode==1 || x==2 || y==3 || value==4)
-        return 1;
-    return 0;
+//check
+int     checkInvalid(Game* game, int x, int y, int value) {
+    Game *game2 = game;
+    int result;
+    int temp = game->board[x][y].value;
+    game->board[x][y].value = value;
+    checkBlock(game2, x, y);
+    checkRow(game2, x);
+    checkColumns(game2, y);
+    result = isInvalid(&game->board[x][y]);
+    game->board[x][y].value = temp;
+    checkBlock(game2, x, y);
+    checkRow(game2, x);
+    checkColumns(game2, y);
+    return result;
 }
 
 /*
@@ -367,6 +410,16 @@ void clearBoard(Game*game){
 }
 
 */
+//only for check the game
+void printerror(Game * game){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            printf("%d ",isInvalid(&game->board[i][j]));
+        }
+        printf("\n");
+    }
+}
 
 
 

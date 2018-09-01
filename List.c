@@ -1,17 +1,5 @@
 #include "List.h"
-
-List * createList(){
-    List * list=calloc(1, sizeof(List));
-    if(list==NULL){
-        printError(NULL,MEMORY_ALLOC_ERROR);
-        return NULL;
-    }
-    list->head=NULL;
-    list->tail=NULL;
-    list->pointer=NULL;
-    return list;
-}
-
+//check
 Node  * createNode(int ** data,int size){
     Node * node=calloc(1, sizeof(Node));
     if(node==NULL){
@@ -24,20 +12,40 @@ Node  * createNode(int ** data,int size){
     node->next=NULL;
     return node;
 }
-/*int insertAtHead(List * list,int * data){
-    Node * node =createNode(data);
-    node->next=list->head;
-    if(node->next!=NULL)
-'        node->next->previous=node;
-    list->head=node;
-    list->length++;
-    if(list->length==1) {
-        list->tail = node;
+//check
+List * createList(){
+    List * list=calloc(1, sizeof(List));
+    if(list==NULL){
+        printError(NULL,MEMORY_ALLOC_ERROR);
+        return NULL;
     }
-    list->pointer=list->head;
+    list->head=NULL;
+    list->tail=NULL;
+    list->pointer=NULL;
+    return list;
+}
+//check
+int printList(List * list){
+    Node * node;
+    for(node=list->head;node!=NULL;node=node->next){
+        printData(node->data,node->size);
+    }
     return 1;
+}
+//check
+int printData(int **data,int size){
+    int r,g;
+    for(r=0;r<size;r++) {
+        for ( g=0; g < 4; g++) {
+            printf("%d ", data[r][g]);
+        }
+        printf("\n");
+    }
+    return 1;
+}
 
-}*/
+
+//check
 int deleteAtPosition(List *list,int pos) {
     int j;
     Node *node = list->head;
@@ -61,7 +69,7 @@ int deleteAtPosition(List *list,int pos) {
     return 1;
 }
 
-
+//check
 int deleteTail(List *list,Node * node){
     while(node->next!=NULL){
         Node * temp=node->next;
@@ -74,38 +82,16 @@ int deleteTail(List *list,Node * node){
     }
     return 1;
 }
-
-int printList(List * list){
-    Node * node;
-    for(node=list->head;node!=NULL;node=node->next){
-        printData(node->data,node->size);
-    }
-    return 1;
-}
-int printData(int **data,int size){
-    int r,g;
-    for(r=0;r<size;r++) {
-        for ( g=0; g < 4; g++) {
-            printf("%d ", data[r][g]);
-        }
-    printf("\n");
-    }
-return 1;
-}
-
-int movePointer(List * list,int isRight) {
-    if (isRight)
-        list->pointer = list->pointer->next;
-
-    else
-        list->pointer = list->pointer->previous;
-    return 1;
-}
-
+//check
 int addLast(List * list,int ** data,int size){
     Node * node;
     if(list->pointer!=list->tail){
-        deleteTail(list,list->pointer);
+        if(list->pointer==NULL) {
+            while (list->length > 0)
+                deleteAtPosition(list, 0);
+        }
+        else
+            deleteTail(list,list->pointer);
     }
     node=createNode(data,size);
     if(list->length==0)
@@ -119,7 +105,7 @@ int addLast(List * list,int ** data,int size){
         return 1;
 
 }
-
+//check
 void freeNode(Node*n){
     int i;
     for(i=0;i<n->size;i++){
@@ -127,7 +113,7 @@ void freeNode(Node*n){
     }
     free(n);
 }
-
+//check
 void freeList(List*list){
     while(list->head!=NULL){
         freeNode(list->head);

@@ -9,7 +9,9 @@
 typedef struct Cell{
     int value;
     int isFixed;
-    int isInValid;
+    int isInValidInRow;
+    int isInValidInColumns;
+    int isInValidInBlock;
     int isPlayerMove;
 }Cell;
 
