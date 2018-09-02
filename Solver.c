@@ -1,57 +1,132 @@
 
 
 #include "Solver.h"
-int addConstrains();
-void allocateArrays(Game*game,int*,double*,double*,char*,char**,char*);
+void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype);
+int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype);
+int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
+int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
+int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
+int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
+void updateBoard(GRBmodel*model,Game*game,int**board,double*obj);
+
 
 int ILPSolve(Game*game,int**board){
-    GRBenv   *env   = NULL;
-    GRBmodel *model = NULL;
+    GRBenv    *env   = NULL;
+    GRBmodel  *model = NULL;
     int       *ind=NULL;
     double    *val=NULL;
     double    *lb=NULL;
+    double    *obj=NULL;
     char      *vtype=NULL;
-    char     **names=NULL;
-    char      *namestorage=NULL;
-    char      *cursor;
-    int        optimstatus;
-    double     objval;
     int        i, j, v, ig, jg, count;
     int        error = 0;
 
-    allocateArrays(game,ind,val,lb,vtype,names,namestorage);
+    allocateArrays(game,ind,val,lb,obj,vtype);
 
-    /* Create an empty model */
-    cursor = namestorage;
+    /* Create new model and environment */
+    error = createModel(model,env,game,board,lb,vtype);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Each cell gets a value */
+    error = addConstrains_noEmptyCells(model,game,ind,val);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Each value must appear once in each row */
+    error = addConstrains_onceInRow(model,game,ind,val);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Each value must appear once in each column */
+    error = addConstrains_onceIncolumn(model,game,ind,val);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Each value must appear once in each block */
+    error = addConstrains_onceInBlock(model,game,ind,val);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    error = GRBsetintattr(model, GRB_INT_ATTR_MODELSENSE, GRB_MAXIMIZE);
+    if (error) {
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+    error = GRBupdatemodel(model);
+    if (error) {
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Optimize model */
+    error = GRBoptimize(model);
+    if(error){
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+
+    /* Get the solved board */
+    error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
+    if (error) {
+        printError(game,ILP_ERROR);
+        return 0;
+    }
+    updateBoard(model,game,board,obj);
+
+    free(ind);
+    free(val);
+    free(lb);
+    free(obj);
+    free(vtype);
+    GRBfreemodel(model);
+    GRBfreeenv(env);
+    return 1;
+}
+
+void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype){
+    ind=(int*)calloc((unsigned int)DIM, sizeof(int));
+    val=(double*)calloc((unsigned int)DIM, sizeof(double));
+    lb=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+    vtype=(char*)calloc((unsigned int)DIM*DIM*DIM, sizeof(char));
+    obj=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+
+    if(ind==NULL || val==NULL || lb==NULL || vtype==NULL || obj==NULL){
+        printError(game,MEMORY_ALLOC_ERROR);
+    }
+}
+
+
+int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
+    int i,j,v,error=0;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
-            for (v = 0; v < DIM; v++) {
+            for (v = 1; v <= DIM; v++) {
                 if (board[i][j] == v)
-                    lb[i*DIM*DIM+j*DIM+v] = 1;
+                    lb[i*DIM*DIM+j*DIM+v-1] = 1;
                 else
-                    lb[i*DIM*DIM+j*DIM+v] = 0;
-                vtype[i*DIM*DIM+j*DIM+v] = GRB_BINARY;
-
-                names[i*DIM*DIM+j*DIM+v] = cursor;
-                sprintf(names[i*DIM*DIM+j*DIM+v], "x[%d,%d,%d]", i, j, v+1);
-                cursor += strlen(names[i*DIM*DIM+j*DIM+v]) + 1;
+                    lb[i*DIM*DIM+j*DIM+v-1] = 0;
+                vtype[i*DIM*DIM+j*DIM+v-1] = GRB_BINARY;
             }
         }
     }
+    error = GRBloadenv(&env, NULL) + GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL,
+                                                         vtype, NULL);
+    return error;
+}
 
-    /* Create environment */
-
-    error = GRBloadenv(&env, "sudoku.log");
-    if (error) goto QUIT;
-
-    /* Create new model */
-
-    error = GRBnewmodel(env, &model, "sudoku", DIM*DIM*DIM, NULL, lb, NULL,
-                        vtype, names);
-    if (error) goto QUIT;
-
-    /* Each cell gets a value */
-
+int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
+    int i,j,v,error;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 0; v < DIM; v++) {
@@ -60,12 +135,13 @@ int ILPSolve(Game*game,int**board){
             }
 
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
-            if (error) goto QUIT;
         }
     }
+    return error;
+}
 
-    /* Each value must appear once in each row */
-
+int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val){
+    int i,j,v,error;
     for (v = 0; v < DIM; v++) {
         for (j = 0; j < DIM; j++) {
             for (i = 0; i < DIM; i++) {
@@ -74,12 +150,13 @@ int ILPSolve(Game*game,int**board){
             }
 
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
-            if (error) goto QUIT;
         }
     }
+    return error;
+}
 
-    /* Each value must appear once in each column */
-
+int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val){
+    int i,j,v,error;
     for (v = 0; v < DIM; v++) {
         for (i = 0; i < DIM; i++) {
             for (j = 0; j < DIM; j++) {
@@ -88,12 +165,13 @@ int ILPSolve(Game*game,int**board){
             }
 
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
-            if (error) goto QUIT;
         }
     }
+    return error;
+}
 
-    /* Each value must appear once in each block */
-
+int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
+    int i,j,v,error,ig,jg,count;
     for (v = 0; v < DIM; v++) {
         for (ig = 0; ig < SUBDIM1; ig++) {
             for (jg = 0; jg < SUBDIM2; jg++) {
@@ -107,67 +185,21 @@ int ILPSolve(Game*game,int**board){
                 }
 
                 error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
-                if (error) goto QUIT;
             }
         }
     }
-
-    /* Optimize model */
-
-    error = GRBoptimize(model);
-    if (error) goto QUIT;
-
-    /* Write model to 'sudoku.lp' */
-
-    error = GRBwrite(model, "sudoku.lp");
-    if (error) goto QUIT;
-
-    /* Capture solution information */
-
-    error = GRBgetintattr(model, GRB_INT_ATTR_STATUS, &optimstatus);
-    if (error) goto QUIT;
-
-    error = GRBgetdblattr(model, GRB_DBL_ATTR_OBJVAL, &objval);
-    if (error) goto QUIT;
-
-    printf("\nOptimization complete\n");
-    if (optimstatus == GRB_OPTIMAL)
-        printf("Optimal objective: %.4e\n", objval);
-    else if (optimstatus == GRB_INF_OR_UNBD)
-        printf("Model is infeasible or unbounded\n");
-    else
-        printf("Optimization was stopped early\n");
-    printf("\n");
-
-    QUIT:
-
-    /* Error reporting */
-
-    if (error) {
-        printf("ERROR: %s\n", GRBgeterrormsg(env));
-        exit(1);
-    }
-
-    /* Free model */
-
-    GRBfreemodel(model);
-
-    /* Free environment */
-
-    GRBfreeenv(env);
-
-    return 0;
+    return error;
 }
 
-void allocateArrays(Game*game,int*ind,double*val,double*lb,char*vtype,char**names,char*namestorage){
-    ind=(int*)calloc(DIM, sizeof(int));
-    val=(double*)calloc(DIM, sizeof(double));
-    lb=(double*)calloc(DIM*DIM*DIM, sizeof(double));
-    vtype=(char*)calloc(DIM*DIM*DIM, sizeof(char));
-    names=(char**)calloc(DIM*DIM*DIM, sizeof(char*));
-    namestorage=(char*)calloc(10*DIM*DIM*DIM, sizeof(char));
-
-    if(ind==NULL || val==NULL || lb==NULL || vtype==NULL || names==NULL || namestorage==NULL){
-        printError(game,MEMORY_ALLOC_ERROR);
+void updateBoard(GRBmodel*model,Game*game,int**board,double*obj){
+    int i,j,v;
+    for (i = 0; i < DIM; i++) {
+        for (j = 0; j < DIM; j++) {
+            for (v = 1; v <= DIM; v++) {
+                if(obj[i*DIM*DIM + j*DIM + v-1]){
+                    board[i][j]=v;
+                }
+            }
+        }
     }
 }
