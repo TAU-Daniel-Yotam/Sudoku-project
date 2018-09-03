@@ -7,7 +7,10 @@ int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
-void updateBoard(GRBmodel*model,Game*game,int**board,double*obj);
+void updateBoard(Game*game,int**board,double*obj);
+int int countSol(Game* game);
+int incrementXY(Game * game,int * x,int* y);
+int findRightMove(Game* game, int x, int y, int from);
 
 
 int ILPSolve(Game*game,int**board){
@@ -19,7 +22,6 @@ int ILPSolve(Game*game,int**board){
     double    *obj=NULL;
     char      *vtype=NULL;
     int        optimstatus;
-    int        i, j, v, ig, jg, count;
     int        error = 0;
 
     allocateArrays(game,ind,val,lb,obj,vtype);
@@ -204,7 +206,7 @@ int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
     return error;
 }
 
-void updateBoard(GRBmodel*model,Game*game,int**board,double*obj){
+void updateBoard(Game*game,int**board,double*obj){
     int i,j,v;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
@@ -217,14 +219,14 @@ void updateBoard(GRBmodel*model,Game*game,int**board,double*obj){
     }
 }
 
-int detSolve(Game* game, int**solution) {
+int countSol(Game* game) {
     Stack stack;
-    init(&stack,DIM*DIM);
-    int x=0;
-    int y=0;
     int * data;
     int counter;
     int rightMove;
+    int x=0;
+    int y=0;
+    init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
         while(x!=-1&&(game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {
             incrementXY(game, x, y);
@@ -253,14 +255,14 @@ int detSolve(Game* game, int**solution) {
 
 int incrementXY(Game * game,int * x,int* y){
     if(*y<DIM-1)
-        *y++;
+        (*y)++;
     else if(*x<DIM -1) {
-        *x++;
-        *y = 0;
+        (*x)++;
+        (*y) = 0;
     }
     else {
-        *x == -1;
-        *y = -1;
+        (*x) = -1;
+        (*y) = -1;
     }
 
 }
@@ -268,7 +270,7 @@ int incrementXY(Game * game,int * x,int* y){
 int findRightMove(Game* game, int x, int y, int from) {
     int rightMove = 0;
     while (from <= game->blockHeight*game->blockWidth) {
-        if (!checkInvalid(&game,x,y,from)){
+        if (!checkInvalid(game,x,y,from)){
             rightMove = from;
             break;
         }
