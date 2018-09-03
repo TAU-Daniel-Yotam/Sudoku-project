@@ -1,5 +1,5 @@
 CC = gcc
-OBJS = main.o Game.o Solver.o MainAux.o Parser.o Exceptions.o List.o GameAux.o stack.c
+OBJS = main.o Game.o stack.o Solver.o MainAux.o Parser.o Exceptions.o List.o GameAux.o
 EXEC = sudoku-console
 COMP_FLAG = -ansi -O3 -Wall -Wextra \
 -Werror -pedantic-errors
