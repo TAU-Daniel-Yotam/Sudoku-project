@@ -13,7 +13,7 @@ Cell  **createBoard(int blockHeight,int blockWidth);
 void    printDashes(int blockWidth,int blockHeight);
 int     checkRange(Game* game,int a,int type);
 void    checkBlock(Game * game,int x,int y);
-void    freeMemory(void ** array,int size,int size2);
+void    freeMemory(void ** array,int size);
 void    checkRow(Game * game,int x);
 int     isInvalid(Cell * cell);
 void    checkColumns(Game * game,int x);

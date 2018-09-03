@@ -18,9 +18,13 @@ int detSolve(Game* game, int**solution) {
     int * data;
     int counter;
     int rightMove;
+    int x=0;
+    int y=0;
+    counter=0;
+    init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
         while(x!=-1&&(game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {
-            incrementXY(game, x, y);
+            incrementXY(game, &x, &y);
         }
         if (x==-1) {
             counter += 1;
@@ -44,24 +48,24 @@ int detSolve(Game* game, int**solution) {
     return counter;
 }
 
-int incrementXY(Game * game,int * x,int* y){
-        if(*y<DIM-1)
-            *y++;
-        else if(*x<DIM -1) {
-            *x++;
-            *y = 0;
-        }
-        else {
-            *x == -1;
-            *y = -1;
-        }
+void incrementXY(Game * game,int * x,int* y){
+    if(*y<DIM-1)
+        (*y)++;
+    else if(*x<DIM -1) {
+        (*x)++;
+        (*y) = 0;
+    }
+    else {
+        (*x) = -1;
+        (*y) = -1;
+    }
 
 }
 
 int findRightMove(Game* game, int x, int y, int from) {
     int rightMove = 0;
     while (from <= game->blockHeight*game->blockWidth) {
-        if (!checkInvalid(&game,x,y,from)){
+        if (!checkInvalid(game,x,y,from)){
             rightMove = from;
             break;
         }

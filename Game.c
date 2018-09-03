@@ -1,7 +1,7 @@
 
 #include "Game.h"
 
-//check
+/*check*/
 int solve(Game* game, char * filePath){
     FILE * file;
     file = fopen(filePath,"r");
@@ -13,7 +13,7 @@ int solve(Game* game, char * filePath){
     fclose(file);
     return 1;
 }
-//check
+/*check*/
 int edit(Game * game, char * filePath){
     FILE * file;
     if (filePath!=NULL) {
@@ -33,7 +33,7 @@ int edit(Game * game, char * filePath){
     return 1;
 }
 
-//check
+/*check*/
 int mark_errors(Game* game, int arg){
     if(arg!=0 && arg!=1){
         printError(game,BINARY_RANGE_ERROR);
@@ -78,17 +78,20 @@ int set(Game* game,int x,int y,int value){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
- //check with yotam
      if(game->board[x-1][y-1].isFixed){
         printError(game,CELL_FIXED_ERROR);
         return 0;
     }
-    listData=calloc(1, sizeof(int *));/* 0:x,1:y,2:from,3:to */
-    if(listData==NULL)
-        printError(&game,MEMORY_ALLOC_ERROR);
-    listData[0]=calloc(4, sizeof(int));
-    if(listData[0]==NULL)
-        printError(&game,MEMORY_ALLOC_ERROR);
+    listData=(int**)calloc(1, sizeof(int *));/* 0:x,1:y,2:from,3:to */
+    if(listData==NULL){
+        printError(game,MEMORY_ALLOC_ERROR);
+        return 0;
+    }
+    listData[0]=(int*)calloc(4, sizeof(int));
+    if(listData[0]==NULL){
+        printError(game,MEMORY_ALLOC_ERROR);
+        return 0;
+    }
     listData[0][0]=x;
     listData[0][1]=y;
     listData[0][2]=game->board[x-1][y-1].value;
@@ -112,7 +115,7 @@ int generate(Game*game,int x,int y){
     int ** listData, **board;
     removed=0;
     listData=NULL;
-    if(!checkRange(game,x,0) || !checkRange(game,y,0)){
+    if(x<0 || x>DIM*DIM || y<0 || y>DIM*DIM){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
@@ -141,7 +144,7 @@ int generate(Game*game,int x,int y){
     return 1;
 }
 
-//check
+/*check*/
 int undo(Game * game) {
     int i;
     int *move;
@@ -170,7 +173,8 @@ int undo(Game * game) {
     game->list->pointer = game->list->pointer->previous;
     return 1;
 }
-//check
+
+/*check*/
 int redo(Game *game) {
     char from;
     char to;
@@ -194,7 +198,7 @@ int redo(Game *game) {
     }
     return 1;
 }
-//check
+/*check*/
 int save(Game *game, char *path) {
     FILE *file=fopen(path,"w");
     if (file == NULL) {
@@ -307,7 +311,7 @@ int** autofill(Game*game){
     printBoard(game);
     return cellsToFill;
 }
-//check
+/*check*/
 int reset(Game *game) {
     while (game->list->length != 0) {
         undo(game);
@@ -317,7 +321,7 @@ int reset(Game *game) {
     printf("Board reset\n");
     return 1;
 }
-//check
+/*check*/
 void exitGame(Game*game){
     freeGame(game);
 }

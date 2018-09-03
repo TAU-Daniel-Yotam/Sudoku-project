@@ -1,5 +1,5 @@
 #include "List.h"
-//check
+/*check*/
 Node  * createNode(int ** data,int size){
     Node * node=calloc(1, sizeof(Node));
     if(node==NULL){
@@ -12,7 +12,7 @@ Node  * createNode(int ** data,int size){
     node->next=NULL;
     return node;
 }
-//check
+/*check*/
 List * createList(){
     List * list=calloc(1, sizeof(List));
     if(list==NULL){
@@ -24,7 +24,7 @@ List * createList(){
     list->pointer=NULL;
     return list;
 }
-//check
+/*check*/
 int printList(List * list){
     Node * node;
     for(node=list->head;node!=NULL;node=node->next){
@@ -32,7 +32,7 @@ int printList(List * list){
     }
     return 1;
 }
-//check
+/*check*/
 int printData(int **data,int size){
     int r,g;
     for(r=0;r<size;r++) {
@@ -45,7 +45,7 @@ int printData(int **data,int size){
 }
 
 
-//check
+/*check*/
 int deleteAtPosition(List *list,int pos) {
     int j;
     Node *node = list->head;
@@ -69,7 +69,7 @@ int deleteAtPosition(List *list,int pos) {
     return 1;
 }
 
-//check
+/*check*/
 int deleteTail(List *list,Node * node){
     while(node->next!=NULL){
         Node * temp=node->next;
@@ -82,7 +82,7 @@ int deleteTail(List *list,Node * node){
     }
     return 1;
 }
-//check
+/*check*/
 int addLast(List * list,int ** data,int size){
     Node * node;
     if(list->pointer!=list->tail){
@@ -105,7 +105,7 @@ int addLast(List * list,int ** data,int size){
         return 1;
 
 }
-//check
+/*check*/
 void freeNode(Node*n){
     int i;
     for(i=0;i<n->size;i++){
@@ -113,7 +113,7 @@ void freeNode(Node*n){
     }
     free(n);
 }
-//check
+/*check*/
 void freeList(List*list){
     while(list->head!=NULL){
         freeNode(list->head);
