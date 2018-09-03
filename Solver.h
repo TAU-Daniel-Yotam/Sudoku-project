@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "stack.h"
-#include "Game.h"
 #include "gurobi_c.h"
+#include "Game.h"
+#include "stack.h"
 
 /*#define SUBDIM1  (game->rows)
 #define SUBDIM2  (game->columns)
