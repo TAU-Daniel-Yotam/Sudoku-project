@@ -120,11 +120,11 @@ void checkBlock(Game * game,int x,int y){
             }
         }
     }
-    freeMemory((void**)table,DIM,2);
+    freeMemory((void**)table,DIM);
 }
 /*check*/
-void freeMemory(void ** array,int size,int size2){
-    int i,j;
+void freeMemory(void ** array,int size){
+    int i;
     for(i=0;i<size;i++) {
         free(array[i]);
     }
