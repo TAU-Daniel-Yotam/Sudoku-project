@@ -1,5 +1,5 @@
 #include "GameAux.h"
-//check
+/*check*/
 int readFromFile2(FILE *file,Game * game,int mode) {
     int a, b, num, i, j,eof;
     Cell **index;
@@ -27,7 +27,7 @@ int readFromFile2(FILE *file,Game * game,int mode) {
     }
     return 1;
 }
-//check
+/*check*/
 void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     game->blockWidth=blockWidth;
     game->blockHeight=blockHeight;
@@ -39,7 +39,7 @@ void initGame(Game * game,int mode,int blockHeight,int blockWidth){
         freeBoard(game);
     }
 }
-//check
+/*check*/
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
@@ -57,7 +57,7 @@ Cell ** createBoard(int columns,int row){
     }
     return board;
 }
-//check
+/*check*/
 void printDashes(int blockWidth,int blockHeight){
     int j;
     for ( j=0;j<4*blockWidth*blockHeight+blockWidth +1;j++){
@@ -70,7 +70,7 @@ void printDashes(int blockWidth,int blockHeight){
  0-x or y
  1-z*/
 
-//check
+/*check*/
 int checkRange(Game* game,int a,int type){
     if((a<0 || a>
             game->blockHeight*game->blockHeight)&&type==1) return 0;
@@ -78,12 +78,12 @@ int checkRange(Game* game,int a,int type){
               game->blockHeight*game->blockHeight)&&type==0) return 0;
     return 1;
 }
-//check
+/*check*/
 int isInvalid(Cell * cell){
 return cell->isInValidInColumns||cell->isInValidInBlock||cell->isInValidInRow;
 
 }
-//check
+/*check*/
 void checkBlock(Game * game,int x,int y){
     int i,j;
     int ** table;
@@ -122,7 +122,7 @@ void checkBlock(Game * game,int x,int y){
     }
     freeMemory((void**)table,DIM,2);
 }
-//check
+/*check*/
 void freeMemory(void ** array,int size,int size2){
     int i,j;
     for(i=0;i<size;i++) {
@@ -133,7 +133,7 @@ void freeMemory(void ** array,int size,int size2){
     printf("h");
 }
 
-//check
+/*check*/
 void checkRow(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
@@ -163,7 +163,7 @@ void checkRow(Game * game,int x) {
     free(line);
 }
 
-//check
+/*check*/
 void checkColumns(Game * game,int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
@@ -189,6 +189,8 @@ void checkColumns(Game * game,int x) {
     }
     free(line);
 }
+
+
 int fillXvalues(Game*game,int x){
     int tries,count,i,j,size;
     int*values;
@@ -218,7 +220,9 @@ int fillXvalues(Game*game,int x){
     if(count<x) tries++;
     return tries;
 }
-//check
+
+
+/*check*/
 int checkEmpty(Game*game){
     int i,j;
     for(i=0;i<DIM;i++){
@@ -265,7 +269,8 @@ void createListDataGenerate(Game*game,int**listData){
         }
     }
 }
-//check
+
+/*check*/
 int checkError(Game *game) {
 
     int i,j;
@@ -279,7 +284,8 @@ int checkError(Game *game) {
     return 1;
 
 }
-//check
+
+/*check*/
 int writeToFile(Game *game, FILE *file) {
     Cell **index;
     int i, j;
@@ -301,7 +307,7 @@ int writeToFile(Game *game, FILE *file) {
     return 1;
 }
 
-//check
+/*check*/
 int**copyBoard(Game*game){
     int size,i,j;
     int**board;
@@ -323,6 +329,8 @@ int**copyBoard(Game*game){
     }
     return board;
 }
+
+
 int countPossibleValues(Game*game,int*num_val,int x, int y){
     int i,first=1;
     num_val[0]=0;
@@ -348,7 +356,8 @@ void fillValues(Game*game,int**values,int size){
         printf("Cell <%d,%d> set to %d\n",values[i][0],values[i][1],values[i][3]);
     }
 }
-//check
+
+/*check*/
 void updateCellValidity(Game*game) {
     int i, j;
     for (i = 0; i < DIM; i++) {
@@ -366,12 +375,14 @@ void updateCellValidity(Game*game) {
         }
     }
 }
-//check
+
+/*check*/
 void freeGame(Game*game){
     freeBoard(game);
     freeList(game->list);
 }
-//check
+
+/*check*/
 void freeBoard(Game*game){
     int i;
     for(i=0;i<DIM;i++){
@@ -381,7 +392,7 @@ void freeBoard(Game*game){
 }
 
 
-//check
+/*check*/
 int     checkInvalid(Game* game, int x, int y, int value) {
     int result;
     int temp = game->board[x][y].value;
@@ -409,7 +420,7 @@ void clearBoard(Game*game){
 }
 
 */
-//only for check the game
+/*only for check the game*/
 void printerror(Game * game){
     int i,j;
     for(i=0;i<DIM;i++){
