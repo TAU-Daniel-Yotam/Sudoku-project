@@ -57,7 +57,7 @@ Cell ** createBoard(int columns,int row){
     }
     return board;
 }
-
+//check
 void printDashes(int blockWidth,int blockHeight){
     int j;
     for ( j=0;j<4*blockWidth*blockHeight+blockWidth +1;j++){
@@ -383,18 +383,17 @@ void freeBoard(Game*game){
 
 //check
 int     checkInvalid(Game* game, int x, int y, int value) {
-    Game *game2 = game;
     int result;
     int temp = game->board[x][y].value;
     game->board[x][y].value = value;
-    checkBlock(game2, x, y);
-    checkRow(game2, x);
-    checkColumns(game2, y);
+    checkBlock(game, x, y);
+    checkRow(game, x);
+    checkColumns(game, y);
     result = isInvalid(&game->board[x][y]);
     game->board[x][y].value = temp;
-    checkBlock(game2, x, y);
-    checkRow(game2, x);
-    checkColumns(game2, y);
+    checkBlock(game, x, y);
+    checkRow(game, x);
+    checkColumns(game, y);
     return result;
 }
 

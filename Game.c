@@ -20,6 +20,8 @@ int edit(Game * game, char * filePath){
         file = fopen(filePath, "r");
         if (file == NULL) {
             printError(NULL, EDIT_IO_ERROR);
+            return 0;
+
         }
         readFromFile2(file, game,2);
         fclose(file);
