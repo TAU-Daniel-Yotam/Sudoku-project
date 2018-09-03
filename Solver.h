@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "Exceptions.h"
 #include "stack.h"
 #include "Game.h"
 #include "gurobi_c.h"
