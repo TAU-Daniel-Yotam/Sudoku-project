@@ -92,14 +92,11 @@ int ILPSolve(Game*game,int**board){
             return 0;
         }
     }
+    else return -1;
 
     /* what if not feasible!!!!!  */
 
     updateBoard(model,game,board,obj);
-
-
-
-
     free(ind);
     free(val);
     free(lb);
