@@ -141,7 +141,7 @@ int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vt
 }
 
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
-    int i,j,v,error;
+    int i,j,v,error=0;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 0; v < DIM; v++) {
@@ -156,7 +156,7 @@ int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
 }
 
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val){
-    int i,j,v,error;
+    int i,j,v,error=0;
     for (v = 0; v < DIM; v++) {
         for (j = 0; j < DIM; j++) {
             for (i = 0; i < DIM; i++) {
@@ -171,7 +171,7 @@ int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val){
 }
 
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val){
-    int i,j,v,error;
+    int i,j,v,error=0;
     for (v = 0; v < DIM; v++) {
         for (i = 0; i < DIM; i++) {
             for (j = 0; j < DIM; j++) {
@@ -187,6 +187,7 @@ int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val){
 
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
     int i,j,v,error,ig,jg,count;
+    error=0;
     for (v = 0; v < DIM; v++) {
         for (ig = 0; ig < SUBDIM1; ig++) {
             for (jg = 0; jg < SUBDIM2; jg++) {
