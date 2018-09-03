@@ -12,8 +12,6 @@ main.o: main.c MainAux.h Game.h Parser.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Game.o: Game.c Game.h Solver.h List.h GameAux.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
-stack.o: stack.c stack.h Exceptions.h
-	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 MainAux.o: MainAux.c MainAux.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Parser.o: Parser.c Parser.h Exceptions.h
@@ -25,6 +23,8 @@ Exceptions.o: Exceptions.c Exceptions.h Game.h
 List.o: List.c List.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 GameAux.o: GameAux.c Exceptions.h
+	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
+stack.o: stack.c stack.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 clean:
 	rm -f $(OBJS) $(EXEC)
