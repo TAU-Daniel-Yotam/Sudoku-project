@@ -3,7 +3,6 @@
 #include "Game.h"
 #include "Parser.h"
 #include "MainAux.h"
-#include "GameAux.h"
 
 int main() {
     int exit, type, erroneous, valid;

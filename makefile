@@ -8,7 +8,7 @@ GUROBI_LIB = -L/usr/local/lib/gurobi563/lib -lgurobi56
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) $(GUROBI_LIB) -o $@ -lm
-main.o: main.c MainAux.h Game.h Parser.h Exceptions.h
+main.o: main.c MainAux.h Game.h Parser.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Game.o: Game.c Game.h Solver.h List.h GameAux.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
