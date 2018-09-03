@@ -18,6 +18,7 @@ int ILPSolve(Game*game,int**board){
     double    *lb=NULL;
     double    *obj=NULL;
     char      *vtype=NULL;
+    int        optimstatus;
     int        i, j, v, ig, jg, count;
     int        error = 0;
 
@@ -76,13 +77,28 @@ int ILPSolve(Game*game,int**board){
         return 0;
     }
 
-    /* Get the solved board */
-    error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
+    /* Check if model was solved */
+    error = GRBgetintattr(model, GRB_INT_ATTR_STATUS, &optimstatus);
     if (error) {
         printError(game,ILP_ERROR);
         return 0;
     }
+
+    if(optimstatus!=GRB_INF_OR_UNBD){
+        /* Get the solved board */
+        error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
+        if (error) {
+            printError(game,ILP_ERROR);
+            return 0;
+        }
+    }
+
+    /* what if not feasible!!!!!  */
+
     updateBoard(model,game,board,obj);
+
+
+
 
     free(ind);
     free(val);
