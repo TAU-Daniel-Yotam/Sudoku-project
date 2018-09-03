@@ -3,7 +3,7 @@
 #define SUDOKU_SOFTWARE_PROJECT_PARSER_H
 
 typedef struct Command{
-    int type,numArgs,saveToList;
+    int type,numArgs;
     int* intArgs;
     char* strArg;
 } Command;
@@ -16,6 +16,6 @@ typedef struct Command{
 
 int getInput(char* command, int size);
 int parseCommand(Game* game, char*command, Command* parsedCommand);
-void initCommand(Command* c,int*a);
+void initCommand(Command* c);
 
 #endif

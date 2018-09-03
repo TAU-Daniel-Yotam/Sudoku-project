@@ -22,17 +22,14 @@ typedef struct List{
 
 Node * createNode(int ** data,int size);
 List * createList();
+int printList(List * list);
 int printData(int ** data,int size);
 int deleteAtPosition(List *list,int pos);
-/*int insertAtHead(List * list,int ** data);
-int deleteAfterSet(List *list,Node * node);
-int delete2(List  *list,Node * node);
-int printList(List * list);
-int movePointer(List * list,int move);*/
 int deleteTail(List *list,Node * node);
 int addLast(List * list,int ** data,int size);
-void freeList(List*list);
 void freeNode(Node*n);
+void freeList(List*list);
+
 
 
 #endif

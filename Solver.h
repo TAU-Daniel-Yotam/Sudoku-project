@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "Exceptions.h"
-#include "gurobi_c.h"
 
 /*#define SUBDIM1  (game->rows)
 #define SUBDIM2  (game->columns)

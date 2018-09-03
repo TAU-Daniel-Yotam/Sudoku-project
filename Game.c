@@ -1,7 +1,7 @@
 
 #include "Game.h"
 
-
+//check
 int solve(Game* game, char * filePath){
     FILE * file;
     file = fopen(filePath,"r");
@@ -9,29 +9,31 @@ int solve(Game* game, char * filePath){
         printError(NULL,SOLVE_IO_ERROR);
         return 0;
     }
-    readFromFile2(file,game,1,0);
+    readFromFile2(file,game,1);
     fclose(file);
     return 1;
 }
-
+//check
 int edit(Game * game, char * filePath){
     FILE * file;
     if (filePath!=NULL) {
         file = fopen(filePath, "r");
         if (file == NULL) {
             printError(NULL, EDIT_IO_ERROR);
+            return 0;
+
         }
-        readFromFile2(file, game,2,1);
+        readFromFile2(file, game,2);
         fclose(file);
     }
     else {
-        initGame(game,2,1,3,3);
+        initGame(game,2,3,3);
         game->board = createBoard(3, 3);
     }
     return 1;
 }
 
-
+//check
 int mark_errors(Game* game, int arg){
     if(arg!=0 && arg!=1){
         printError(game,BINARY_RANGE_ERROR);
@@ -51,17 +53,18 @@ void printBoard(Game * game) {
             if (!(j % game->blockWidth))
                 printf("|");
             index = game->board[i][j];
-            if (index.isFixed) {
+            if (index.isFixed)
                 printf(" %2d.", index.value);
-            } else if (!index.isInValid && (game->markError||game->mode==2))
+
+            else if (isInvalid(&index) && (game->markError||game->mode==2)&&index.value)
                 printf(" %2d*", index.value);
             else {
 
-                if (index.value != 0) {
+                if (index.value != 0)
                     printf(" %2d ", index.value);
-                } else {
+                else
                     printf("    ");
-                }
+
             }
         }
         printf("|\n");
@@ -70,22 +73,32 @@ void printBoard(Game * game) {
 }
 
 int set(Game* game,int x,int y,int value){
-    int* listData=calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-    if(!checkRange(game,x) || !checkRange(game,y) || !checkRange(game,value)){
+    int** listData ;
+    if(!checkRange(game,x,0) || !checkRange(game,y,0) || !checkRange(game,value,1)){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
-    if(game->mode==1 && game->board[x][y].isFixed){
+ //check with yotam
+     if(game->board[x-1][y-1].isFixed){
         printError(game,CELL_FIXED_ERROR);
         return 0;
     }
-    listData[0]=x,listData[1]=y,listData[2]=game->board[x][y].value,listData[3]=value;
-   addLast(game->list,&listData,1);
+    listData=calloc(1, sizeof(int *));/* 0:x,1:y,2:from,3:to */
+    if(listData==NULL)
+        printError(&game,MEMORY_ALLOC_ERROR);
+    listData[0]=calloc(4, sizeof(int));
+    if(listData[0]==NULL)
+        printError(&game,MEMORY_ALLOC_ERROR);
+    listData[0][0]=x;
+    listData[0][1]=y;
+    listData[0][2]=game->board[x-1][y-1].value;
+    listData[0][3]=value;
+   addLast(game->list,listData,1);
 
-    game->board[x][y].value=value;
-    checkBlock(game,x,y);
-    checkRow(game,x);
-    checkColumns(game,y);
+    game->board[x-1][y-1].value=value;
+    /*checkBlock(game,x-1,y-1);
+    checkRow(game,x-1);
+    checkColumns(game,y-1);*/
     return 1;
 }
 
@@ -99,7 +112,7 @@ int generate(Game*game,int x,int y){
     int ** listData, **board;
     removed=0;
     listData=NULL;
-    if(!checkRange(game,x) || !checkRange(game,y)){
+    if(!checkRange(game,x,0) || !checkRange(game,y,0)){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
@@ -128,7 +141,7 @@ int generate(Game*game,int x,int y){
     return 1;
 }
 
-
+//check
 int undo(Game * game) {
     int i;
     int *move;
@@ -138,7 +151,12 @@ int undo(Game * game) {
     }
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
-        game->board[move[0]][move[1]].value = move[2];
+        printf("%d",move[0]);
+        printf("%d",move[1]);
+        printf("%d",move[2]);
+        printf("%d",move[3]);
+
+        game->board[move[0]-1][move[1]-1].value = move[2];
         printf("Undo %d,%d: from ",move[0], move[1]);
         if (move[3])
             printf("%d to ", move[3]);
@@ -152,28 +170,31 @@ int undo(Game * game) {
     game->list->pointer = game->list->pointer->previous;
     return 1;
 }
-
+//check
 int redo(Game *game) {
     char from;
     char to;
     int i;
     int *move;
-    if (!game->list->length || game->list->pointer->next == NULL) {
+    if (!game->list->length || game->list->pointer== game->list->tail) {
         printError(game,REDO_ERROR);
         return 0;
     }
-    game->list->pointer = game->list->pointer->next;
+    if(game->list->pointer!=NULL)
+        game->list->pointer = game->list->pointer->next;
+    else
+        game->list->pointer=game->list->head;
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        game->board[move[0]][move[1]].value = move[3];
+        game->board[move[0]-1][move[1]-1].value = move[3];
         if(i==0) printBoard(game);
         printf("Redo %d,%d: from %c to %c\n", move[0], move[1], to, from);
     }
     return 1;
 }
-
+//check
 int save(Game *game, char *path) {
     FILE *file=fopen(path,"w");
     if (file == NULL) {
@@ -184,7 +205,7 @@ int save(Game *game, char *path) {
         printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    if (game->mode == 1 && !validate(game)) {
+    if (game->mode == 2 && !validate(game)) {
         printError(game,VALIDATION_FAILED_ERROR);
         return 0;
     }
@@ -196,7 +217,7 @@ int save(Game *game, char *path) {
 
 int hint(Game* game, int x, int y){
     int**board;
-    if(!checkRange(game,x) || !checkRange(game,y)){
+    if(!checkRange(game,x,0) || !checkRange(game,y,0)){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
@@ -286,16 +307,17 @@ int** autofill(Game*game){
     printBoard(game);
     return cellsToFill;
 }
-
+//check
 int reset(Game *game) {
     while (game->list->length != 0) {
         undo(game);
         deleteAtPosition(game->list, game->list->length - 1);
     }
+
     printf("Board reset\n");
     return 1;
 }
-
+//check
 void exitGame(Game*game){
     freeGame(game);
 }
