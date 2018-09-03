@@ -1,7 +1,6 @@
 
-#include "stack.h"
 #include "Solver.h"
-#include "Game.h"
+
 void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype);
 int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype);
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
