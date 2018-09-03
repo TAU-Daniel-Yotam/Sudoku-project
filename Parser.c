@@ -16,7 +16,7 @@ int getInput(char* command, int size){
 int parseCommand(Game* game, char*command, Command* parsedCommand){
     char* word;
     int i;
-    initCommand(parsedCommand,NULL);
+    initCommand(parsedCommand);
     i=0;
     if(strlen(command)>256){
         parsedCommand->type=-1;
@@ -28,11 +28,13 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             if(!strcmp(word,"solve")){
                 parsedCommand->type=1;
                 parsedCommand->numArgs=1;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
             }
             else if(!strcmp(word,"edit")){
                 parsedCommand->type=2;
                 parsedCommand->numArgs=1;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
             }
             else if(!strcmp(word,"mark_errors") && game->mode==1){
@@ -43,6 +45,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             else if(!strcmp(word,"print_board") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=4;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
@@ -54,6 +57,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             else if(!strcmp(word,"validate") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=6;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
@@ -65,47 +69,53 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             else if(!strcmp(word,"undo") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=8;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"redo") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=9;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"save") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=10;
                 parsedCommand->numArgs=1;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
             }
             else if(!strcmp(word,"hint") && game->mode==1){
                 parsedCommand->type=11;
                 parsedCommand->numArgs=2;
                 parsedCommand->strArg=NULL;
-                parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"num_solutions") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=12;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"autofill") && game->mode==1){
                 parsedCommand->type=13;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"reset") && (game->mode==1 || game->mode==2)){
                 parsedCommand->type=14;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
             else if(!strcmp(word,"exit")){
                 parsedCommand->type=15;
                 parsedCommand->numArgs=0;
+                free(parsedCommand->intArgs);
                 parsedCommand->intArgs=NULL;
                 parsedCommand->strArg=NULL;
             }
@@ -193,19 +203,13 @@ int validateArgs(Command* c){
     return 1;
 }
 
-void initCommand(Command* c,int *a ){
+void initCommand(Command* c){
     int i;
     c->strArg=NULL;
-    if(c->intArgs!=NULL){
-        for(i=0;i<3;i++)
-            c->intArgs[i]=-1;
-    }
-    else{
-        c->intArgs=a;
-        for(i=0;i<3;i++)
-            c->intArgs[i]=-1;
-    }
+    c->intArgs=(int*)calloc(3, sizeof(int));
+    if(c->intArgs==NULL) printError(NULL,MEMORY_ALLOC_ERROR);
+    for(i=0;i<3;i++)
+        c->intArgs[i]=-1;
     c->type=-1;
     c->numArgs=-1;
-
 }

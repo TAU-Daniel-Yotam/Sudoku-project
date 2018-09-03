@@ -8,14 +8,12 @@
 int main() {
             int exit, type, erroneous, valid;
             /*int eof;*/
-            int inta[3];
+            int *inta=NULL;
             Game game;
             game.board=NULL;
             game.list=NULL;
             Command parsedCommand;
             parsedCommand.intArgs=inta;
-
-
             char command[1024];
             game.mode = 0;
             erroneous=0;
@@ -23,6 +21,7 @@ int main() {
             printf("Sudoku\n------\n");
             while (!exit) {
                 /*eof = getInput(command, 1024);*/
+                printf("Enter your command:\n");
                 getInput(command, 1024);
                 type = parseCommand(&game, command, &parsedCommand);
                 if (type == -1) {
@@ -93,7 +92,8 @@ int main() {
                     default:
                         break;
                 }
-
+                if(parsedCommand.intArgs==NULL)
+                    free(parsedCommand.intArgs);
             }
             return 0;
 
