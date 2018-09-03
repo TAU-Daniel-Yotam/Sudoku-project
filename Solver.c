@@ -9,7 +9,7 @@ int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
 void updateBoard(Game*game,int**board,double*obj);
 int countSol(Game* game);
-int incrementXY(Game * game,int * x,int* y);
+void incrementXY(Game * game,int * x,int* y);
 int findRightMove(Game* game, int x, int y, int from);
 
 
@@ -226,10 +226,11 @@ int countSol(Game* game) {
     int rightMove;
     int x=0;
     int y=0;
+    counter=0;
     init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
         while(x!=-1&&(game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {
-            incrementXY(game, x, y);
+            incrementXY(game, &x, &y);
         }
         if (x==-1) {
             counter += 1;
@@ -253,7 +254,7 @@ int countSol(Game* game) {
     return counter;
 }
 
-int incrementXY(Game * game,int * x,int* y){
+void incrementXY(Game * game,int * x,int* y){
     if(*y<DIM-1)
         (*y)++;
     else if(*x<DIM -1) {
