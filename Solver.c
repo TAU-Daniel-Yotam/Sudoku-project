@@ -8,7 +8,7 @@ int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
 void updateBoard(Game*game,int**board,double*obj);
-int int countSol(Game* game);
+int countSol(Game* game);
 int incrementXY(Game * game,int * x,int* y);
 int findRightMove(Game* game, int x, int y, int from);
 
@@ -98,7 +98,7 @@ int ILPSolve(Game*game,int**board){
 
     /* what if not feasible!!!!!  */
 
-    updateBoard(model,game,board,obj);
+    updateBoard(game,board,obj);
     free(ind);
     free(val);
     free(lb);
