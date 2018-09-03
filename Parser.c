@@ -206,6 +206,9 @@ int validateArgs(Command* c){
 void initCommand(Command* c){
     int i;
     c->strArg=NULL;
+    if(c->intArgs!=NULL){
+        free(c->intArgs);
+    }
     c->intArgs=(int*)calloc(3, sizeof(int));
     if(c->intArgs==NULL) printError(NULL,MEMORY_ALLOC_ERROR);
     for(i=0;i<3;i++)

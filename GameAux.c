@@ -235,7 +235,7 @@ int checkEmpty(Game*game){
 
 void createValuesArray(Game*game,int x,int y,int* values){
     int i=1,j=0;
-    for(;i<DIM;i++){
+    for(;i<=DIM;i++){
         game->board[x][y].value=i;
         checkBlock(game,x,y);
         checkRow(game,y);

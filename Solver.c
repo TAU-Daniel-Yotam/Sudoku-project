@@ -1,7 +1,8 @@
 
-#include "stack.h"
 #include "Solver.h"
-#include "Game.h"
+
+void incrementXY(Game*game, int*x, int*y);
+int findRightMove(Game* game, int x, int y, int from);
 
 int ILPSolve(Game*game,int**board){
     if(game->mode==1 || board==NULL) {
@@ -10,7 +11,7 @@ int ILPSolve(Game*game,int**board){
     printf("bye");
     return 1;
 }
-int detSolve(Game* game, int**solution) {
+int detSolve(Game* game) {
     Stack stack;
     init(&stack,DIM*DIM);
     int x=0;
@@ -18,8 +19,6 @@ int detSolve(Game* game, int**solution) {
     int * data;
     int counter;
     int rightMove;
-    int x=0;
-    int y=0;
     counter=0;
     init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
