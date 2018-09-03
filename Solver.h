@@ -8,6 +8,7 @@
 #include "Exceptions.h"
 #include "stack.h"
 #include "Game.h"
+#include "gurobi_c.h"
 
 /*#define SUBDIM1  (game->rows)
 #define SUBDIM2  (game->columns)
