@@ -12,13 +12,13 @@ main.o: main.c MainAux.h Game.h Parser.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Game.o: Game.c Game.h Solver.h List.h GameAux.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
+stack.o: stack.c stack.h Exceptions.h
+	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 MainAux.o: MainAux.c MainAux.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Parser.o: Parser.c Parser.h Exceptions.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
-stack.o: stack.c stack.h Exceptions.h
-	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
-Solver.o: Solver.c Solver.h stack.h Exceptions.h
+Solver.o: Solver.c Solver.h stack.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
 Exceptions.o: Exceptions.c Exceptions.h Game.h
 	$(CC) $(COMP_FLAG) $(GUROBI_COMP) -c $*.c
