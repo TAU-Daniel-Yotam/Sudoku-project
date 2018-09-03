@@ -115,7 +115,7 @@ int generate(Game*game,int x,int y){
     int ** listData, **board;
     removed=0;
     listData=NULL;
-    if(!checkRange(game,x,0) || !checkRange(game,y,0)){
+    if(x<0 || x>DIM*DIM || y<0 || y>DIM*DIM){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
@@ -173,6 +173,7 @@ int undo(Game * game) {
     game->list->pointer = game->list->pointer->previous;
     return 1;
 }
+
 /*check*/
 int redo(Game *game) {
     char from;
