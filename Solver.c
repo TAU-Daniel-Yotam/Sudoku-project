@@ -145,8 +145,10 @@ int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vt
             }
         }
     }
+    printf("create model 1");
     error = GRBloadenv(&env, NULL) + GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL,
                                                          vtype, NULL);
+    printf("create model 2");
     return error;
 }
 
