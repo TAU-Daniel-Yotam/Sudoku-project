@@ -43,13 +43,13 @@ void initGame(Game * game,int mode,int blockHeight,int blockWidth){
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
-    board = (Cell **)calloc((unsigned int)columns * row, sizeof(Cell *));
+    board = (Cell**)calloc((unsigned int)(columns * row), sizeof(Cell *));
     if(board==NULL){
         printError(NULL,MEMORY_ALLOC_ERROR);
         return 0;
     }
     for (i = 0; i < columns * row; i++) {
-        board[i] = (Cell *)calloc((unsigned int)columns * row, sizeof(Cell));
+        board[i] = (Cell *)calloc((unsigned int)(columns * row), sizeof(Cell));
         if(board[i]==NULL){
             printError(NULL,MEMORY_ALLOC_ERROR);
             return 0;
