@@ -43,7 +43,7 @@ void initGame(Game * game,int mode,int blockHeight,int blockWidth){
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
-    board = (Cell**)calloc((unsigned int)(columns * row), sizeof(Cell *));
+    board = (Cell**)calloc((unsigned int)(columns * row), sizeof(Cell*));
     if(board==NULL){
         printError(NULL,MEMORY_ALLOC_ERROR);
         return 0;
