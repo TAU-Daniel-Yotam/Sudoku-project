@@ -114,6 +114,7 @@ int validate(Game *game) {
     board=copyBoard(game);
     res=ILPSolve(game,board);
     if(res==3 || res==4 || res==5){
+        freeMemory(board,DIM);
         printf("Validation failed: board is unsolvable\n");
         return 0;
     }
