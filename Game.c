@@ -111,9 +111,11 @@ int validate(Game *game) {
 }
 
 int generate(Game*game,int x,int y){
-    int i,j,tries,removed;
+    int i,j,tries,removed,solved;
     int ** listData, **board;
     removed=0;
+    tries=0;
+    solved=-1;
     listData=NULL;
     if(x<0 || x>DIM*DIM || y<0 || y>DIM*DIM){
         printError(game,VALUE_RANGE_ERROR);
@@ -123,14 +125,24 @@ int generate(Game*game,int x,int y){
         printError(game,BOARD_NOT_EMPTY_ERROR);
         return 0;
     }
-    tries=fillXvalues(game,x);
-
-    if(tries==1001){
+    do {
+        emptyBoard(game);
+        tries += fillXvalues(game, x);
+        if(tries==1001){
+            printError(game,GENERATOR_FAILED_ERROR);
+            return 0;
+        }
+        board = copyBoard(game);
+        solved = ILPSolve(game,board);
+        if(solved==-1) tries++;
+    }while (solved==-1);
+/*    if(tries==1001){
         printError(game,GENERATOR_FAILED_ERROR);
         return 0;
-    }
-    board = copyBoard(game);
-    ILPSolve(game,board); /* need to implement */
+    }*/
+    printBoard(game);
+    updateGameBoard(game,board);
+    printBoard(game);
     while(removed < DIM*DIM-y){
         do {
             i = rand() % DIM;
