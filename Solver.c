@@ -24,9 +24,9 @@ int ILPSolve(Game*game,int**board){
     char      *vtype=NULL;
     int        optimstatus;
     int        error = 0;
-
+    printf("s0\n");
     allocateArrays(game,ind,val,lb,obj,vtype);
-    printf("s1");
+    printf("s1\n");
     /* Create new model and environment */
     error = createModel(model,env,game,board,lb,vtype);
     if(error){
