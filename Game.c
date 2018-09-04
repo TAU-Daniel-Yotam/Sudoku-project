@@ -106,8 +106,21 @@ int set(Game* game,int x,int y,int value){
 }
 
 int validate(Game *game) {
-    if(game->mode==1) return 1;
-    return 0;
+    int**board,res;
+    if(checkError(game)){
+        printError(NULL,ERRONEOUS_BOARD_ERROR);
+        return 0;
+    }
+    board=copyBoard(game);
+    res=ILPSolve(game,board);
+    if(res==3 || res==4 || res==5){
+        printf("Validation failed: board is unsolvable\n");
+        return 0;
+    }
+    printf("Validation passed board is solvable\n");
+    freeMemory(board,DIM);
+    return 1;
+
 }
 
 int generate(Game*game,int x,int y){
