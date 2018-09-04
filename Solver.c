@@ -241,12 +241,12 @@ void updateBoard(Game*game,int**board,double*obj){
 
 int countSol(Game* game) {
     Stack stack;
-    init(&stack,DIM*DIM);
     int * data;
     int counter;
     int rightMove,x,y;
     x=0;
     y=0;
+    init(&stack,DIM*DIM);
     counter=0;
     init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
