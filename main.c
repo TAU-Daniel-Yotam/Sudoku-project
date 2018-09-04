@@ -47,10 +47,10 @@ int main() {
                 break;
             case 5:
                 set(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1], parsedCommand.intArgs[2]);
-                if (checkWinningGame(&game) && validate(&game)) {
+                if (checkWinningGame(&game) && checkError(&game)) {
                     printf("Puzzle solved successfully\n");
                     game.mode = 0;
-                } else if (checkWinningGame(&game) && !validate(&game)) {
+                } else if (checkWinningGame(&game) && !checkError(&game)) {
                     printf("Puzzle solution erroneous\n");
                     erroneous = 1;
                 }
