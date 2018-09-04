@@ -21,6 +21,8 @@ int     checkEmpty(Game*game);
 void    createValuesArray(Game*game,int x,int y,int* values);
 void    createListDataGenerate(Game*game,int**listData);
 int     fillXvalues(Game*game,int x);
+void    updateGameBoard(Game*game,int**board);
+void    emptyBoard(Game*game);
 int     checkError(Game *game);
 int     writeToFile(Game *game, FILE *file);
 int   **copyBoard(Game*game);

@@ -128,9 +128,7 @@ void freeMemory(void ** array,int size){
     for(i=0;i<size;i++) {
         free(array[i]);
     }
-            free(array);
-
-    printf("h");
+    free(array);
 }
 
 /*check*/
@@ -266,6 +264,24 @@ void createListDataGenerate(Game*game,int**listData){
                 listData[count][2]=0;
                 listData[count][3]=game->board[i][j].value;
             }
+        }
+    }
+}
+
+void updateGameBoard(Game*game,int**board){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            game->board[i][j].value=board[i][j];
+        }
+    }
+}
+
+void emptyBoard(Game*game){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            game->board[i][j].value=0;
         }
     }
 }

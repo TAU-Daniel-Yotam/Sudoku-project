@@ -7,6 +7,7 @@ int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
+void freeResources(GRBenv*env,GRBmodel*model,void*a,void*b,void*c,void*d,void*e);
 void updateBoard(Game*game,int**board,double*obj);
 int countSol(Game* game);
 void incrementXY(Game * game,int * x,int* y);
@@ -30,6 +31,7 @@ int ILPSolve(Game*game,int**board){
     error = createModel(model,env,game,board,lb,vtype);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -37,6 +39,7 @@ int ILPSolve(Game*game,int**board){
     error = addConstrains_noEmptyCells(model,game,ind,val);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -44,6 +47,7 @@ int ILPSolve(Game*game,int**board){
     error = addConstrains_onceInRow(model,game,ind,val);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -51,6 +55,7 @@ int ILPSolve(Game*game,int**board){
     error = addConstrains_onceIncolumn(model,game,ind,val);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -58,17 +63,20 @@ int ILPSolve(Game*game,int**board){
     error = addConstrains_onceInBlock(model,game,ind,val);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
     error = GRBsetintattr(model, GRB_INT_ATTR_MODELSENSE, GRB_MAXIMIZE);
     if (error) {
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
     error = GRBupdatemodel(model);
     if (error) {
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -76,6 +84,7 @@ int ILPSolve(Game*game,int**board){
     error = GRBoptimize(model);
     if(error){
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
@@ -83,29 +92,26 @@ int ILPSolve(Game*game,int**board){
     error = GRBgetintattr(model, GRB_INT_ATTR_STATUS, &optimstatus);
     if (error) {
         printError(game,ILP_ERROR);
+        freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
 
-    if(optimstatus!=GRB_INF_OR_UNBD){
+    if(optimstatus!=3 && optimstatus!=4 && optimstatus!=5){
         /* Get the solved board */
         error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
         if (error) {
             printError(game,ILP_ERROR);
+            freeResources(env,model,val,obj,vtype,lb,ind);
             return 0;
         }
     }
-    else return -1;
-
-    /* what if not feasible!!!!!  */
+    else{
+        freeResources(env,model,val,obj,vtype,lb,ind);
+        return -1;
+    }
 
     updateBoard(game,board,obj);
-    free(ind);
-    free(val);
-    free(lb);
-    free(obj);
-    free(vtype);
-    GRBfreemodel(model);
-    GRBfreeenv(env);
+    freeResources(env,model,val,obj,vtype,lb,ind);
     return 1;
 }
 
@@ -206,6 +212,19 @@ int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
     }
     return error;
 }
+
+void freeResources(GRBenv*env,GRBmodel*model,void*a,void*b,void*c,void*d,void*e){
+    free(a);
+    free(b);
+    free(c);
+    free(d);
+    free(e);
+    if(env!=NULL)
+        GRBfreemodel(model);
+    if(model!=NULL)
+        GRBfreeenv(env);
+}
+
 
 void updateBoard(Game*game,int**board,double*obj){
     int i,j,v;
