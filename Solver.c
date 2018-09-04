@@ -13,12 +13,12 @@ int ILPSolve(Game*game,int**board){
 }
 int detSolve(Game* game) {
     Stack stack;
-    init(&stack,DIM*DIM);
-    int x=0;
-    int y=0;
     int * data;
     int counter;
-    int rightMove;
+    int rightMove,x,y;
+    init(&stack,DIM*DIM);
+    x=0;
+    y=0;
     counter=0;
     init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
