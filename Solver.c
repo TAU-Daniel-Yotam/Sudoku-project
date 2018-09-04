@@ -29,6 +29,7 @@ int ILPSolve(Game*game,int**board){
     printf("s1\n");
     /* Create new model and environment */
     error = createModel(model,env,game,board,lb,vtype);
+    printf("s1.5\n");
     if(error){
         printError(game,ILP_ERROR);
         freeResources(env,model,val,obj,vtype,lb,ind);
@@ -134,6 +135,7 @@ void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype
 
 int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
     int i,j,v,error=0;
+    printf("create model 0");
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 1; v <= DIM; v++) {
