@@ -131,7 +131,6 @@ int generate(Game*game,int x,int y){
     }
     board = copyBoard(game);
     ILPSolve(game,board); /* need to implement */
-    printBoard(game);
     while(removed < DIM*DIM-y){
         do {
             i = rand() % DIM;
