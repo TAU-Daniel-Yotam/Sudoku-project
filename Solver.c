@@ -244,9 +244,9 @@ int countSol(Game* game) {
     init(&stack,DIM*DIM);
     int * data;
     int counter;
-    int rightMove;
-    int x=0;
-    int y=0;
+    int rightMove,x,y;
+    x=0;
+    y=0;
     counter=0;
     init(&stack,DIM*DIM);
     while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
