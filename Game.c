@@ -107,7 +107,7 @@ int set(Game* game,int x,int y,int value){
 
 int validate(Game *game) {
     int**board,res;
-    if(checkError(game)){
+    if(!checkError(game)){
         printError(NULL,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
