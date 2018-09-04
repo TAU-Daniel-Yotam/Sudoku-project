@@ -14,5 +14,6 @@
 #define DIM    (SUBDIM1*SUBDIM2)*/
 
 int ILPSolve(Game*game,int**board);
+int countSol(Game* game);
 
 #endif
