@@ -5,7 +5,7 @@
 #include "MainAux.h"
 
 int main() {
-    int exit, type, valid;
+    int exit, type;
     Game game;
     char command[1024];
     Command parsedCommand;
@@ -27,10 +27,12 @@ int main() {
             case 1:
                 solve(&game, parsedCommand.strArg);
                 updateCellValidity(&game);
+                printBoard(&game);
                 break;
             case 2:
                 edit(&game, parsedCommand.strArg);
                 updateCellValidity(&game);
+                printBoard(&game);
                 break;
             case 3:
                 mark_errors(&game, parsedCommand.intArgs[0]);
@@ -50,12 +52,7 @@ int main() {
 
                 break;
             case 6:
-                valid = validate(&game);
-                if (valid == 1)
-                    printf("Validation passed board is solvable\n");
-                else
-                    printf("Validation failed: board is unsolvable\n");
-                break;
+                validate(&game);
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
                 break;
