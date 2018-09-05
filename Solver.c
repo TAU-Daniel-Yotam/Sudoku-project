@@ -247,36 +247,45 @@ void updateBoard(Game*game,int**board,double*obj){
     }
 }
 
-int countSol(Game* game) {
-    Stack stack;
+int detSolve(Game* game) {
+    Stack * stack =calloc(1, sizeof(Stack));
+    init(stack,DIM*DIM);
+    int x=0;
+    int y=0;
+    int from;
     int * data;
     int counter;
-    int rightMove,x,y;
-    x=0;
-    y=0;
-    init(&stack,DIM*DIM);
+    int rightMove;
+    int value=0;
+
     counter=0;
-    init(&stack,DIM*DIM);
-    while(!(x==0&&y==0&&!findRightMove(game,x,y,game->board[x][y].value))){
+    push(stack,-2,-2);
+    while(x!=-2){
+
         while(x!=-1&&(game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {
             incrementXY(game, &x, &y);
+            value=0;
         }
         if (x==-1) {
             counter += 1;
-            data = pop(&stack);
+            data = pop(stack);
             x = data[0];
             y = data[1];
+            value=1;
         }
-        else if ((rightMove=findRightMove(game ,x,y,game->board[x][y].value+1))) {
+        else if ((rightMove=findRightMove(game ,x,y,game->board[x][y].value+value))) {
             game->board[x][y].value = rightMove;
-            push(&stack, x, y);
+            push(stack, x, y);
             incrementXY(game, &x, &y);
+            value=0;
         }
 
         else {
-            data=pop(&stack);
+            game->board[x][y].value=0;
+            data=pop(stack);
             x=data[0];
             y=data[1];
+            value=1;
         }
 
     }
@@ -299,6 +308,7 @@ void incrementXY(Game * game,int * x,int* y){
 
 int findRightMove(Game* game, int x, int y, int from) {
     int rightMove = 0;
+    from=from==0?1:from;
     while (from <= game->blockHeight*game->blockWidth) {
         if (!checkInvalid(game,x,y,from)){
             rightMove = from;

@@ -108,6 +108,7 @@ int addLast(List * list,int ** data,int size){
 /*check*/
 void freeNode(Node*n){
     int i;
+    Node * temp;
     for(i=0;i<n->size;i++){
         free(n->data[i]);
     }
@@ -115,8 +116,13 @@ void freeNode(Node*n){
 }
 /*check*/
 void freeList(List*list){
+    Node * node;
+    if(list==NULL)
+        return ;
     while(list->head!=NULL){
-        freeNode(list->head);
+        node=list->head;
+        list->head=list->head->next;
+        freeNode(node);
     }
     free(list);
 }

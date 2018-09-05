@@ -12,6 +12,6 @@ typedef struct Stack{
 void init(Stack * stack ,int size);
 void push(Stack * stack ,int x,int y);
 int * pop(Stack * stack);
-int * top(Stack * stack);
+
 
 #endif
