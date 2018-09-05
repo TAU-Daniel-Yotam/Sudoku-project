@@ -33,5 +33,5 @@ void    updateCellValidity(Game*game);
 void    freeGame(Game*game);
 void    freeBoard(Game*game);
 int     checkInvalid(Game* game, int x, int y, int value);
-void printerror(Game * game);
+void    printerror(Game * game);
 #endif

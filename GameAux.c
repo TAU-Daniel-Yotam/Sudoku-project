@@ -124,10 +124,13 @@ void checkBlock(Game * game,int x,int y){
 /*check*/
 void freeMemory(void ** array,int size){
     int i;
+    printf("ga1\n");
     for(i=0;i<size;i++) {
         free(array[i]);
+        printf("ga2\n");
     }
     free(array);
+    printf("ga3\n");
 }
 
 /*check*/
