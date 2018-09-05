@@ -120,7 +120,9 @@ int validate(Game *game) {
         return 0;
     }
     printf("Validation passed board is solvable\n");
-    freeMemory((void*)board,DIM);
+    printf("g1\n");
+    freeMemory((void**)board,DIM);
+    printf("g2\n");
     return 1;
 
 }

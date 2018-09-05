@@ -105,9 +105,13 @@ int ILPSolve(Game*game,int**board){
         return -1;
     }
     updateBoard(game,board,obj);
+    printf("s1\n");
     free(ind); free(lb); free(vtype); free(obj); free(val);
+    printf("s2\n");
     GRBfreemodel(model);
+    printf("s3\n");
     GRBfreeenv(env);
+    printf("s4\n");
     /*freeResources(env,model,val,obj,vtype,lb,ind);*/
     return 1;
 }

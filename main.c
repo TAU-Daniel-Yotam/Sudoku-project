@@ -53,6 +53,7 @@ int main() {
                 break;
             case 6:
                 validate(&game);
+                printf("m1");
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
                 break;
