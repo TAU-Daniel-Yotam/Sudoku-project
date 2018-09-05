@@ -14,6 +14,7 @@ int findRightMove(Game* game, int x, int y, int from);
 
 
 int ILPSolve(Game*game,int**board){
+    int i,j,v;
     GRBenv    *env   = NULL;
     GRBmodel  *model = NULL;
     int       *ind=NULL;
@@ -27,7 +28,29 @@ int ILPSolve(Game*game,int**board){
     allocateArrays(game,ind,val,lb,obj,vtype);
     printf("s1\n");
     /* Create new model and environment */
-    error = createEnv(model,env,game,board,lb,vtype);
+    /*error = createEnv(model,env,game,board,lb,vtype);*/
+    printf("create model 0");
+    error=0;
+    for (i = 0; i < DIM; i++) {
+        for (j = 0; j < DIM; j++) {
+            for (v = 1; v <= DIM; v++) {
+                if (board[i][j] == v){
+                    lb[i*DIM*DIM+j*DIM+v-1] = 1;
+                    printf("create model 1");
+                }
+                else{
+                    lb[i*DIM*DIM+j*DIM+v-1] = 0;
+                    printf("create model 2");
+                }
+                vtype[i*DIM*DIM+j*DIM+v-1] = GRB_BINARY;
+                printf("create model 3");
+            }
+        }
+    }
+    printf("create model 4");
+    error = GRBloadenv(&env, NULL) + GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL,
+                                                 vtype, NULL);
+    printf("create model 5");
     printf("s1.5\n");
     if(error){
         printError(game,ILP_ERROR);
