@@ -166,15 +166,17 @@ int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtyp
 }
 
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
+    printf("c1");
     int i,j,v,error=0;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 0; v < DIM; v++) {
+                printf("c2");
                 ind[v] = i*DIM*DIM + j*DIM + v;
                 val[v] = 1.0;
             }
-
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
+            printf("c3");
         }
     }
     return error;
