@@ -23,6 +23,8 @@ int ILPSolve(Game*game,int**board){
     char      *vtype;
     int        optimstatus;
     int        error = 0;
+    env=NULL;
+    model=NULL;
     printf("s0\n");
     /*allocateArrays(game,ind,val,lb,obj,vtype);*/
 
