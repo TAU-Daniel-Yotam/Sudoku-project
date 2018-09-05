@@ -2,7 +2,7 @@
 #include "Solver.h"
 
 void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype);
-int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype);
+int createModel(Game*game,int**board,double*lb,char*vtype);
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
@@ -16,7 +16,7 @@ int findRightMove(Game* game, int x, int y, int from);
 int ILPSolve(Game*game,int**board){
     GRBenv    *env;
     GRBmodel  *model;
-    int error,optimstatus;
+    int        error,optimstatus;
     int       *ind=(int*)calloc((unsigned int)DIM, sizeof(int));
     double    *val=(double*)calloc((unsigned int)DIM, sizeof(double));
     double    *lb=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
@@ -33,7 +33,9 @@ int ILPSolve(Game*game,int**board){
     }
     printf("s1\n");
     /* Create new model and environment */
-    error = createEnv(model,env,game,board,lb,vtype);
+    createModel(game,board,lb,vtype);
+    error = GRBloadenv(&env, NULL) +
+            GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL, vtype, NULL);
     printf("s1.5\n");
     if(error){
         printError(game,ILP_ERROR);
@@ -138,7 +140,7 @@ void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype
 }
 
 
-int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
+void createModel(Game*game,int**board,double*lb,char*vtype){
     int i,j,v,error;
     error=0;
     for (i = 0; i < DIM; i++) {
@@ -154,9 +156,6 @@ int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtyp
             }
         }
     }
-    error = GRBloadenv(&env, NULL) + GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL,
-                                                         vtype, NULL);
-    return error;
 }
 
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
