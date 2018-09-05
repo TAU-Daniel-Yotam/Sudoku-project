@@ -2,7 +2,7 @@
 #include "Solver.h"
 
 void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype);
-int createModel(Game*game,int**board,double*lb,char*vtype);
+void createModel(Game*game,int**board,double*lb,char*vtype);
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
@@ -141,8 +141,7 @@ void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype
 
 
 void createModel(Game*game,int**board,double*lb,char*vtype){
-    int i,j,v,error;
-    error=0;
+    int i,j,v;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 1; v <= DIM; v++) {
