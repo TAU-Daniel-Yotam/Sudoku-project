@@ -449,19 +449,17 @@ Cell ** copyCellBoard(Game * game){
 }
 int checkblock(Game* game, int x, int y, int value) {
     int k, r, i=x, j=y,sign=0;
+    printf("a");
     while (x%game->blockHeight!= 0)x--;
     while (y%game->blockWidth!= 0)y--;
     for (k = 0; k<game->blockHeight; k++) {
         for (r = 0; r<game->blockWidth; r++) {
             if (game->board[x+k][y+r].value == value && (k+x)!=i && (r+y)!=j){
                 sign=1;
-                game->board[i][y].isInValidInColumns=1;
             }
-
-            x++;
         }
-        y++;
     }
+    printf("a");
     return sign;
 }
 int checkRowColumn(Game* game, int x, int y, int value) {
