@@ -16,23 +16,17 @@ int findRightMove(Game* game, int x, int y, int from);
 int ILPSolve(Game*game,int**board){
     GRBenv    *env;
     GRBmodel  *model;
-    int       *ind;
-    double    *val;
-    double    *lb;
-    double    *obj;
-    char      *vtype;
-    int        optimstatus;
-    int        error = 0;
+    int error,optimstatus;
+    int       *ind=(int*)calloc((unsigned int)DIM, sizeof(int));
+    double    *val=(double*)calloc((unsigned int)DIM, sizeof(double));
+    double    *lb=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+    double    *obj=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+    char      *vtype=(char*)calloc((unsigned int)DIM*DIM*DIM, sizeof(char));
+    error = 0;
     env=NULL;
     model=NULL;
     printf("s0\n");
     /*allocateArrays(game,ind,val,lb,obj,vtype);*/
-
-    ind=(int*)calloc((unsigned int)DIM, sizeof(int));
-    val=(double*)calloc((unsigned int)DIM, sizeof(double));
-    lb=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
-    vtype=(char*)calloc((unsigned int)DIM*DIM*DIM, sizeof(char));
-    obj=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
 
     if(ind==NULL || val==NULL || lb==NULL || vtype==NULL || obj==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
