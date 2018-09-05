@@ -271,13 +271,22 @@ int hint(Game* game, int x, int y){
 }
 
 int numSolution(Game * game){
+    int number;
     Game * newGame=(Game*)calloc(1, sizeof(Game));
     newGame->blockWidth=game->blockWidth;
     newGame->blockHeight=game->blockHeight;
     newGame->list=NULL;
     newGame->board=copyCellBoard(game);
-    int number=detSolve(newGame);
-    printf("%d\n",number);
+    number=detSolve(newGame);
+    printf("Number of solutions: %d\n",number);
+    if(number == 1){
+        printf("This is a good board!\n");
+    }
+    else{
+        printf("The puzzle has more than 1 solution, try to edit it further\n");
+    }
+    freeGame(newGame);
+    return 1;
 }
 
 int** autofill(Game*game){
@@ -343,9 +352,9 @@ int** autofill(Game*game){
 }
 /*check*/
 int reset(Game *game) {
-    printList(game->list);
     int i;
     int * move;
+    printList(game->list);
     if(!game->list->length)
         return 1;
     while (game->list->pointer!=NULL) {

@@ -9,7 +9,6 @@ int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val);
 void freeResources(GRBenv*env,GRBmodel*model,void*a,void*b,void*c,void*d,void*e);
 void updateBoard(Game*game,int**board,double*obj);
-int countSol(Game* game);
 void incrementXY(Game * game,int * x,int* y);
 int findRightMove(Game* game, int x, int y, int from);
 
@@ -248,16 +247,12 @@ void updateBoard(Game*game,int**board,double*obj){
 }
 
 int detSolve(Game* game) {
+    int x,y,*data,counter,rightMove,value;
     Stack * stack =calloc(1, sizeof(Stack));
     init(stack,DIM*DIM);
-    int x=0;
-    int y=0;
-    int from;
-    int * data;
-    int counter;
-    int rightMove;
-    int value=0;
-
+    x=0;
+    y=0;
+    value=0;
     counter=0;
     push(stack,-2,-2);
     while(x!=-2){
