@@ -24,7 +24,17 @@ int ILPSolve(Game*game,int**board){
     int        optimstatus;
     int        error = 0;
     printf("s0\n");
-    allocateArrays(game,ind,val,lb,obj,vtype);
+    /*allocateArrays(game,ind,val,lb,obj,vtype);*/
+
+    ind=(int*)calloc((unsigned int)DIM, sizeof(int));
+    val=(double*)calloc((unsigned int)DIM, sizeof(double));
+    lb=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+    vtype=(char*)calloc((unsigned int)DIM*DIM*DIM, sizeof(char));
+    obj=(double*)calloc((unsigned int)DIM*DIM*DIM, sizeof(double));
+
+    if(ind==NULL || val==NULL || lb==NULL || vtype==NULL || obj==NULL){
+        printError(game,MEMORY_ALLOC_ERROR);
+    }
     printf("s1\n");
     /* Create new model and environment */
     error = createEnv(model,env,game,board,lb,vtype);
