@@ -113,7 +113,6 @@ int validate(Game *game) {
         return 0;
     }
     board=copyBoard(game);
-    printf("1\n");
     res=ILPSolve(game,board);
     if(res==3 || res==4 || res==5){
         freeMemory((void*)board,DIM);
