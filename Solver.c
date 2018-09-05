@@ -2,7 +2,7 @@
 #include "Solver.h"
 
 void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype);
-int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype);
+int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype);
 int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val);
 int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val);
@@ -27,7 +27,7 @@ int ILPSolve(Game*game,int**board){
     allocateArrays(game,ind,val,lb,obj,vtype);
     printf("s1\n");
     /* Create new model and environment */
-    error = createModel(model,env,game,board,lb,vtype);
+    error = createEnv(model,env,game,board,lb,vtype);
     printf("s1.5\n");
     if(error){
         printError(game,ILP_ERROR);
@@ -132,7 +132,7 @@ void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype
 }
 
 
-int createModel(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
+int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
     int i,j,v,error;
     printf("create model 0");
     error=0;
