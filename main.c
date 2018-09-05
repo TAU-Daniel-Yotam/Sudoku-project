@@ -5,7 +5,7 @@
 #include "MainAux.h"
 
 int main() {
-            int exit, type, erroneous, valid;
+            int exit, type, valid;
             Game game;
             game.board=NULL;
             game.list=NULL;
@@ -13,7 +13,6 @@ int main() {
             parsedCommand.intArgs=NULL;
             char command[1024];
             game.mode = 0;
-            erroneous=0;
             exit=0;
             printf("Sudoku\n------\n");
             while (!exit) {
@@ -61,8 +60,6 @@ int main() {
                         generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
                         break;
                     case 8:
-                        if (erroneous == 1)
-                            erroneous = 0;
                         undo(&game);
                         break;
                     case 9:
