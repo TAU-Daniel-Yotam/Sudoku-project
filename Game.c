@@ -96,12 +96,13 @@ int set(Game* game,int x,int y,int value){
     listData[0][1]=y;
     listData[0][2]=game->board[x][y].value;
     listData[0][3]=value;
-   addLast(game->list,listData,1);
+    addLast(game->list,listData,1);
 
     game->board[x][y].value=value;
     checkBlock(game,x,y);
     checkRow(game,x);
     checkColumns(game,y);
+    printBoard(game);
     return 1;
 }
 

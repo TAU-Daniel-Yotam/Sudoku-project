@@ -73,10 +73,8 @@ void printDashes(int blockWidth,int blockHeight){
 
 /*check*/
 int checkRange(Game* game,int a,int type){
-    if((a<0 || a>
-            game->blockHeight*game->blockHeight)&&type==1) return 0;
-    if((a<=0 || a>=
-              game->blockHeight*game->blockHeight)&&type==0) return 0;
+    if((a<0 || a > DIM) && type==1) return 0;
+    if((a<=0 || a> DIM) && type==0) return 0;
     return 1;
 }
 /*check*/
