@@ -146,28 +146,22 @@ void allocateArrays(Game*game,int*ind,double*val,double*lb,double*obj,char*vtype
 
 int createEnv(GRBmodel*model,GRBenv*env,Game*game,int**board,double*lb,char*vtype){
     int i,j,v,error;
-    printf("create model 0");
     error=0;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
             for (v = 1; v <= DIM; v++) {
                 if (board[i][j] == v){
                     lb[i*DIM*DIM+j*DIM+v-1] = 1;
-                    printf("create model 1");
                 }
                 else{
                     lb[i*DIM*DIM+j*DIM+v-1] = 0;
-                    printf("create model 2");
                 }
                 vtype[i*DIM*DIM+j*DIM+v-1] = GRB_BINARY;
-                printf("create model 3");
             }
         }
     }
-    printf("create model 4");
     error = GRBloadenv(&env, NULL) + GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL,
                                                          vtype, NULL);
-    printf("create model 5");
     return error;
 }
 
