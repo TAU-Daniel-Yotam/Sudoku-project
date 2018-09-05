@@ -33,4 +33,7 @@ void    freeGame(Game*game);
 void    freeBoard(Game*game);
 int     checkInvalid(Game* game, int x, int y, int value);
 void printerror(Game * game);
+Cell ** copyCellBoard(Game * game);
+int checkblock(Game* game, int x, int y, int value);
+int checkRowColumn(Game* game, int x, int y, int value);
 #endif

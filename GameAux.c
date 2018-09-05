@@ -29,15 +29,16 @@ int readFromFile2(FILE *file,Game * game,int mode) {
 }
 /*check*/
 void initGame(Game * game,int mode,int blockHeight,int blockWidth){
-    game->blockWidth=blockWidth;
-    game->blockHeight=blockHeight;
-    game->mode=mode;
-    if(game->list!=NULL)
-        freeList(game->list);
-    game->list=createList();
     if(game->board!=NULL){
         freeBoard(game);
     }
+    if(game->list!=NULL)
+        freeList(game->list);
+    game->blockWidth=blockWidth;
+    game->blockHeight=blockHeight;
+    game->mode=mode;
+    game->list=createList();
+
 }
 /*check*/
 Cell ** createBoard(int columns,int row){
@@ -94,7 +95,7 @@ void checkBlock(Game * game,int x,int y){
         printError(game,MEMORY_ALLOC_ERROR);
     }
     for(i=0;i<DIM;i++){
-        table[i]=(int*)calloc(2, sizeof(int));
+        table[i]=(int*)calloc(3, sizeof(int));
         if(table[i]==NULL){
             printError(game,MEMORY_ALLOC_ERROR);
         }
@@ -128,7 +129,8 @@ void freeMemory(void ** array,int size){
     for(i=0;i<size;i++) {
         free(array[i]);
     }
-    free(array);
+            free(array);
+
 }
 
 /*check*/
@@ -264,24 +266,6 @@ void createListDataGenerate(Game*game,int**listData){
                 listData[count][2]=0;
                 listData[count][3]=game->board[i][j].value;
             }
-        }
-    }
-}
-
-void updateGameBoard(Game*game,int**board){
-    int i,j;
-    for(i=0;i<DIM;i++){
-        for(j=0;j<DIM;j++){
-            game->board[i][j].value=board[i][j];
-        }
-    }
-}
-
-void emptyBoard(Game*game){
-    int i,j;
-    for(i=0;i<DIM;i++){
-        for(j=0;j<DIM;j++){
-            game->board[i][j].value=0;
         }
     }
 }
@@ -446,6 +430,58 @@ void printerror(Game * game){
         printf("\n");
     }
 }
+
+Cell ** copyCellBoard(Game * game){
+    int i,j;
+   Cell ** board= createBoard(game->blockHeight,game->blockWidth);
+   for(i=0;i<DIM;i++){
+       for(j=0;j<DIM;j++){
+           board[i][j].value=game->board[i][j].value;
+           board[i][j].isPlayerMove=game->board[i][j].isPlayerMove;
+           board[i][j].isFixed=game->board[i][j].isFixed;
+           board[i][j].isInValidInBlock=game->board[i][j].isInValidInBlock;
+           board[i][j].isInValidInRow=game->board[i][j].isInValidInRow;
+           board[i][j].isInValidInColumns=game->board[i][j].isInValidInColumns;
+       }
+   }
+   return board;
+
+}
+int checkblock(Game* game, int x, int y, int value) {
+    int k, r, i=x, j=y,sign=0;
+    while (x%game->blockHeight!= 0)x--;
+    while (y%game->blockWidth!= 0)y--;
+    for (k = 0; k<game->blockHeight; k++) {
+        for (r = 0; r<game->blockWidth; r++) {
+            if (game->board[x+k][y+r].value == value && (k+x)!=i && (r+y)!=j){
+                sign=1;
+                game->board[i][y].isInValidInColumns=1;
+            }
+
+            x++;
+        }
+        y++;
+    }
+    return sign;
+}
+int checkRowColumn(Game* game, int x, int y, int value) {
+    int i,sign=0;
+    for(i=0;i<game->blockWidth*game->blockHeight;i++) {
+        if (i != y && game->board[x][i].value == value) {
+            sign = 1;
+            game->board[x][i].isInValidInRow = 1;
+        }
+    }
+    for(i=0;i<game->blockWidth*game->blockHeight;i++){
+        if(i!=x && game->board[i][y].value==value) {
+            game->board[i][y].isInValidInColumns=1;
+            sign=1;
+
+        }
+    }
+    return sign;
+}
+
 
 
 

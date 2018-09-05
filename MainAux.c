@@ -35,9 +35,29 @@ int initArray(int*a, int size, int initValue){
     return 0;
 }
 
-int checkWinningGame(Game*game){
-    if(game!=NULL) return 1;
-    return 0;
+int checkFullBoard(Game*game){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            if(game->board[i][j].value==0)
+                return 0;
+        }
+    }
+
+    return 1;
+}
+int checkValidGame(Game *game){
+    int i,j;
+    updateCellValidity(game);
+    printerror(game);
+    for(i=0;i<DIM;i++) {
+        for (j = 0; j < DIM; j++) {
+            if (isInvalid(&game->board[i][j]))
+                return 0;
+        }
+    }
+    return 1;
+
 }
 
 

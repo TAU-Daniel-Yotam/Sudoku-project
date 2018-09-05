@@ -74,11 +74,11 @@ void printBoard(Game * game) {
 
 int set(Game* game,int x,int y,int value){
     int** listData ;
-    if(!checkRange(game,x,0) || !checkRange(game,y,0) || !checkRange(game,value,1)){
+    if(!checkRange(game,x+1,0) || !checkRange(game,y+1,0) || !checkRange(game,value,1)){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
     }
-     if(game->board[x-1][y-1].isFixed){
+     if(game->board[x][y].isFixed){
         printError(game,CELL_FIXED_ERROR);
         return 0;
     }
@@ -94,14 +94,14 @@ int set(Game* game,int x,int y,int value){
     }
     listData[0][0]=x;
     listData[0][1]=y;
-    listData[0][2]=game->board[x-1][y-1].value;
+    listData[0][2]=game->board[x][y].value;
     listData[0][3]=value;
    addLast(game->list,listData,1);
 
-    game->board[x-1][y-1].value=value;
-    /*checkBlock(game,x-1,y-1);
-    checkRow(game,x-1);
-    checkColumns(game,y-1);*/
+    game->board[x][y].value=value;
+    checkBlock(game,x,y);
+    checkRow(game,x);
+    checkColumns(game,y);
     return 1;
 }
 
@@ -126,7 +126,7 @@ int generate(Game*game,int x,int y){
         return 0;
     }
     do {
-        emptyBoard(game);
+       // emptyBoard(game);
         tries += fillXvalues(game, x);
         if(tries==1001){
             printError(game,GENERATOR_FAILED_ERROR);
@@ -141,7 +141,7 @@ int generate(Game*game,int x,int y){
         return 0;
     }*/
     printBoard(game);
-    updateGameBoard(game,board);
+//    updateGameBoard(game,board);
     printBoard(game);
     while(removed < DIM*DIM-y){
         do {
@@ -158,6 +158,7 @@ int generate(Game*game,int x,int y){
 /*check*/
 int undo(Game * game) {
     int i;
+    char from,to;
     int *move;
     if (!game->list->length || game->list->pointer == NULL) {
         printError(game,UNDO_ERROR);
@@ -165,23 +166,17 @@ int undo(Game * game) {
     }
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
-        printf("%d",move[0]);
-        printf("%d",move[1]);
-        printf("%d",move[2]);
-        printf("%d",move[3]);
-
-        game->board[move[0]-1][move[1]-1].value = move[2];
-        printf("Undo %d,%d: from ",move[0], move[1]);
-        if (move[3])
-            printf("%d to ", move[3]);
-        else
-            printf("_ to ");
-        if (move[2])
-            printf("%d\n", move[2]);
-        else
-            printf("_\n");
+        from = (char)(move[2] == 0 ? '_' : move[2] + '0');
+        to = (char)(move[3] == 0 ? '_' : move[3] + '0');
+        game->board[move[0]][move[1]].value = move[2];
+        checkRow(game,move[0]);
+        checkColumns(game,move[1]);
+        checkBlock(game,move[0],move[1]);
+        if(i==0) printBoard(game);
+        printf("undo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, to, from);
     }
     game->list->pointer = game->list->pointer->previous;
+    if(i==0) printBoard(game);
     return 1;
 }
 
@@ -203,9 +198,12 @@ int redo(Game *game) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        game->board[move[0]-1][move[1]-1].value = move[3];
+        game->board[move[0]][move[1]].value = move[3];
+        checkRow(game,move[0]);
+        checkColumns(game,move[1]);
+        checkBlock(game,move[0],move[1]);
         if(i==0) printBoard(game);
-        printf("Redo %d,%d: from %c to %c\n", move[0], move[1], to, from);
+        printf("Redo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, from, to);
     }
     return 1;
 }
@@ -257,9 +255,15 @@ int hint(Game* game, int x, int y){
     return 1;
 }
 
-/*int numSolution(Game * game){
-    return 1;
-}*/
+int numSolution(Game * game){
+    Game * newGame=calloc(1, sizeof(Game));
+    newGame->blockWidth=game->blockWidth;
+    newGame->blockHeight=game->blockHeight;
+    newGame->list=NULL;
+    newGame->board=copyCellBoard(game);
+    int number=detSolve(newGame);
+    printf("%d",number);
+}
 
 int** autofill(Game*game){
     int num_val[2]={0};
@@ -324,11 +328,24 @@ int** autofill(Game*game){
 }
 /*check*/
 int reset(Game *game) {
-    while (game->list->length != 0) {
-        undo(game);
-        deleteAtPosition(game->list, game->list->length - 1);
+    printList(game->list);
+    int i;
+    int * move;
+    if(!game->list->length)
+        return 1;
+    while (game->list->pointer!=NULL) {
+        for (i = 0; i < game->list->pointer->size; i++) {
+            move = game->list->pointer->data[i];
+            game->board[move[0]][move[1]].value = move[2];
+            checkRow(game,move[0]);
+            checkColumns(game,move[1]);
+            checkBlock(game,move[0],move[1]);
+        }
+        game->list->pointer=game->list->pointer->previous;
     }
-
+    deleteTail(game->list,game->list->head);
+    deleteAtPosition(game->list,0);
+    printList(game->list);
     printf("Board reset\n");
     return 1;
 }
