@@ -31,7 +31,6 @@ int main() {
             }
             command[0]='e';command[1]='x';command[2]='i';command[3]='t';command[4]='\0';
             type = parseCommand(&game, command, &parsedCommand);
-            printf("\n");
         }
         if (type == -1) {
             printError(&game, INVALID_COMMAND_ERROR);
