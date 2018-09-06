@@ -84,6 +84,7 @@ int ILPSolve(Game*game,int**board){
         freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
+    printf("s1\n");
     /* Check if model was solved */
     error = GRBgetintattr(model, GRB_INT_ATTR_STATUS, &optimstatus);
     if (error) {
