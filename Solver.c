@@ -105,6 +105,7 @@ int ILPSolve(Game*game,int**board){
         return -1;
     }
     updateBoard(game,board,obj);
+    printBoard(game);
     printf("s1\n");
     free(ind); free(lb); free(vtype); free(obj); free(val);
     printf("s2\n");
