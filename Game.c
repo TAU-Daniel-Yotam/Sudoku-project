@@ -262,7 +262,6 @@ int hint(Game* game, int x, int y){
 }
 
 int numSolution(Game * game){
-    if(checkError(game))
     Game * newGame=calloc(1, sizeof(Game));
     newGame->blockWidth=game->blockWidth;
     newGame->blockHeight=game->blockHeight;
@@ -335,7 +334,6 @@ int** autofill(Game*game){
 }
 /*check*/
 int reset(Game *game) {
-    printList(game->list);
     int i;
     int * move;
     if(!game->list->length)

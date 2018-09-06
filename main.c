@@ -14,7 +14,6 @@ int main() {
             parsedCommand.intArgs=NULL;
             char command[1024];
             game.mode = 0;
-            erroneous=0;
             exit=0;
             printf("Sudoku\n------\n");
             while (!exit) {
@@ -27,14 +26,18 @@ int main() {
                 }
                 switch (type) {
                     case 1:
-                        solve(&game, parsedCommand.strArg);
-                        updateCellValidity(&game);
-                        printBoard(&game);
+                        done=solve(&game, parsedCommand.strArg);
+                        if(done) {
+                            updateCellValidity(&game);
+                            printBoard(&game);
+                        }
                         break;
                     case 2:
-                        edit(&game, parsedCommand.strArg);
-                        updateCellValidity(&game);
-                        printBoard(&game);
+                        done=edit(&game, parsedCommand.strArg);
+                        if(done) {
+                            updateCellValidity(&game);
+                            printBoard(&game);
+                        }
                         break;
                     case 3:
                         mark_errors(&game, parsedCommand.intArgs[0]);
@@ -53,7 +56,6 @@ int main() {
                             } else
                                 printf("Puzzle solution erroneous\n");
                         }
-
                         break;
                     case 6:
                         valid = validate(&game);
@@ -83,7 +85,6 @@ int main() {
                         break;
                     case 13:
                         autofill(&game);
-                        printBoard(&game);
                         break;
                     case 14:
                         reset(&game);
