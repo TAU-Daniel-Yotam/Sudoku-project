@@ -308,8 +308,8 @@ int checkError(Game *game) {
 int writeToFile(Game *game, FILE *file) {
     Cell **index;
     int i, j;
-    fprintf(file, "%d ", game->blockWidth);
-    fprintf(file, "%d\n", game->blockHeight);
+    fprintf(file, "%d ", game->blockHeight);
+    fprintf(file, "%d\n", game->blockWidth);
     index = game->board;
     for (i = 0; i < DIM; i++) {
         for (j = 0; j < DIM; j++) {
