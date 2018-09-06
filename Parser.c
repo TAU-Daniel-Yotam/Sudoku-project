@@ -6,7 +6,7 @@ int parseArg(Command* command, char* arg, int argIndex);
 int validateArgs(Command* c);
 
 
-char* getInput(int size){
+char* getInput(int size,int*eof){
     char *str;
     int ch;
     int len = 0;
@@ -17,8 +17,9 @@ char* getInput(int size){
     }
     while(EOF!=(ch=fgetc(stdin)) && ch != '\n'){
         if(len>256){
-            free(str);
-            return "too long";
+            str[0]='t';
+            str[1]='\0';
+            return str;
         }
         str[len++]=(char)ch;
         if(len==size){
@@ -29,9 +30,14 @@ char* getInput(int size){
             }
         }
     }
+    if(ch==EOF) *eof=1;
     str[len++]='\0';
-
-    return realloc(str, sizeof(char)*len);
+    str = realloc(str, sizeof(char)*len);
+    if(!str) {
+        printError(NULL, MEMORY_ALLOC_ERROR);
+        return NULL;
+    }
+    return str;
 }
 
 int parseCommand(Game* game, char*command, Command* parsedCommand){

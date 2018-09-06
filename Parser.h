@@ -13,7 +13,7 @@ typedef struct Command{
 #include <stdio.h>
 #include <string.h>
 
-char* getInput(int size);
+char* getInput(int size,int*eof);
 int parseCommand(Game* game, char*command, Command* parsedCommand);
 void initCommand(Command* c);
 

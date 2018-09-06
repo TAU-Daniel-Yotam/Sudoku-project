@@ -5,7 +5,7 @@
 #include "MainAux.h"
 
 int main() {
-    int exit, type;
+    int exit, type,eof;
     Game game;
     char *command;
     Command parsedCommand;
@@ -13,13 +13,20 @@ int main() {
     game.list=NULL;
     parsedCommand.intArgs=NULL;
     game.mode = 0;
+    eof=0;
     exit=0;
     printf("Sudoku\n------\n");
     while (!exit) {
         printf("Enter your command:\n");
-        command = getInput(1024);
-        type = parseCommand(&game, command, &parsedCommand);
-        free(command);
+        if(!eof){
+            command = getInput(1024,&eof);
+            type = parseCommand(&game, command, &parsedCommand);
+            free(command);
+        }
+        else{
+            command="exit";
+            type = parseCommand(&game, command, &parsedCommand);
+        }
         if (type == -1) {
             printError(&game, INVALID_COMMAND_ERROR);
             continue;
