@@ -94,6 +94,7 @@ int main() {
             case 15:
                 exitGame(&game);
                 exit = 1;
+                printf("Exiting...\n");
                 break;
             default:
                 break;
