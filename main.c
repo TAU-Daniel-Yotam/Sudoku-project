@@ -7,7 +7,7 @@
 int main() {
     int exit, type;
     Game game;
-    char command[1024];
+    char *command;
     Command parsedCommand;
     game.board=NULL;
     game.list=NULL;
@@ -17,8 +17,9 @@ int main() {
     printf("Sudoku\n------\n");
     while (!exit) {
         printf("Enter your command:\n");
-        getInput(command, 1024);
+        command = getInput(1024);
         type = parseCommand(&game, command, &parsedCommand);
+        free(command);
         if (type == -1) {
             printError(&game, INVALID_COMMAND_ERROR);
             continue;
