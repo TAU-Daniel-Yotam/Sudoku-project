@@ -84,7 +84,6 @@ int ILPSolve(Game*game,int**board){
         freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
-    printf("s1\n");
     /* Check if model was solved */
     error = GRBgetintattr(model, GRB_INT_ATTR_STATUS, &optimstatus);
     if (error) {
@@ -146,6 +145,7 @@ int addConstrains_noEmptyCells(GRBmodel*model,Game*game,int*ind,double*val){
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
         }
     }
+    printf("no empty cells %d\n",error);
     return error;
 }
 
@@ -161,6 +161,7 @@ int addConstrains_onceInRow(GRBmodel*model,Game*game,int*ind,double*val){
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
         }
     }
+    printf("rows %d\n",error);
     return error;
 }
 
@@ -176,6 +177,7 @@ int addConstrains_onceIncolumn(GRBmodel*model,Game*game,int*ind,double*val){
             error = GRBaddconstr(model, DIM, ind, val, GRB_EQUAL, 1.0, NULL);
         }
     }
+    printf("columns %d\n",error);
     return error;
 }
 
@@ -198,6 +200,7 @@ int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
             }
         }
     }
+    printf("blocks %d\n",error);
     return error;
 }
 
