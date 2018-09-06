@@ -21,7 +21,7 @@ int readFromFile2(FILE *file,Game * game,int mode) {
                 printError(game,SOLVE_IO_ERROR);
             }
             game->board[i][j].value = num;
-            if (getc(file) == '.')
+            if (getc(file) == '.'&&game->mode==1)
                 game->board[i][j].isFixed = 1;
         }
     }
@@ -75,7 +75,7 @@ void printDashes(int blockWidth,int blockHeight){
 int checkRange(Game* game,int a,int type){
     if((a<0 || a>
             game->blockHeight*game->blockHeight)&&type==1) return 0;
-    if((a<=0 || a>=
+    if((a<=0 || a>
               game->blockHeight*game->blockHeight)&&type==0) return 0;
     return 1;
 }

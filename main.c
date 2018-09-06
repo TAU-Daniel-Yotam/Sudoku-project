@@ -6,7 +6,7 @@
 #include "GameAux.h"
 
 int main() {
-            int exit, type, erroneous, valid;
+            int exit, type, erroneous, valid,done;
             Game game;
             game.board=NULL;
             game.list=NULL;
@@ -29,10 +29,12 @@ int main() {
                     case 1:
                         solve(&game, parsedCommand.strArg);
                         updateCellValidity(&game);
+                        printBoard(&game);
                         break;
                     case 2:
                         edit(&game, parsedCommand.strArg);
                         updateCellValidity(&game);
+                        printBoard(&game);
                         break;
                     case 3:
                         mark_errors(&game, parsedCommand.intArgs[0]);
@@ -41,8 +43,10 @@ int main() {
                         printBoard(&game);
                         break;
                     case 5:
-                        set(&game, parsedCommand.intArgs[0]-1, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[2]);
-                        if (checkFullBoard(&game)) {
+                        done=set(&game, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[0]-1, parsedCommand.intArgs[2]);
+                        if (done)
+                            printBoard(&game);
+                        if (checkFullBoard(&game)&&game.mode==1&&done) {
                             if (checkValidGame(&game)) {
                                 printf("Puzzle solved successfully\n");
                                 game.mode = 0;
@@ -60,10 +64,9 @@ int main() {
                         break;
                     case 7:
                         generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
+                        printBoard(&game);
                         break;
                     case 8:
-                        if (erroneous == 1)
-                            erroneous = 0;
                         undo(&game);
                         break;
                     case 9:
@@ -73,16 +76,18 @@ int main() {
                         save(&game, parsedCommand.strArg);
                         break;
                     case 11:
-                        hint(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
+                        hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);
                         break;
                     case 12:
                         numSolution(&game);
                         break;
                     case 13:
                         autofill(&game);
+                        printBoard(&game);
                         break;
                     case 14:
                         reset(&game);
+                        printBoard(&game);
                         break;
                     case 15:
                         exitGame(&game);
