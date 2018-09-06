@@ -9,7 +9,7 @@ int validateArgs(Command* c);
 char* getInput(int size){
     char *str;
     int ch;
-    size_t len = 0;
+    int len = 0;
     str = realloc(NULL, sizeof(char)*size);
     if(!str) {
         printError(NULL, MEMORY_ALLOC_ERROR);
@@ -20,7 +20,7 @@ char* getInput(int size){
             free(str);
             return "too long";
         }
-        str[len++]=ch;
+        str[len++]=(char)ch;
         if(len==size){
             str = realloc(str, sizeof(char)*(size*=2));
             if(!str) {
