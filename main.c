@@ -24,6 +24,13 @@ int main() {
             free(command);
         }
         else{
+            printf("\n");
+            command=(char*)calloc(5, sizeof(char));
+            if(command==NULL){
+                printError(NULL,MEMORY_ALLOC_ERROR);
+                return 0;
+            }
+            command[0]='e';command[1]='x';command[2]='i';command[3]='t';command[4]='\0';
             command="exit";
             type = parseCommand(&game, command, &parsedCommand);
         }
