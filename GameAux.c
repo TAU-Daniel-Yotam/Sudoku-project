@@ -11,8 +11,8 @@ int readFromFile2(FILE *file,Game * game,int mode) {
     if(!eof){
         printError(game,SOLVE_IO_ERROR);
     }
-    initGame(game,mode,b,a);
-    index = createBoard(a,b);
+    initGame(game,mode,a,b);
+    index = createBoard(b,a);
     game->board = index;
     for (i = 0; i < a * b; i++) {
         for (j = 0; j < a * b; j++) {
