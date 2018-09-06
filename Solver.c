@@ -185,8 +185,8 @@ int addConstrains_onceInBlock(GRBmodel*model,Game*game,int*ind,double*val){
     int i,j,v,error,ig,jg,count;
     error=0;
     for (v = 0; v < DIM; v++) {
-        for (ig = 0; ig < SUBDIM1; ig++) {
-            for (jg = 0; jg < SUBDIM2; jg++) {
+        for (ig = 0; ig < SUBDIM2; ig++) {
+            for (jg = 0; jg < SUBDIM1; jg++) {
                 count = 0;
                 for (i = ig*SUBDIM1; i < (ig+1)*SUBDIM1; i++) {
                     for (j = jg*SUBDIM2; j < (jg+1)*SUBDIM2; j++) {
