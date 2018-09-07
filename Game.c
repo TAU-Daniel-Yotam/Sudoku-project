@@ -159,6 +159,7 @@ int generate(Game*game,int x,int y){
     }*/
     printBoard(game);
     updateGameBoard(game,board);
+    freeMemory((void**)board,DIM);
     printBoard(game);
     while(removed < DIM*DIM-y){
         do {
