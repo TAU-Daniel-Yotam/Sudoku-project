@@ -30,7 +30,7 @@ int ILPSolve(Game*game,int**board){
     }
     /* Create new model and environment */
     createModel(game,board,lb,vtype);
-    error = GRBloadenv(&env, NULL) + GRBsetintparam(env, GRB_INT_PAR_LOGTOCONSOLE, 0) +
+    error = GRBloadenv(&env, NULL) /*+ GRBsetintparam(env, GRB_INT_PAR_LOGTOCONSOLE, 0)*/ +
             GRBnewmodel(env, &model, NULL, DIM*DIM*DIM, NULL, lb, NULL, vtype, NULL);
     if(error){
         printError(game,ILP_ERROR);
