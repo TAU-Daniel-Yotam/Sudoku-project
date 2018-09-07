@@ -12,7 +12,7 @@
 #include "GameAux.h"
 
 int main() {
-    int exit, type, erroneous, valid,done;
+    int exit, type, valid,done;
     Game game;
     game.board=NULL;
     game.list=NULL;
