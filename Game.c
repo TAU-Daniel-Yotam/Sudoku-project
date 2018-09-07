@@ -119,9 +119,7 @@ int validate(Game *game) {
         return 0;
     }
     printf("Validation passed board is solvable\n");
-    printf("g1\n");
     freeMemory((void**)board,DIM);
-    printf("g2\n");
     return 1;
 
 }
@@ -132,7 +130,6 @@ int generate(Game*game,int x,int y){
     removed=0;
     tries=0;
     solved=-1;
-    printf("g1_%d_%d\n",x,y);
     if(x<0 || x>DIM*DIM || y<0 || y>DIM*DIM){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
@@ -141,12 +138,9 @@ int generate(Game*game,int x,int y){
         printError(game,BOARD_NOT_EMPTY_ERROR);
         return 0;
     }
-    printf("g2\n");
     do {
         emptyBoard(game);
-        printf("g3\n");
         tries += fillXvalues(game, x);
-        printf("%d gen4\n",tries);
         if(tries==1001){
             printError(game,GENERATOR_FAILED_ERROR);
             return 0;
@@ -155,18 +149,15 @@ int generate(Game*game,int x,int y){
         solved = ILPSolve(game,board);
         if(solved==-1) tries++;
     }while (solved==-1);
-    printf("g4\n");
     printBoard(game);
     updateGameBoard(game,board);
     freeMemory((void**)board,DIM);
-    printf("gen5\n");
     while(removed < DIM*DIM-y){
         do {
             i = rand() % DIM;
             j = rand() % DIM;
         } while (!game->board[i][j].value);
         game->board[i][j].value=0;
-        printf("line=%d col=%d\n",i,j);
         removed++;
     }
     listData = (int**)calloc(y, sizeof(int*));
@@ -174,7 +165,6 @@ int generate(Game*game,int x,int y){
         printError(NULL,MEMORY_ALLOC_ERROR);
         return 0;
     }
-    printf("gen12\n");
     createListDataGenerate(game,listData);
     printData(listData,y);
     addLast(game->list,listData,y);
