@@ -17,7 +17,7 @@ int main() {
     exit=0;
     printf("Sudoku\n------\n");
     while (!exit) {
-        if(parsedCommand.strArg) free(parsedCommand.strArg);
+        if(parsedCommand.strArg!=NULL) free(parsedCommand.strArg);
         printf("Enter your command:\n");
         if(!eof){
             command = getInput(1024,&eof);
