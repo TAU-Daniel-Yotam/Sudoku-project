@@ -203,19 +203,15 @@ int fillXvalues(Game*game,int x){
         } while (game->board[i][j].value);
         size = countPossibleValues(game,a,i,j);
         if(size>0) {
-            printf("1");
             values = (int *) calloc((unsigned int)size, sizeof(int));
-            printf("2");
             if (values == NULL) {
                 printError(game, MEMORY_ALLOC_ERROR);
                 return 0;
             }
             createValuesArray(game,i,j,values);
-            printf("3");
             game->board[i][j].value = values[rand() % size];
             count++;
             free(values);
-            printf("4");
             continue;
         }
         tries++;
