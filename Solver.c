@@ -92,7 +92,7 @@ int ILPSolve(Game*game,int**board){
         return 0;
     }
     printf("opt status %d\n",optimstatus);
-    if(optimstatus!=3 && optimstatus!=4 && optimstatus!=5){
+    if(optimstatus!=3){
         /* Get the solved board */
         error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
         if (error) {

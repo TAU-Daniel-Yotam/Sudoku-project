@@ -113,7 +113,7 @@ int validate(Game *game,int toPrint) {
     }
     board=copyBoard(game);
     res=ILPSolve(game,board);
-    if(res==3 || res==4 || res==5){
+    if(res==-1){
         freeMemory((void*)board,DIM);
         if(toPrint)
             printf("Validation failed: board is unsolvable\n");
@@ -241,7 +241,7 @@ int save(Game *game, char *path) {
         printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    if (game->mode == 2 && !validate(game,0)) {
+    if (game->mode == 2 && validate(game,0)==-1) {
         printError(game,VALIDATION_FAILED_ERROR);
         return 0;
     }
