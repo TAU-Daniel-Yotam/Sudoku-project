@@ -206,7 +206,7 @@ int undo(Game * game) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        printf("undo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, to, from);
+        printf("undo %d,%d: from %c to %c\n", move[1]+1, move[0]+1, to, from);
     }
     game->list->pointer = game->list->pointer->previous;
     if(i==0) printBoard(game);
@@ -239,7 +239,7 @@ int redo(Game *game) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        printf("Redo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, from, to);
+        printf("Redo %d,%d: from %c to %c\n", move[1]+1, move[0]+1, from, to);
     }
     return 1;
 }

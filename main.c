@@ -90,7 +90,7 @@ int main() {
                 free(parsedCommand.strArg);
                 break;
             case 11:
-                hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);
+                hint(&game, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[0]-1);
                 break;
             case 12:
                 numSolution(&game);
