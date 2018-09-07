@@ -44,7 +44,7 @@ int     redo(Game * game);
 int     save(Game *game, char *path);
 int     hint(Game * game,int x,int y);
 int     numSolution(Game * game);
-int**   autofill(Game*game);
+int     autofill(Game*game);
 int     reset(Game * game);
 void    exitGame(Game*game);
 

@@ -314,13 +314,11 @@ int autofill(Game*gamea){
                     else{
                         cellsToFill=(int**)realloc(cellsToFill,(sizeof(int*))*(++count));
                     }
-                    printf("%x\n",(int)cellsToFill);
                     if(cellsToFill==NULL) {
                         printError(game,MEMORY_ALLOC_ERROR);
                         return 0;
                     }
                     cellsToFill[count-1]=(int*)calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-                    printf("%x\n",(int)cellsToFill[count-1]);
                     if(cellsToFill[count-1]==NULL) {
                         printError(game,MEMORY_ALLOC_ERROR);
                         return 0;
@@ -334,18 +332,12 @@ int autofill(Game*gamea){
         }
     }
 
-    printf("af0\n");
     printData(cellsToFill,(int)count);
-    printf("af1\n");
     if(cellsToFill!=NULL) {
         for (k = 0; k < (int)count; k++) { /* fill board with values */
             game->board[cellsToFill[k][0]][cellsToFill[k][1]].value = cellsToFill[k][3];
-            printf("%d\n", k);
         }
-
         /*fillValues(game,cellsToFill,count);*/
-        printf("af2\n");
-
         updateCellValidity(game);
         deleteTail(game->list, game->list->pointer);
         addLast(game->list, cellsToFill, (int) count);
