@@ -5,7 +5,7 @@
 #include "MainAux.h"
 
 int main() {
-    int exit, type,eof;
+    int exit, type, eof,valid,done;
     Game game;
     char *command;
     Command parsedCommand;
@@ -24,6 +24,7 @@ int main() {
             free(command);
         }
         else{
+            printf("\n");
             command=(char*)calloc(5, sizeof(char));
             if(command==NULL){
                 printError(NULL,MEMORY_ALLOC_ERROR);
@@ -38,15 +39,18 @@ int main() {
         }
         switch (type) {
             case 1:
-                if(solve(&game, parsedCommand.strArg)){
+                done=solve(&game, parsedCommand.strArg);
+                if(done) {
                     updateCellValidity(&game);
                     printBoard(&game);
                 }
                 break;
             case 2:
-                edit(&game, parsedCommand.strArg);
-                updateCellValidity(&game);
-                printBoard(&game);
+                done=edit(&game, parsedCommand.strArg);
+                if(done) {
+                    updateCellValidity(&game);
+                    printBoard(&game);
+                }
                 break;
             case 3:
                 mark_errors(&game, parsedCommand.intArgs[0]);
@@ -55,15 +59,16 @@ int main() {
                 printBoard(&game);
                 break;
             case 5:
-                set(&game, parsedCommand.intArgs[0]-1, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[2]);
-                if (checkFullBoard(&game)) {
+                done=set(&game, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[0]-1, parsedCommand.intArgs[2]);
+                if (done)
+                    printBoard(&game);
+                if (checkFullBoard(&game)&&game.mode==1&&done) {
                     if (checkValidGame(&game)) {
                         printf("Puzzle solved successfully\n");
                         game.mode = 0;
                     } else
                         printf("Puzzle solution erroneous\n");
                 }
-
                 break;
             case 6:
                 validate(&game);
@@ -81,7 +86,7 @@ int main() {
                 save(&game, parsedCommand.strArg);
                 break;
             case 11:
-                hint(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
+                hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);
                 break;
             case 12:
                 numSolution(&game);
@@ -91,6 +96,7 @@ int main() {
                 break;
             case 14:
                 reset(&game);
+                printBoard(&game);
                 break;
             case 15:
                 exitGame(&game);

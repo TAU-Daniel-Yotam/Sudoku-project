@@ -370,11 +370,14 @@ int countPossibleValues(Game*game,int*num_val,int x, int y){
 
 
 void fillValues(Game*game,int**values,int size){
-    int i;
+    int i,a,b;
+    if(size==0) return;
     for(i=0;i<size;i++){
-        game->board[values[i][0]][values[i][1]].value=values[i][3];
-        game->board[values[i][0]][values[i][1]].isPlayerMove=1;
-        printf("Cell <%d,%d> set to %d\n",values[i][0],values[i][1],values[i][3]);
+        a=values[i][0];
+        b=values[i][1];
+        game->board[a][b].value=values[i][3];
+        game->board[a][b].isPlayerMove=1;
+        printf("Cell <%d,%d> set to %d\n",values[i][0]+1,values[i][1]+1,values[i][3]);
     }
 }
 

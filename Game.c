@@ -197,13 +197,16 @@ int undo(Game * game) {
     }
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
+        game->board[move[0]][move[1]].value = move[2];
+        checkRow(game, move[0]);
+        checkColumns(game, move[1]);
+        checkBlock(game, move[0], move[1]);
+    }
+    printBoard(game);
+    for (i=0;i<game->list->pointer->size;i++){
+        move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        game->board[move[0]][move[1]].value = move[2];
-        checkRow(game,move[0]);
-        checkColumns(game,move[1]);
-        checkBlock(game,move[0],move[1]);
-        if(i==0) printBoard(game);
         printf("undo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, to, from);
     }
     game->list->pointer = game->list->pointer->previous;
@@ -227,13 +230,16 @@ int redo(Game *game) {
         game->list->pointer=game->list->head;
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
+        game->board[move[0]][move[1]].value = move[3];
+        checkRow(game, move[0]);
+        checkColumns(game, move[1]);
+        checkBlock(game, move[0], move[1]);
+    }
+    printBoard(game);
+    for(i=0;i<game->list->pointer->size;i++){
+        move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        game->board[move[0]][move[1]].value = move[3];
-        checkRow(game,move[0]);
-        checkColumns(game,move[1]);
-        checkBlock(game,move[0],move[1]);
-        if(i==0) printBoard(game);
         printf("Redo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, from, to);
     }
     return 1;
@@ -254,7 +260,7 @@ int save(Game *game, char *path) {
         return 0;
     }
     writeToFile(game,file);
-    printf("Saved to:x\n");
+    printf("Saved to:%s\n",path);
     fclose(file);
     return 1;
 }
@@ -345,13 +351,14 @@ int autofill(Game*gamea){
             }
         }
     }
+
     if(cellsToFill!=NULL) {
         for (k = 0; k < (int)count; k++) { /* fill board with values */
             game->board[cellsToFill[k][0]][cellsToFill[k][1]].value = cellsToFill[k][3];
         }
         updateCellValidity(game);
         addLast(game->list, cellsToFill, (int) count);
-        freeMemory((void **) cellsToFill, (int) count);
+        /*freeMemory((void **) cellsToFill, (int) count) - this is freed by list functions;*/
     }
     printBoard(game);
     return 1;
@@ -360,7 +367,6 @@ int autofill(Game*gamea){
 int reset(Game *game) {
     int i;
     int * move;
-    printList(game->list);
     if(!game->list->length)
         return 1;
     while (game->list->pointer!=NULL) {
