@@ -21,7 +21,7 @@ int readFromFile2(FILE *file,Game * game,int mode) {
                 printError(game,SOLVE_IO_ERROR);
             }
             game->board[i][j].value = num;
-            if (getc(file) == '.')
+            if (getc(file) == '.' && game->mode==1)
                 game->board[i][j].isFixed = 1;
         }
     }
