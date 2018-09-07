@@ -14,7 +14,7 @@ typedef struct Command{
 #include <string.h>
 
 
-int getInput(char* command, int size);
+char* getInput(int size,int*eof);
 int parseCommand(Game* game, char*command, Command* parsedCommand);
 void initCommand(Command* c);
 

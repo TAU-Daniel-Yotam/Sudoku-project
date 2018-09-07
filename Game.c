@@ -262,73 +262,75 @@ int hint(Game* game, int x, int y){
 }
 
 int numSolution(Game * game){
-    Game * newGame=calloc(1, sizeof(Game));
+    int number;
+    Game * newGame=(Game*)calloc(1, sizeof(Game));
     newGame->blockWidth=game->blockWidth;
     newGame->blockHeight=game->blockHeight;
     newGame->list=NULL;
     newGame->board=copyCellBoard(game);
-    int number=detSolve(newGame);
-    printf("%d",number);
+    number=detSolve(newGame);
+    printf("Number of solutions: %d\n",number);
+    if(number == 1){
+        printf("This is a good board!\n");
+    }
+    else{
+        printf("The puzzle has more than 1 solution, try to edit it further\n");
+    }
+    freeGame(newGame);
+    return 1;
 }
-int** autofill(Game*game) {
-    int num_val[2] = {0};
-    unsigned int count;
-    int **cellsToFill = NULL;
-    int i, j, first = 1;
-    count = 0;
-    if (!checkError(game)) {
-        printError(game, ERRONEOUS_BOARD_ERROR);
+
+int autofill(Game*gamea){
+    Game*game=gamea;
+    size_t count;
+    int i,j,k,first=1;
+    int num_val[2]={0};
+    int**cellsToFill=NULL;
+    count=0;
+    if(!checkError(game)){
+        printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    for (i = 0; i < game->blockWidth; i++) {
-        for (j = 0; j < game->blockHeight; j++) {
-            if (game->board[i][j].value) {/* if cell is not empty */
-                countPossibleValues(game, num_val, i, j);
-                if (num_val[0] == 1) {
-                    if (first) {
-                        cellsToFill = (int **) calloc(++count, sizeof(int *));
-                        if (cellsToFill == NULL) {
-                            printError(game, MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count - 1] = (int *) calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-                        if (cellsToFill[count - 1] == NULL) {
-                            printError(game, MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count - 1][0] = i;
-                        cellsToFill[count - 1][1] = j;
-                        cellsToFill[count - 1][2] = 0;
-                        cellsToFill[count - 1][3] = num_val[1];
-                        first = 0;
-                    } else {
-                        cellsToFill = (int **) realloc(cellsToFill, ++count);
-                        if (cellsToFill == NULL) {
-                            printError(game, MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count - 1] = (int *) calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-                        if (cellsToFill[count - 1] == NULL) {
-                            printError(game, MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count - 1][0] = i;
-                        cellsToFill[count - 1][1] = j;
-                        cellsToFill[count - 1][2] = 0;
-                        cellsToFill[count - 1][3] = num_val[1];
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            if(!game->board[i][j].value){/* if cell is empty */
+                countPossibleValues(game,num_val,i,j);
+                if(num_val[0]==1) {
+                    if(first){
+                        cellsToFill=(int**)realloc(NULL, (sizeof(int*))*(++count));
+                        first=0;
                     }
+                    else{
+                        cellsToFill=(int**)realloc(cellsToFill,(sizeof(int*))*(++count));
+                    }
+                    if(cellsToFill==NULL) {
+                        printError(game,MEMORY_ALLOC_ERROR);
+                        return 0;
+                    }
+                    cellsToFill[count-1]=(int*)calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
+                    if(cellsToFill[count-1]==NULL) {
+                        printError(game,MEMORY_ALLOC_ERROR);
+                        return 0;
+                    }
+                    cellsToFill[count-1][0]=i;
+                    cellsToFill[count-1][1]=j;
+                    cellsToFill[count-1][2]=0;
+                    cellsToFill[count-1][3]=num_val[1];
                 }
             }
         }
     }
-    /* complete:
-     * add list node
-     * if count == 0 don't add list node
-     * delete list nodes after this command*/
-    fillValues(game, cellsToFill, count);
-    updateCellValidity(game);
+
+    if(cellsToFill!=NULL) {
+        for (k = 0; k < (int)count; k++) { /* fill board with values */
+            game->board[cellsToFill[k][0]][cellsToFill[k][1]].value = cellsToFill[k][3];
+        }
+        updateCellValidity(game);
+        addLast(game->list, cellsToFill, (int) count);
+        /*freeMemory((void **) cellsToFill, (int) count) - this is freed by list functions;*/
+    }
     printBoard(game);
-    return cellsToFill;
+    return 1;
 }
 /*check*/
 int reset(Game *game) {
