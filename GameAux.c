@@ -19,6 +19,8 @@ int readFromFile2(FILE *file,Game * game,int mode) {
             eof=fscanf(file, "%d", &num);
             if(!eof){
                 printError(game,SOLVE_IO_ERROR);
+                freeGame(game);
+                return 0;
             }
             game->board[i][j].value = num;
             if (getc(file) == '.' && game->mode==1)
