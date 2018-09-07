@@ -105,7 +105,7 @@ int set(Game* game,int x,int y,int value){
     return 1;
 }
 
-int validate(Game *game) {
+int validate(Game *game,int toPrint) {
     int**board,res;
     if(!checkError(game)){
         printError(NULL,ERRONEOUS_BOARD_ERROR);
@@ -113,15 +113,15 @@ int validate(Game *game) {
     }
     board=copyBoard(game);
     res=ILPSolve(game,board);
-    if(res==3 || res==4 || res==5){
+    if(res==-1){
         freeMemory((void*)board,DIM);
-        printf("Validation failed: board is unsolvable\n");
+        if(toPrint)
+            printf("Validation failed: board is unsolvable\n");
         return 0;
     }
-    printf("Validation passed board is solvable\n");
-    printf("g1\n");
+    if(toPrint)
+        printf("Validation passed board is solvable\n");
     freeMemory((void**)board,DIM);
-    printf("g2\n");
     return 1;
 
 }
@@ -132,7 +132,6 @@ int generate(Game*game,int x,int y){
     removed=0;
     tries=0;
     solved=-1;
-    listData=NULL;
     if(x<0 || x>DIM*DIM || y<0 || y>DIM*DIM){
         printError(game,VALUE_RANGE_ERROR);
         return 0;
@@ -152,22 +151,24 @@ int generate(Game*game,int x,int y){
         solved = ILPSolve(game,board);
         if(solved==-1) tries++;
     }while (solved==-1);
-/*    if(tries==1001){
-        printError(game,GENERATOR_FAILED_ERROR);
-        return 0;
-    }*/
-    printBoard(game);
     updateGameBoard(game,board);
-    printBoard(game);
+    freeMemory((void**)board,DIM);
     while(removed < DIM*DIM-y){
         do {
             i = rand() % DIM;
             j = rand() % DIM;
         } while (!game->board[i][j].value);
         game->board[i][j].value=0;
+        removed++;
+    }
+    listData = (int**)calloc(y, sizeof(int*));
+    if(listData==NULL){
+        printError(NULL,MEMORY_ALLOC_ERROR);
+        return 0;
     }
     createListDataGenerate(game,listData);
     addLast(game->list,listData,y);
+    printBoard(game);
     return 1;
 }
 
@@ -192,7 +193,7 @@ int undo(Game * game) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        printf("undo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, to, from);
+        printf("undo %d,%d: from %c to %c\n", move[1]+1, move[0]+1, to, from);
     }
     game->list->pointer = game->list->pointer->previous;
     if(i==0) printBoard(game);
@@ -225,7 +226,7 @@ int redo(Game *game) {
         move = game->list->pointer->data[i];
         from = (char)(move[2] == 0 ? '_' : move[2] + '0');
         to = (char)(move[3] == 0 ? '_' : move[3] + '0');
-        printf("Redo %d,%d: from %c to %c\n", move[0]+1, move[1]+1, from, to);
+        printf("Redo %d,%d: from %c to %c\n", move[1]+1, move[0]+1, from, to);
     }
     return 1;
 }
@@ -240,7 +241,7 @@ int save(Game *game, char *path) {
         printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    if (game->mode == 2 && !validate(game)) {
+    if (game->mode == 2 && !validate(game,0)) {
         printError(game,VALIDATION_FAILED_ERROR);
         return 0;
     }

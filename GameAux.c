@@ -192,10 +192,11 @@ void checkColumns(Game * game,int x) {
 
 int fillXvalues(Game*game,int x){
     int tries,count,i,j,size;
-    int*values;
+    int value;
     int a[2]={0};
     tries=0;
     count=0;
+    value=1;
     while (tries<1000 && count<x) {
         do {
             i = rand() % DIM;
@@ -203,15 +204,11 @@ int fillXvalues(Game*game,int x){
         } while (game->board[i][j].value);
         size = countPossibleValues(game,a,i,j);
         if(size>0) {
-            values = (int *) calloc((unsigned int)size, sizeof(int));
-            if (values == NULL) {
-                printError(game, MEMORY_ALLOC_ERROR);
-                return 0;
+            while(checkInvalid(game,i,j,value)){
+                value = rand()%DIM +1;
             }
-            createValuesArray(game,i,j,values);
-            game->board[i][j].value = values[rand() % size];
+            game->board[i][j].value = value;
             count++;
-            free(values);
             continue;
         }
         tries++;
@@ -264,6 +261,7 @@ void createListDataGenerate(Game*game,int**listData){
                 listData[count][1]=j;
                 listData[count][2]=0;
                 listData[count][3]=game->board[i][j].value;
+                count++;
             }
         }
     }

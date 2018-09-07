@@ -73,8 +73,7 @@ int main() {
                 }
                 break;
             case 6:
-                validate(&game);
-                printf("m1");
+                validate(&game,1);
                 break;
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
@@ -90,7 +89,7 @@ int main() {
                 free(parsedCommand.strArg);
                 break;
             case 11:
-                hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);
+                hint(&game, parsedCommand.intArgs[1]-1, parsedCommand.intArgs[0]-1);
                 break;
             case 12:
                 numSolution(&game);
