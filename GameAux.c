@@ -192,40 +192,28 @@ void checkColumns(Game * game,int x) {
 
 int fillXvalues(Game*game,int x){
     int tries,count,i,j,k,size;
-    int*values;
+    int value;
     int a[2]={0};
     tries=0;
     count=0;
-    printf("fill1\n");
+    value=1;
     while (tries<1000 && count<x) {
         do {
             i = rand() % DIM;
             j = rand() % DIM;
         } while (game->board[i][j].value);
-        printf("fill2_%d_%d\n",count,tries);
         size = countPossibleValues(game,a,i,j);
-        printf("fill3_%d_%d\n",count,tries);
         if(size>0) {
-            values = (int *) calloc((unsigned int)size, sizeof(int));
-            if (values == NULL) {
-                printError(game, MEMORY_ALLOC_ERROR);
-                return 0;
+            while(checkInvalid(game,i,j,value)){
+                value = rand()%DIM +1;
             }
-            printf("fill4_%d_%d\n",count,tries);
-            createValuesArray(game,i,j,values);
-            printf("fill5_%d_%d\n",count,tries);
-            game->board[i][j].value = values[rand() % size];
-            printf("fill6_%d_%d\n",count,tries);
+            game->board[i][j].value = value;
             count++;
-            for(k=0;k<300000;k++){}
-            free(values);
-            printf("fill7_%d_%d\n",count,tries);
             continue;
         }
         tries++;
     }
     if(count<x) tries++;
-    printf("fill8_%d_%d\n",count,tries);
     return tries;
 }
 
