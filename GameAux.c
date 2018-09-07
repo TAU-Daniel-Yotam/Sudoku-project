@@ -191,7 +191,7 @@ void checkColumns(Game * game,int x) {
 
 
 int fillXvalues(Game*game,int x){
-    int tries,count,i,j,size;
+    int tries,count,i,j,k,size;
     int*values;
     int a[2]={0};
     tries=0;
@@ -217,6 +217,7 @@ int fillXvalues(Game*game,int x){
             game->board[i][j].value = values[rand() % size];
             printf("fill6_%d_%d\n",count,tries);
             count++;
+            for(k=0;k<5000;k++){}
             free(values);
             printf("fill7_%d_%d\n",count,tries);
             continue;
