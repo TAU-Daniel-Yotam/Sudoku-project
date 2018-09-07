@@ -340,7 +340,6 @@ int autofill(Game*gamea){
         }
         /*fillValues(game,cellsToFill,count);*/
         updateCellValidity(game);
-        deleteTail(game->list, game->list->pointer);
         addLast(game->list, cellsToFill, (int) count);
         freeMemory((void **) cellsToFill, (int) count);
     }
