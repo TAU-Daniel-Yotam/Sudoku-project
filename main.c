@@ -73,7 +73,7 @@ int main() {
                 }
                 break;
             case 6:
-                validate(&game);
+                validate(&game,1);
                 break;
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
