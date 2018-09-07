@@ -36,7 +36,7 @@ char* getInput(int size,int*eof){
     }
     str[len++]='\0';
     str = realloc(str, sizeof(char)*len);
-    for(i=0i<len;i++){
+    for(i=0;i<len;i++){
         printf("%c",str[i]);
     }
     printf("\n");
