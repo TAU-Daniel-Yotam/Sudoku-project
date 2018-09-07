@@ -38,9 +38,10 @@ int main() {
         }
         switch (type) {
             case 1:
-                solve(&game, parsedCommand.strArg);
-                updateCellValidity(&game);
-                printBoard(&game);
+                if(solve(&game, parsedCommand.strArg)){
+                    updateCellValidity(&game);
+                    printBoard(&game);
+                }
                 break;
             case 2:
                 edit(&game, parsedCommand.strArg);
