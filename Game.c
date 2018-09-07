@@ -4,6 +4,7 @@
 /*check*/
 int solve(Game* game, char * filePath){
     FILE * file;
+    printf("%s\n",filePath);
     file = fopen(filePath,"r");
     if(file==NULL){
         printError(NULL,SOLVE_IO_ERROR);
