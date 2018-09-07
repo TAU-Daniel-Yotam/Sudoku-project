@@ -156,7 +156,6 @@ int generate(Game*game,int x,int y){
     printBoard(game);
     updateGameBoard(game,board);
     freeMemory((void**)board,DIM);
-    printBoard(game);
     printf("gen11\n");
     while(removed < DIM*DIM-y){
         do {
@@ -174,8 +173,9 @@ int generate(Game*game,int x,int y){
     }
     printf("gen12\n");
     createListDataGenerate(game,listData);
+    printData(listData,y);
     addLast(game->list,listData,y);
-    printf("gen13\n");
+    printBoard(game);
     return 1;
 }
 
