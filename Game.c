@@ -144,8 +144,9 @@ int generate(Game*game,int x,int y){
     printf("g2\n");
     do {
         emptyBoard(game);
+        printf("g3\n");
         tries += fillXvalues(game, x);
-        printf("%d gen3\n",tries);
+        printf("%d gen4\n",tries);
         if(tries==1001){
             printError(game,GENERATOR_FAILED_ERROR);
             return 0;
