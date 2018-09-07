@@ -164,8 +164,13 @@ int generate(Game*game,int x,int y){
             j = rand() % DIM;
         } while (!game->board[i][j].value);
         game->board[i][j].value=0;
-        printf("line=%d col=%d",i,j);
+        printf("line=%d col=%d\n",i,j);
         removed++;
+    }
+    listData = (int**)calloc(y, sizeof(int*));
+    if(listData==NULL){
+        printError(NULL,MEMORY_ALLOC_ERROR);
+        return 0;
     }
     printf("gen12\n");
     createListDataGenerate(game,listData);
