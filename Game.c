@@ -162,7 +162,7 @@ int generate(Game*game,int x,int y){
         do {
             i = rand() % DIM;
             j = rand() % DIM;
-        } while (!game->board[i][j].value);
+        } while (game->board[i][j].value);
         game->board[i][j].value=0;
         printf("line=%d col=%d",i,j);
     }
