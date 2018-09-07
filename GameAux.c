@@ -191,7 +191,7 @@ void checkColumns(Game * game,int x) {
 
 
 int fillXvalues(Game*game,int x){
-    int tries,count,i,j,k,size;
+    int tries,count,i,j,size;
     int value;
     int a[2]={0};
     tries=0;
