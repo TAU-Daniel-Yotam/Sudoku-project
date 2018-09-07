@@ -241,7 +241,7 @@ int save(Game *game, char *path) {
         printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    if (game->mode == 2 && validate(game,0)==-1) {
+    if (game->mode == 2 && !validate(game,0)) {
         printError(game,VALIDATION_FAILED_ERROR);
         return 0;
     }
