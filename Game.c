@@ -332,13 +332,10 @@ int autofill(Game*gamea){
             }
         }
     }
-
-    printData(cellsToFill,(int)count);
     if(cellsToFill!=NULL) {
         for (k = 0; k < (int)count; k++) { /* fill board with values */
             game->board[cellsToFill[k][0]][cellsToFill[k][1]].value = cellsToFill[k][3];
         }
-        /*fillValues(game,cellsToFill,count);*/
         updateCellValidity(game);
         addLast(game->list, cellsToFill, (int) count);
         freeMemory((void **) cellsToFill, (int) count);
