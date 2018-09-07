@@ -6,7 +6,7 @@ int solve(Game* game, char * filePath){
     FILE * file;
     printf("%s\n",filePath);
     file = fopen(filePath,"r");
-    printf("%p\n",file);
+    printf("%p\n",(void*)file);
     if(file==NULL){
         printError(NULL,SOLVE_IO_ERROR);
         return 0;
@@ -21,7 +21,7 @@ int edit(Game * game, char * filePath){
     printf("%s\n",filePath);
     if (filePath!=NULL) {
         file = fopen(filePath, "r");
-        printf("%p\n",file);
+        printf("%p\n",(void*)file);
         if (file == NULL) {
             printError(NULL, EDIT_IO_ERROR);
             return 0;
