@@ -39,6 +39,7 @@ int main() {
         }
         switch (type) {
             case 1:
+                printf("%s\n",parsedCommand.strArg);
                 done=solve(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
@@ -46,6 +47,7 @@ int main() {
                 }
                 break;
             case 2:
+                printf("%s\n",parsedCommand.strArg);
                 done=edit(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
