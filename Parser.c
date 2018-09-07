@@ -172,6 +172,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
 
 int parseArg(Command* command, char* arg, int argIndex){
     unsigned int i;
+    char* str = arg;
     switch(command->type){
         case 3:
         case 5:
@@ -188,8 +189,8 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 1:
         case 2:
         case 10:
-            printf("%s\n",arg);
-            command->strArg=arg;
+            printf("%s_%s\n",arg,str);
+            command->strArg=str;
         default:
             break;
     }
