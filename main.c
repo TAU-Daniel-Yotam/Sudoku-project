@@ -5,7 +5,7 @@
 #include "MainAux.h"
 
 int main() {
-    int exit, type, eof,valid,done;
+    int exit, type, eof, done;
     Game game;
     char *command;
     Command parsedCommand;
