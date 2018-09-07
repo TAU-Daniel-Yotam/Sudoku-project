@@ -8,7 +8,7 @@ int validateArgs(Command* c);
 
 char* getInput(int size,int*eof){
     char *str;
-    int ch;
+    int ch,i;
     int len = 0;
     str = realloc(NULL, sizeof(char)*size);
     if(!str) {
@@ -36,6 +36,10 @@ char* getInput(int size,int*eof){
     }
     str[len++]='\0';
     str = realloc(str, sizeof(char)*len);
+    for(i=0i<len;i++){
+        printf("%c",str[i]);
+    }
+    printf("\n");
     if(!str) {
         printError(NULL, MEMORY_ALLOC_ERROR);
         return NULL;
