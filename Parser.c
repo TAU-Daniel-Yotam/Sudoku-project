@@ -188,7 +188,6 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 1:
         case 2:
         case 10:
-            printf("%s\n",arg);
             command->strArg=(char*)calloc(strlen(arg)+1, sizeof(char));
             if(command->strArg==NULL){
                 printError(NULL,MEMORY_ALLOC_ERROR);

@@ -33,14 +33,12 @@ int main() {
             command[0]='e';command[1]='x';command[2]='i';command[3]='t';command[4]='\0';
             type = parseCommand(&game, command, &parsedCommand);
         }
-        printf("m1 %s\n",parsedCommand.strArg);
         if (type == -1) {
             printError(&game, INVALID_COMMAND_ERROR);
             continue;
         }
         switch (type) {
             case 1:
-                printf("%s\n",parsedCommand.strArg);
                 done=solve(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
@@ -49,7 +47,6 @@ int main() {
                 free(parsedCommand.strArg);
                 break;
             case 2:
-                printf("%s\n",parsedCommand.strArg);
                 done=edit(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
