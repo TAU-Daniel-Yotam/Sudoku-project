@@ -217,7 +217,7 @@ int fillXvalues(Game*game,int x){
             game->board[i][j].value = values[rand() % size];
             printf("fill6_%d_%d\n",count,tries);
             count++;
-            for(k=0;k<5000;k++){}
+            for(k=0;k<30000;k++){}
             free(values);
             printf("fill7_%d_%d\n",count,tries);
             continue;
