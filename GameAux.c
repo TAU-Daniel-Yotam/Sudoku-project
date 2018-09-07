@@ -264,6 +264,7 @@ void createListDataGenerate(Game*game,int**listData){
                 listData[count][1]=j;
                 listData[count][2]=0;
                 listData[count][3]=game->board[i][j].value;
+                count++;
             }
         }
     }
