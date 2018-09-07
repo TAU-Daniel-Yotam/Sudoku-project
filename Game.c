@@ -149,7 +149,6 @@ int generate(Game*game,int x,int y){
         solved = ILPSolve(game,board);
         if(solved==-1) tries++;
     }while (solved==-1);
-    printBoard(game);
     updateGameBoard(game,board);
     freeMemory((void**)board,DIM);
     while(removed < DIM*DIM-y){
@@ -166,7 +165,6 @@ int generate(Game*game,int x,int y){
         return 0;
     }
     createListDataGenerate(game,listData);
-    printData(listData,y);
     addLast(game->list,listData,y);
     printBoard(game);
     return 1;
