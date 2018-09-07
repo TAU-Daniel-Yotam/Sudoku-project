@@ -188,6 +188,7 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 1:
         case 2:
         case 10:
+            printf("%s\n",arg);
             command->strArg=arg;
         default:
             break;
