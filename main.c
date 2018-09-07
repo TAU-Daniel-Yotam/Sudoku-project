@@ -44,6 +44,7 @@ int main() {
                     updateCellValidity(&game);
                     printBoard(&game);
                 }
+                free(parsedCommand.strArg);
                 break;
             case 2:
                 done=edit(&game, parsedCommand.strArg);
@@ -51,6 +52,7 @@ int main() {
                     updateCellValidity(&game);
                     printBoard(&game);
                 }
+                free(parsedCommand.strArg);
                 break;
             case 3:
                 mark_errors(&game, parsedCommand.intArgs[0]);
@@ -73,6 +75,7 @@ int main() {
             case 6:
                 validate(&game);
                 printf("m1");
+                break;
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
                 break;
@@ -84,6 +87,7 @@ int main() {
                 break;
             case 10:
                 save(&game, parsedCommand.strArg);
+                free(parsedCommand.strArg);
                 break;
             case 11:
                 hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);

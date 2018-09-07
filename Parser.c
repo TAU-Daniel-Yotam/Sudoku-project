@@ -188,7 +188,15 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 1:
         case 2:
         case 10:
-            command->strArg=arg;
+            command->strArg=(char*)calloc(strlen(arg)+1, sizeof(char));
+            if(command->strArg==NULL){
+                printError(NULL,MEMORY_ALLOC_ERROR);
+                return 0;
+            }
+            for(i=0;i<strlen(arg);i++){
+                command->strArg[i]=arg[i];
+            }
+            command->strArg[i]='\0';
         default:
             break;
     }

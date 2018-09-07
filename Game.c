@@ -102,7 +102,6 @@ int set(Game* game,int x,int y,int value){
     checkBlock(game,x,y);
     checkRow(game,x);
     checkColumns(game,y);
-    printBoard(game);
     return 1;
 }
 
