@@ -17,7 +17,6 @@ int main() {
     exit=0;
     printf("Sudoku\n------\n");
     while (!exit) {
-        if(parsedCommand.strArg!=NULL) free(parsedCommand.strArg);
         printf("Enter your command:\n");
         if(!eof){
             command = getInput(1024,&eof);
@@ -47,6 +46,7 @@ int main() {
                     updateCellValidity(&game);
                     printBoard(&game);
                 }
+                free(parsedCommand.strArg);
                 break;
             case 2:
                 printf("%s\n",parsedCommand.strArg);
@@ -55,6 +55,7 @@ int main() {
                     updateCellValidity(&game);
                     printBoard(&game);
                 }
+                free(parsedCommand.strArg);
                 break;
             case 3:
                 mark_errors(&game, parsedCommand.intArgs[0]);
@@ -88,6 +89,7 @@ int main() {
                 break;
             case 10:
                 save(&game, parsedCommand.strArg);
+                free(parsedCommand.strArg);
                 break;
             case 11:
                 hint(&game, parsedCommand.intArgs[1], parsedCommand.intArgs[0]);
