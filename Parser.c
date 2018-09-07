@@ -8,7 +8,7 @@ int validateArgs(Command* c);
 
 char* getInput(int size,int*eof){
     char *str;
-    int ch,i;
+    int ch;
     int len = 0;
     str = realloc(NULL, sizeof(char)*size);
     if(!str) {
