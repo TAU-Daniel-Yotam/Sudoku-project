@@ -76,7 +76,6 @@ int main() {
                 validate(&game);
                 break;
             case 7:
-                printf("m1\n");
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
                 break;
             case 8:
