@@ -30,7 +30,10 @@ char* getInput(int size,int*eof){
             }
         }
     }
-    if(ch==EOF) *eof=1;
+    if(ch==EOF) {
+        *eof=1;
+        printf("\n");
+    }
     str[len++]='\0';
     str = realloc(str, sizeof(char)*len);
     if(!str) {

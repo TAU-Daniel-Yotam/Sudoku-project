@@ -31,7 +31,6 @@ int main() {
                 return 0;
             }
             command[0]='e';command[1]='x';command[2]='i';command[3]='t';command[4]='\0';
-            command="exit";
             type = parseCommand(&game, command, &parsedCommand);
         }
         if (type == -1) {
