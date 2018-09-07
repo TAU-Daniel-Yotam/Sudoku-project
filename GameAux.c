@@ -73,10 +73,8 @@ void printDashes(int blockWidth,int blockHeight){
 
 /*check*/
 int checkRange(Game* game,int a,int type){
-    if((a<0 || a>
-            game->blockHeight*game->blockHeight)&&type==1) return 0;
-    if((a<=0 || a>
-              game->blockHeight*game->blockHeight)&&type==0) return 0;
+    if((a<0 || a > DIM) && type==1) return 0;
+    if((a<=0 || a> DIM) && type==0) return 0;
     return 1;
 }
 /*check*/
@@ -129,8 +127,7 @@ void freeMemory(void ** array,int size){
     for(i=0;i<size;i++) {
         free(array[i]);
     }
-            free(array);
-
+    free(array);
 }
 
 /*check*/
@@ -270,6 +267,24 @@ void createListDataGenerate(Game*game,int**listData){
     }
 }
 
+void updateGameBoard(Game*game,int**board){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            game->board[i][j].value=board[i][j];
+        }
+    }
+}
+
+void emptyBoard(Game*game){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            game->board[i][j].value=0;
+        }
+    }
+}
+
 /*check*/
 int checkError(Game *game) {
 
@@ -349,11 +364,14 @@ int countPossibleValues(Game*game,int*num_val,int x, int y){
 
 
 void fillValues(Game*game,int**values,int size){
-    int i;
+    int i,a,b;
+    if(size==0) return;
     for(i=0;i<size;i++){
-        game->board[values[i][0]][values[i][1]].value=values[i][3];
-        game->board[values[i][0]][values[i][1]].isPlayerMove=1;
-        printf("Cell <%d,%d> set to %d\n",values[i][0],values[i][1],values[i][3]);
+        a=values[i][0];
+        b=values[i][1];
+        game->board[a][b].value=values[i][3];
+        game->board[a][b].isPlayerMove=1;
+        printf("Cell <%d,%d> set to %d\n",values[i][0]+1,values[i][1]+1,values[i][3]);
     }
 }
 

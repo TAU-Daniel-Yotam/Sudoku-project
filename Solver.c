@@ -12,16 +12,12 @@ int ILPSolve(Game*game,int**board){
     return 1;
 }
 int detSolve(Game* game) {
+    int x,y,*data,counter,rightMove,value;
     Stack * stack =calloc(1, sizeof(Stack));
     init(stack,DIM*DIM);
-    int x=0;
-    int y=0;
-    int from;
-    int * data;
-    int counter;
-    int rightMove;
-    int value=0;
-
+    x=0;
+    y=0;
+    value=0;
     counter=0;
     push(stack,-2,-2);
     while(x!=-2){

@@ -3,29 +3,37 @@
 #include "Game.h"
 #include "Parser.h"
 #include "MainAux.h"
-#include "GameAux.h"
-
-
-#include "Game.h"
-#include "Parser.h"
-#include "MainAux.h"
-#include "GameAux.h"
 
 int main() {
-    int exit, type, valid,done;
+    int exit, type, eof,valid,done;
     Game game;
+    char *command;
+    Command parsedCommand;
     game.board=NULL;
     game.list=NULL;
-    Command parsedCommand;
     parsedCommand.intArgs=NULL;
-    char command[1024];
     game.mode = 0;
+    eof=0;
     exit=0;
     printf("Sudoku\n------\n");
     while (!exit) {
         printf("Enter your command:\n");
-        getInput(command, 1024);
-        type = parseCommand(&game, command, &parsedCommand);
+        if(!eof){
+            command = getInput(1024,&eof);
+            type = parseCommand(&game, command, &parsedCommand);
+            free(command);
+        }
+        else{
+            printf("\n");
+            command=(char*)calloc(5, sizeof(char));
+            if(command==NULL){
+                printError(NULL,MEMORY_ALLOC_ERROR);
+                return 0;
+            }
+            command[0]='e';command[1]='x';command[2]='i';command[3]='t';command[4]='\0';
+            command="exit";
+            type = parseCommand(&game, command, &parsedCommand);
+        }
         if (type == -1) {
             printError(&game, INVALID_COMMAND_ERROR);
             continue;
@@ -64,15 +72,10 @@ int main() {
                 }
                 break;
             case 6:
-                valid = validate(&game);
-                if (valid == 1)
-                    printf("Validation passed board is solvable\n");
-                else
-                    printf("Validation failed: board is unsolvable\n");
-                break;
+                validate(&game);
+                printf("m1");
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
-                printBoard(&game);
                 break;
             case 8:
                 undo(&game);

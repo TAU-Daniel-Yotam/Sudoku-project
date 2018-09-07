@@ -3,13 +3,13 @@
 
 void init(Stack * stack,int size ){
     int i;
-    int ** array=(int **)calloc(size+1, sizeof(int * ));
+    int ** array=(int **)calloc((unsigned int)size+1, sizeof(int * ));
     if(array==NULL) {
         printError(NULL, MEMORY_ALLOC_ERROR);
         return;
     }
     for(i=0;i<size+1;i++){
-        array[i]=calloc(3, sizeof(int));
+        array[i]=(int*)calloc(3, sizeof(int));
         if (array[i]==NULL){
             printError(NULL,MEMORY_ALLOC_ERROR);
             return;

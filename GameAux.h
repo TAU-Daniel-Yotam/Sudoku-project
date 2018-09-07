@@ -26,14 +26,12 @@ void    emptyBoard(Game*game);
 int     checkError(Game *game);
 int     writeToFile(Game *game, FILE *file);
 int   **copyBoard(Game*game);
+Cell  **copyCellBoard(Game * game);
 int     countPossibleValues(Game*game,int*num_val,int x, int y);
 void    fillValues(Game*game,int**values,int size);
 void    updateCellValidity(Game*game);
 void    freeGame(Game*game);
 void    freeBoard(Game*game);
 int     checkInvalid(Game* game, int x, int y, int value);
-void printerror(Game * game);
-Cell ** copyCellBoard(Game * game);
-int checkblock(Game* game, int x, int y, int value);
-int checkRowColumn(Game* game, int x, int y, int value);
+void    printerror(Game * game);
 #endif
