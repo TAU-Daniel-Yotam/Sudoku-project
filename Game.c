@@ -291,66 +291,68 @@ int numSolution(Game * game){
     return 1;
 }
 
-int** autofill(Game*game){
+int autofill(Game*gamea){
+    Game*game=gamea;
+    size_t count;
+    int i,j,k,first=1;
     int num_val[2]={0};
-    unsigned int count;
     int**cellsToFill=NULL;
-    int i,j,first=1;
     count=0;
     if(!checkError(game)){
         printError(game,ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    for(i=0;i<game->blockWidth;i++){
-        for(j=0;j<game->blockHeight;j++){
-            if(game->board[i][j].value){/* if cell is not empty */
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            if(!game->board[i][j].value){/* if cell is empty */
                 countPossibleValues(game,num_val,i,j);
                 if(num_val[0]==1) {
                     if(first){
-                        cellsToFill=(int**)calloc(++count, sizeof(int*));
-                        if(cellsToFill==NULL) {
-                            printError(game,MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count-1]=(int*)calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-                        if(cellsToFill[count-1]==NULL) {
-                            printError(game,MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count-1][0]=i;
-                        cellsToFill[count-1][1]=j;
-                        cellsToFill[count-1][2]=0;
-                        cellsToFill[count-1][3]=num_val[1];
+                        cellsToFill=(int**)realloc(NULL, (sizeof(int*))*(++count));
                         first=0;
                     }
                     else{
-                        cellsToFill=(int**)realloc(cellsToFill,++count);
-                        if(cellsToFill==NULL) {
-                            printError(game,MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count-1]=(int*)calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
-                        if(cellsToFill[count-1]==NULL) {
-                            printError(game,MEMORY_ALLOC_ERROR);
-                            return NULL;
-                        }
-                        cellsToFill[count-1][0]=i;
-                        cellsToFill[count-1][1]=j;
-                        cellsToFill[count-1][2]=0;
-                        cellsToFill[count-1][3]=num_val[1];
+                        cellsToFill=(int**)realloc(cellsToFill,(sizeof(int*))*(++count));
                     }
+                    printf("%x\n",(int)cellsToFill);
+                    if(cellsToFill==NULL) {
+                        printError(game,MEMORY_ALLOC_ERROR);
+                        return 0;
+                    }
+                    cellsToFill[count-1]=(int*)calloc(4, sizeof(int)); /* 0:x,1:y,2:from,3:to */
+                    printf("%x\n",(int)cellsToFill[count-1]);
+                    if(cellsToFill[count-1]==NULL) {
+                        printError(game,MEMORY_ALLOC_ERROR);
+                        return 0;
+                    }
+                    cellsToFill[count-1][0]=i;
+                    cellsToFill[count-1][1]=j;
+                    cellsToFill[count-1][2]=0;
+                    cellsToFill[count-1][3]=num_val[1];
                 }
             }
         }
     }
-    /* complete:
-     * add list node
-     * if count == 0 don't add list node
-     * delete list nodes after this command*/
-    fillValues(game,cellsToFill,count);
-    updateCellValidity(game);
+
+    printf("af0\n");
+    printData(cellsToFill,(int)count);
+    printf("af1\n");
+    if(cellsToFill!=NULL) {
+        for (k = 0; k < (int)count; k++) { /* fill board with values */
+            game->board[cellsToFill[k][0]][cellsToFill[k][1]].value = cellsToFill[k][3];
+            printf("%d\n", k);
+        }
+
+        /*fillValues(game,cellsToFill,count);*/
+        printf("af2\n");
+
+        updateCellValidity(game);
+        deleteTail(game->list, game->list->pointer);
+        addLast(game->list, cellsToFill, (int) count);
+        freeMemory((void **) cellsToFill, (int) count);
+    }
     printBoard(game);
-    return cellsToFill;
+    return 1;
 }
 /*check*/
 int reset(Game *game) {
