@@ -2,7 +2,7 @@
 #include "Parser.h"
 int isInt(char c);
 int parseInt(char* str, int size);
-int parseArg(Command* command, char** arg, int argIndex);
+int parseArg(Command* command, char* arg, int argIndex);
 int validateArgs(Command* c);
 
 
@@ -155,7 +155,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             }
         }
         else if(i<=parsedCommand->numArgs){
-            parseArg(parsedCommand,&word,i);
+            parseArg(parsedCommand,word,i);
         }
         i++;
         word=strtok(NULL," \t\r\n");
@@ -170,26 +170,34 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
     return parsedCommand->type;
 }
 
-int parseArg(Command* command, char** arg, int argIndex){
+int parseArg(Command* command, char* arg, int argIndex){
     unsigned int i;
     switch(command->type){
         case 3:
         case 5:
         case 7:
         case 11:
-            for(i=0;i<strlen(*arg);i++){
-                if(!isInt((*arg)[i])){
+            for(i=0;i<strlen(arg);i++){
+                if(!isInt(arg[i])){
                     command->intArgs[argIndex]=-1;
                     break;
                 }
             }
-            command->intArgs[argIndex-1]=parseInt(*arg,(int)strlen(*arg));
+            command->intArgs[argIndex-1]=parseInt(arg,(int)strlen(arg));
             break;
         case 1:
         case 2:
         case 10:
-            printf("%s\n",*arg);
-            command->strArg=*arg;
+            printf("%s\n",arg);
+            command->strArg=(char*)calloc(strlen(arg)+1, sizeof(char));
+            if(command->strArg==NULL){
+                printError(NULL,MEMORY_ALLOC_ERROR);
+                return 0;
+            }
+            for(i=0;i<strlen(arg);i++){
+                command->strArg[i]=arg[i];
+            }
+            command->strArg[i]='\0';
         default:
             break;
     }
