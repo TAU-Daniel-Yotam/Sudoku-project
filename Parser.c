@@ -170,6 +170,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
     return parsedCommand->type;
 }
 
+/* fixed case "set zsf sg g" -> value not in range  */
 int parseArg(Command* command, char* arg, int argIndex){
     unsigned int i;
     switch(command->type){
@@ -179,11 +180,12 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 11:
             for(i=0;i<strlen(arg);i++){
                 if(!isInt(arg[i])){
-                    command->intArgs[argIndex]=-1;
+                    command->intArgs[argIndex-1]=-1;
                     break;
                 }
             }
-            command->intArgs[argIndex-1]=parseInt(arg,(int)strlen(arg));
+            if(!command->intArgs[argIndex-1]==-1)
+                command->intArgs[argIndex-1]=parseInt(arg,(int)strlen(arg));
             break;
         case 1:
         case 2:
