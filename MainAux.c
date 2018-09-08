@@ -46,19 +46,6 @@ int checkFullBoard(Game*game){
 
     return 1;
 }
-int checkValidGame(Game *game){
-    int i,j;
-    updateCellValidity(game);
-    for(i=0;i<DIM;i++) {
-        for (j = 0; j < DIM; j++) {
-            if (isInvalid(&game->board[i][j]))
-                return 0;
-        }
-    }
-    return 1;
-
-}
-
 
 /*int checkValid(Game* game, int x, int y, int value) {
     if(!value) return 1;
