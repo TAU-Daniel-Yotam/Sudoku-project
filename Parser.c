@@ -184,8 +184,9 @@ int parseArg(Command* command, char* arg, int argIndex){
                     break;
                 }
             }
-            if(!command->intArgs[argIndex-1]==-1)
+            if(!command->intArgs[argIndex-1]==-1){
                 command->intArgs[argIndex-1]=parseInt(arg,(int)strlen(arg));
+            }
             break;
         case 1:
         case 2:
