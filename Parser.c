@@ -1,8 +1,36 @@
 
 #include "Parser.h"
+
+/**
+ *
+ * @param c - a char to be checked if represents an int
+ * @return 1 if c is '0'...'9' or 0 o.w
+ */
 int isInt(char c);
+
+/**
+ *
+ * @param str - a string to be parsed to decimal value
+ * @param size == strlen(str)
+ * @pre str represents an int in decimal value
+ * @return decimal value of str
+ */
 int parseInt(char* str, int size);
+
+/**
+ *
+ * @param command - a Command instance to be filled with the relevant data from the lst user input
+ * @param arg - a string t be parsed to a command argument
+ * @param argIndex - the index of the current argument in the commnd (for example: set [1] [2] [3])
+ * @return 1 if arg parses successfully or 0 0.w
+ */
 int parseArg(Command* command, char* arg, int argIndex);
+
+/**
+ *
+ * @param c - a Command instance that contains parsed data from the last user input
+ * @return 1 if c contains at least the correct number of arguments according to the pdf file or 0 if less
+ */
 int validateArgs(Command* c);
 
 
