@@ -180,11 +180,11 @@ int parseArg(Command* command, char* arg, int argIndex){
         case 11:
             for(i=0;i<strlen(arg);i++){
                 if(!isInt(arg[i])){
-                    command->intArgs[argIndex-1]=-1;
+                    command->intArgs[argIndex-1]=-2;
                     break;
                 }
             }
-            if(!command->intArgs[argIndex-1]==-1){
+            if(command->intArgs[argIndex-1]!=-2){
                 command->intArgs[argIndex-1]=parseInt(arg,(int)strlen(arg));
             }
             break;
