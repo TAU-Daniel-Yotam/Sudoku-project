@@ -22,6 +22,8 @@ int readFromFile2(FILE *file,Game * game,int mode) {
                 freeGame(game);
                 return 0;
             }
+            if(num)
+             /***/   game->board[i][j].isPlayerMove=1;
             game->board[i][j].value = num;
             if (getc(file) == '.' && game->mode==1)
                 game->board[i][j].isFixed = 1;
@@ -63,9 +65,9 @@ Cell ** createBoard(int columns,int row){
 /*check*/
 void printDashes(int blockWidth,int blockHeight){
     int j;
-    for ( j=0;j<4*blockWidth*blockHeight+blockWidth +1;j++){
+    for ( j=0;j<4*blockWidth*blockHeight+blockHeight +1;j++){
         printf("-");
-        if(j==(4*blockWidth*blockHeight+blockWidth))
+        if(j==(4*blockWidth*blockHeight+blockHeight))
             printf("\n");
     }
 }
@@ -465,38 +467,20 @@ Cell ** copyCellBoard(Game * game){
    return board;
 
 }
-int checkblock(Game* game, int x, int y, int value) {
-    int k, r, i=x, j=y,sign=0;
-    printf("a");
-    while (x%game->blockHeight!= 0)x--;
-    while (y%game->blockWidth!= 0)y--;
-    for (k = 0; k<game->blockHeight; k++) {
-        for (r = 0; r<game->blockWidth; r++) {
-            if (game->board[x+k][y+r].value == value && (k+x)!=i && (r+y)!=j){
-                sign=1;
-            }
+/************************************/
+int checkValidGame(Game *game){
+    int i,j;
+    updateCellValidity(game);
+    for(i=0;i<DIM;i++) {
+        for (j = 0; j < DIM; j++) {
+            if (isInvalid(&game->board[i][j]))
+                return 0;
         }
     }
-    printf("a");
-    return sign;
-}
-int checkRowColumn(Game* game, int x, int y, int value) {
-    int i,sign=0;
-    for(i=0;i<game->blockWidth*game->blockHeight;i++) {
-        if (i != y && game->board[x][i].value == value) {
-            sign = 1;
-            game->board[x][i].isInValidInRow = 1;
-        }
-    }
-    for(i=0;i<game->blockWidth*game->blockHeight;i++){
-        if(i!=x && game->board[i][y].value==value) {
-            game->board[i][y].isInValidInColumns=1;
-            sign=1;
+    return 1;
 
-        }
-    }
-    return sign;
 }
+
 
 
 
