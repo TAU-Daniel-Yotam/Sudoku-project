@@ -279,12 +279,13 @@ int hint(Game* game, int x, int y){
 }
 
 int numSolution(Game * game){
-   /****/ if(!checkValidGame(game)) {
+    int number;
+    Game * newGame;
+    if(!checkValidGame(game)) {
         printError(game, ERRONEOUS_BOARD_ERROR);
         return 0;
     }
-    int number;
-    Game * newGame=(Game*)calloc(1, sizeof(Game));
+    newGame=(Game*)calloc(1, sizeof(Game));
     newGame->blockWidth=game->blockWidth;
     newGame->blockHeight=game->blockHeight;
     newGame->list=NULL;

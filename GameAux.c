@@ -23,7 +23,7 @@ int readFromFile2(FILE *file,Game * game,int mode) {
                 return 0;
             }
             if(num)
-             /***/   game->board[i][j].isPlayerMove=1;
+                game->board[i][j].isPlayerMove=1;
             game->board[i][j].value = num;
             if (getc(file) == '.' && game->mode==1)
                 game->board[i][j].isFixed = 1;
@@ -467,7 +467,7 @@ Cell ** copyCellBoard(Game * game){
    return board;
 
 }
-/************************************/
+
 int checkValidGame(Game *game){
     int i,j;
     updateCellValidity(game);

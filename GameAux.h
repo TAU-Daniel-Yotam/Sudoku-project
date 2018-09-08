@@ -34,5 +34,5 @@ void    freeGame(Game*game);
 void    freeBoard(Game*game);
 int     checkInvalid(Game* game, int x, int y, int value);
 void    printerror(Game * game);
-int checkValidGame(Game *game);
+int     checkValidGame(Game *game);
 #endif
