@@ -95,7 +95,16 @@ int main() {
                 numSolution(&game);
                 break;
             case 13:
-                autofill(&game);
+                done=autofill(&game);
+                if (done)
+                    printBoard(&game);
+                if (checkFullBoard(&game)&&game.mode==1&&done) {
+                    if (checkValidGame(&game)) {
+                        printf("Puzzle solved successfully\n");
+                        game.mode = 0;
+                    } else
+                        printf("Puzzle solution erroneous\n");
+                }
                 break;
             case 14:
                 reset(&game);
