@@ -12,6 +12,7 @@ int main() {
     game.board=NULL;
     game.list=NULL;
     parsedCommand.intArgs=NULL;
+    parsedCommand.strArg=NULL;
     game.mode = 0;
     eof=0;
     exit=0;
