@@ -60,6 +60,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand);
 /**
  *
  * @param c - the command to be initialized
+ * @post c->type=-1, c->numArgs=-1, c->strArg=NULL, c->intArgs[i]=-1
  */
 void initCommand(Command* c);
 

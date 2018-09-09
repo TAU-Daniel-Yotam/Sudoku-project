@@ -295,7 +295,7 @@ int numSolution(Game * game){
     if(number == 1){
         printf("This is a good board!\n");
     }
-    else{
+    else if(number > 1){
         printf("The puzzle has more than 1 solution, try to edit it further\n");
     }
     freeGame(newGame);
