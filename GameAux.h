@@ -26,7 +26,7 @@ void    updateCellValidity(Game*game)-updates the following fields for each cell
 void    freeGame(Game*game);
 void    freeBoard(Game*game);
 int     checkInvalid(Game* game, int x, int y, int value)-Checks whether the given value in the given cell will cause errors or not
-int     checkValidGame(Game *game)-checks whether the value of any cell already appears in another cell in its row or in its block or column
+int     checkError(Game *game)-checks whether the value of any cell already appears in another cell in its row or in its block or column
 
 **/
 
@@ -95,7 +95,6 @@ void    createValuesArray(Game*game,int x,int y,int* values);
 void createListDataGenerate(Game*game,int**listData);
 void    updateGameBoard(Game*game,int**board);
 void    emptyBoard(Game*game);
-int     checkError(Game *game);
 /**
  *
  * @param game -a pointer to the current Game instance
@@ -128,5 +127,5 @@ int     checkInvalid(Game* game, int x, int y, int value);
  * @param game -a pointer to a current Game instance
  * @return 1 if the board is valid,or 0 o.w
  * */
-int     checkValidGame(Game *game);
+int checkError(Game *game);
 #endif

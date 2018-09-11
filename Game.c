@@ -281,7 +281,7 @@ int hint(Game* game, int x, int y){
 int numSolution(Game * game){
     int number;
     Game * newGame;
-    if(!checkValidGame(game)) {
+    if(!checkError(&game)) {
         printError(game, ERRONEOUS_BOARD_ERROR);
         return 0;
     }
@@ -372,7 +372,6 @@ int reset(Game *game) {
     }
     deleteTail(game->list,game->list->head);
     deleteAtPosition(game->list,0);
-    printList(game->list);
     printf("Board reset\n");
     return 1;
 }

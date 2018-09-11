@@ -61,11 +61,7 @@ Cell ** createBoard(int columns,int row){
     }
     return board;
 }
-/**
- *
- * @param blockWidth -the games block width
- * @param blockHeight- the games block height
- */
+
 void printDashes(int blockWidth,int blockHeight){
     int j;
     for ( j=0;j<4*blockWidth*blockHeight+blockHeight +1;j++){
@@ -78,27 +74,17 @@ void printDashes(int blockWidth,int blockHeight){
  0-x or y
  1-z*/
 
-/*check*/
 int checkRange(Game* game,int a,int type){
     if((a<0 || a > DIM) && type==1) return 0;
     if((a<=0 || a> DIM) && type==0) return 0;
     return 1;
 }
-/**
- *
- * @param cell - a pointer to a Cell instance
- * @return  0 if the cell has valid value,or 1 o.w
- */
+
 int isInvalid(Cell * cell){
 return cell->isInValidInColumns||cell->isInValidInBlock||cell->isInValidInRow;
 
 }
-/**
- *
- * @param game a pointer to a current Game instance
- * @param x - the column of the cell to be check
- * @param y  -the row of the cell to be check
- */
+
 void checkBlock(Game * game,int x,int y){
     int i,j;
     int ** table;
@@ -379,6 +365,14 @@ void fillValues(Game*game,int**values,int size){
         printf("Cell <%d,%d> set to %d\n",values[i][0]+1,values[i][1]+1,values[i][3]);
     }
 }
+void emptyBoard(Game*game){
+    int i,j;
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            game->board[i][j].value=0;
+        }
+    }
+}
 
 /**
  *
@@ -444,31 +438,19 @@ void clearBoard(Game*game){
 }
 
 */
-/**
- *
- * @param game -a pointer to the current Game instance
- * @return a copy of the Cell board of the game
- */
+int checkError(Game *game) {
 
-/**
- *
- * @param game -a pointer to the current Game instance
- * @return 1 if the board doesn't contain invalid values,or 0 o.w
- */
-int checkValidGame(Game *game){
     int i,j;
-    updateCellValidity(game);
-    for(i=0;i<DIM;i++) {
-        for (j = 0; j < DIM; j++) {
-            if (isInvalid(&game->board[i][j]))
+    for (i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            if(isInvalid(&(game->board[i][j]))){
                 return 0;
+            }
         }
     }
     return 1;
 
 }
-
-
 
 
 
