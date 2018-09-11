@@ -1,6 +1,6 @@
 #include "GameAux.h"
-/*check*/
-int readFromFile2(FILE *file,Game * game,int mode) {
+
+int readFromFile(FILE *file,Game * game,int mode) {
     int a, b, num, i, j,eof;
     Cell **index;
     eof=fscanf(file, "%d", &a);
@@ -31,7 +31,7 @@ int readFromFile2(FILE *file,Game * game,int mode) {
     }
     return 1;
 }
-/*check*/
+
 void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     if(game->board!=NULL){
         freeBoard(game);
@@ -44,7 +44,6 @@ void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     game->list=createList();
 
 }
-/*check*/
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
@@ -62,7 +61,11 @@ Cell ** createBoard(int columns,int row){
     }
     return board;
 }
-/*check*/
+/**
+ *
+ * @param blockWidth -the games block width
+ * @param blockHeight- the games block height
+ */
 void printDashes(int blockWidth,int blockHeight){
     int j;
     for ( j=0;j<4*blockWidth*blockHeight+blockHeight +1;j++){
@@ -81,12 +84,21 @@ int checkRange(Game* game,int a,int type){
     if((a<=0 || a> DIM) && type==0) return 0;
     return 1;
 }
-/*check*/
+/**
+ *
+ * @param cell - a pointer to a Cell instance
+ * @return  0 if the cell has valid value,or 1 o.w
+ */
 int isInvalid(Cell * cell){
 return cell->isInValidInColumns||cell->isInValidInBlock||cell->isInValidInRow;
 
 }
-/*check*/
+/**
+ *
+ * @param game a pointer to a current Game instance
+ * @param x - the column of the cell to be check
+ * @param y  -the row of the cell to be check
+ */
 void checkBlock(Game * game,int x,int y){
     int i,j;
     int ** table;
@@ -134,8 +146,7 @@ void freeMemory(void ** array,int size){
     free(array);
 }
 
-/*check*/
-void checkRow(Game * game,int x) {
+void checkColumns(Game *game, int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
     if(line==NULL){
@@ -164,8 +175,7 @@ void checkRow(Game * game,int x) {
     free(line);
 }
 
-/*check*/
-void checkColumns(Game * game,int x) {
+void checkRows(Game *game, int x) {
     int i;
     int *line = calloc((unsigned int)DIM, sizeof(int));
     if(line==NULL){
@@ -236,16 +246,16 @@ void createValuesArray(Game*game,int x,int y,int* values){
     for(;i<=DIM;i++){
         game->board[x][y].value=i;
         checkBlock(game,x,y);
-        checkRow(game,y);
-        checkColumns(game,x);
+        checkColumns(game, y);
+        checkRows(game, x);
         if(!isInvalid(&(game->board[x][y]))){
             values[j]=i;
             j++;
         }
         game->board[x][y].value=0;
         checkBlock(game,x,y);
-        checkRow(game,y);
-        checkColumns(game,x);
+        checkColumns(game, y);
+        checkRows(game, x);
     }
 }
 
@@ -278,31 +288,8 @@ void updateGameBoard(Game*game,int**board){
     }
 }
 
-void emptyBoard(Game*game){
-    int i,j;
-    for(i=0;i<DIM;i++){
-        for(j=0;j<DIM;j++){
-            game->board[i][j].value=0;
-        }
-    }
-}
 
-/*check*/
-int checkError(Game *game) {
 
-    int i,j;
-    for (i=0;i<DIM;i++){
-        for(j=0;j<DIM;j++){
-            if(isInvalid(&(game->board[i][j]))){
-                return 0;
-            }
-        }
-    }
-    return 1;
-
-}
-
-/*check*/
 int writeToFile(Game *game, FILE *file) {
     Cell **index;
     int i, j;
@@ -346,6 +333,22 @@ int**copyBoard(Game*game){
     }
     return board;
 }
+Cell ** copyCellBoard(Game * game){
+    int i,j;
+    Cell ** board= createBoard(game->blockHeight,game->blockWidth);
+    for(i=0;i<DIM;i++){
+        for(j=0;j<DIM;j++){
+            board[i][j].value=game->board[i][j].value;
+            board[i][j].isPlayerMove=game->board[i][j].isPlayerMove;
+            board[i][j].isFixed=game->board[i][j].isFixed;
+            board[i][j].isInValidInBlock=game->board[i][j].isInValidInBlock;
+            board[i][j].isInValidInRow=game->board[i][j].isInValidInRow;
+            board[i][j].isInValidInColumns=game->board[i][j].isInValidInColumns;
+        }
+    }
+    return board;
+
+}
 
 
 int countPossibleValues(Game*game,int*num_val,int x, int y){
@@ -377,14 +380,17 @@ void fillValues(Game*game,int**values,int size){
     }
 }
 
-/*check*/
+/**
+ *
+ * @param game - a pointer to the current Game instance
+ */
 void updateCellValidity(Game*game) {
     int i, j;
     for (i = 0; i < DIM; i++) {
-        checkRow(game, i);
+        checkColumns(game, i);
     }
     for (j = 0; j < DIM; j++) {
-        checkColumns(game, j);
+        checkRows(game, j);
     }
     for (i = 0; i < DIM; i++) {
         for (j = 0; j<DIM; j++) {
@@ -411,20 +417,18 @@ void freeBoard(Game*game){
     free(game->board);
 }
 
-
-/*check*/
 int     checkInvalid(Game* game, int x, int y, int value) {
     int result;
     int temp = game->board[x][y].value;
     game->board[x][y].value = value;
     checkBlock(game, x, y);
-    checkRow(game, x);
-    checkColumns(game, y);
+    checkColumns(game, x);
+    checkRows(game, y);
     result = isInvalid(&game->board[x][y]);
     game->board[x][y].value = temp;
     checkBlock(game, x, y);
-    checkRow(game, x);
-    checkColumns(game, y);
+    checkColumns(game, x);
+    checkRows(game, y);
     return result;
 }
 
@@ -440,34 +444,17 @@ void clearBoard(Game*game){
 }
 
 */
-/*only for check the game*/
-void printerror(Game * game){
-    int i,j;
-    for(i=0;i<DIM;i++){
-        for(j=0;j<DIM;j++){
-            printf("%d ",isInvalid(&game->board[i][j]));
-        }
-        printf("\n");
-    }
-}
+/**
+ *
+ * @param game -a pointer to the current Game instance
+ * @return a copy of the Cell board of the game
+ */
 
-Cell ** copyCellBoard(Game * game){
-    int i,j;
-   Cell ** board= createBoard(game->blockHeight,game->blockWidth);
-   for(i=0;i<DIM;i++){
-       for(j=0;j<DIM;j++){
-           board[i][j].value=game->board[i][j].value;
-           board[i][j].isPlayerMove=game->board[i][j].isPlayerMove;
-           board[i][j].isFixed=game->board[i][j].isFixed;
-           board[i][j].isInValidInBlock=game->board[i][j].isInValidInBlock;
-           board[i][j].isInValidInRow=game->board[i][j].isInValidInRow;
-           board[i][j].isInValidInColumns=game->board[i][j].isInValidInColumns;
-       }
-   }
-   return board;
-
-}
-
+/**
+ *
+ * @param game -a pointer to the current Game instance
+ * @return 1 if the board doesn't contain invalid values,or 0 o.w
+ */
 int checkValidGame(Game *game){
     int i,j;
     updateCellValidity(game);

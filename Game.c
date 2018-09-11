@@ -9,7 +9,7 @@ int solve(Game* game, char * filePath){
         printError(NULL,SOLVE_IO_ERROR);
         return 0;
     }
-    readFromFile2(file,game,1);
+    readFromFile(file,game,1);
     fclose(file);
     return 1;
 }
@@ -23,7 +23,7 @@ int edit(Game * game, char * filePath){
             return 0;
 
         }
-        readFromFile2(file, game,2);
+        readFromFile(file, game,2);
         fclose(file);
     }
     else {
@@ -100,8 +100,8 @@ int set(Game* game,int x,int y,int value){
 
     game->board[x][y].value=value;
     checkBlock(game,x,y);
-    checkRow(game,x);
-    checkColumns(game,y);
+    checkColumns(game, x);
+    checkRows(game, y);
     return 1;
 }
 
@@ -184,8 +184,8 @@ int undo(Game * game) {
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
         game->board[move[0]][move[1]].value = move[2];
-        checkRow(game, move[0]);
-        checkColumns(game, move[1]);
+        checkColumns(game, move[0]);
+        checkRows(game, move[1]);
         checkBlock(game, move[0], move[1]);
     }
     printBoard(game);
@@ -217,8 +217,8 @@ int redo(Game *game) {
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
         game->board[move[0]][move[1]].value = move[3];
-        checkRow(game, move[0]);
-        checkColumns(game, move[1]);
+        checkColumns(game, move[0]);
+        checkRows(game, move[1]);
         checkBlock(game, move[0], move[1]);
     }
     printBoard(game);
@@ -364,8 +364,8 @@ int reset(Game *game) {
         for (i = 0; i < game->list->pointer->size; i++) {
             move = game->list->pointer->data[i];
             game->board[move[0]][move[1]].value = move[2];
-            checkRow(game,move[0]);
-            checkColumns(game,move[1]);
+            checkColumns(game, move[0]);
+            checkRows(game, move[1]);
             checkBlock(game,move[0],move[1]);
         }
         game->list->pointer=game->list->pointer->previous;

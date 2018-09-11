@@ -1,5 +1,6 @@
 #include "List.h"
 /*check*/
+
 Node  * createNode(int ** data,int size){
     Node * node=calloc(1, sizeof(Node));
     if(node==NULL){
@@ -25,15 +26,14 @@ List * createList(){
     return list;
 }
 /*check*/
-int printList(List * list){
+void printList(List * list){
     Node * node;
     for(node=list->head;node!=NULL;node=node->next){
         printData(node->data,node->size);
     }
-    return 1;
 }
 /*check*/
-int printData(int **data,int size){
+void printData(int **data,int size){
     int r,g;
     for(r=0;r<size;r++) {
         for ( g=0; g < 4; g++) {
@@ -41,7 +41,6 @@ int printData(int **data,int size){
         }
         printf("\n");
     }
-    return 1;
 }
 
 
