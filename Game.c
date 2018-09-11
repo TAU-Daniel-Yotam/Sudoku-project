@@ -99,6 +99,10 @@ int set(Game* game,int x,int y,int value){
     addLast(game->list,listData,1);
 
     game->board[x][y].value=value;
+    if (value)
+        game->board[x][y].isPlayerMove=1;
+    else
+        game->board[x][y].isPlayerMove= 0;
     checkBlock(game,x,y);
     checkColumns(game, x);
     checkRows(game, y);
@@ -184,6 +188,8 @@ int undo(Game * game) {
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
         game->board[move[0]][move[1]].value = move[2];
+        if(!move[2])
+            game->board[move[0]][move[1]].isPlayerMove=0;
         checkColumns(game, move[0]);
         checkRows(game, move[1]);
         checkBlock(game, move[0], move[1]);
@@ -217,6 +223,8 @@ int redo(Game *game) {
     for (i = 0; i < game->list->pointer->size; i++) {
         move = game->list->pointer->data[i];
         game->board[move[0]][move[1]].value = move[3];
+        if(move[3])
+            game->board[move[0]][move[1]].isPlayerMove=1;
         checkColumns(game, move[0]);
         checkRows(game, move[1]);
         checkBlock(game, move[0], move[1]);
@@ -281,7 +289,7 @@ int hint(Game* game, int x, int y){
 int numSolution(Game * game){
     int number;
     Game * newGame;
-    if(!checkError(&game)) {
+    if(!checkError(game)) {
         printError(game, ERRONEOUS_BOARD_ERROR);
         return 0;
     }
@@ -364,6 +372,10 @@ int reset(Game *game) {
         for (i = 0; i < game->list->pointer->size; i++) {
             move = game->list->pointer->data[i];
             game->board[move[0]][move[1]].value = move[2];
+            if(!move[2])
+                game->board[move[0]][move[1]].isPlayerMove=0;
+            else
+                game->board[move[0]][move[1]].isPlayerMove=1;
             checkColumns(game, move[0]);
             checkRows(game, move[1]);
             checkBlock(game,move[0],move[1]);
