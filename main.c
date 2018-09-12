@@ -3,14 +3,17 @@
 #include "Game.h"
 #include "Parser.h"
 #include "MainAux.h"
+#include <time.h>
 
 int main() {
     int exit, type, eof, done;
     Game game;
     char *command;
     Command parsedCommand;
+    srand(time(NULL));
     game.board=NULL;
     game.list=NULL;
+    game.markError=1;
     parsedCommand.intArgs=NULL;
     parsedCommand.strArg=NULL;
     command=NULL;
