@@ -299,6 +299,7 @@ int numSolution(Game * game){
         printf("The puzzle has more than 1 solution, try to edit it further\n");
     }
     freeGame(newGame);
+    free(newGame);
     return 1;
 }
 
