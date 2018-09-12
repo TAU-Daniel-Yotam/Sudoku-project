@@ -1,6 +1,5 @@
 #include "List.h"
 /*check*/
-
 Node  * createNode(int ** data,int size){
     Node * node=calloc(1, sizeof(Node));
     if(node==NULL){
@@ -94,6 +93,7 @@ void freeNode(Node*n){
     for(i=0;i<n->size;i++){
         free(n->data[i]);
     }
+    free(n->data);
     free(n);
 }
 /*check*/

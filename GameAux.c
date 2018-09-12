@@ -227,24 +227,6 @@ int checkEmpty(Game*game){
     return 1;
 }
 
-void createValuesArray(Game*game,int x,int y,int* values){
-    int i=1,j=0;
-    for(;i<=DIM;i++){
-        game->board[x][y].value=i;
-        checkBlock(game,x,y);
-        checkColumns(game, y);
-        checkRows(game, x);
-        if(!isInvalid(&(game->board[x][y]))){
-            values[j]=i;
-            j++;
-        }
-        game->board[x][y].value=0;
-        checkBlock(game,x,y);
-        checkColumns(game, y);
-        checkRows(game, x);
-    }
-}
-
 void createListDataGenerate(Game*game,int**listData){
     int i,j,count;
     count=0;
@@ -355,17 +337,6 @@ int countPossibleValues(Game*game,int*num_val,int x, int y){
 }
 
 
-void fillValues(Game*game,int**values,int size){
-    int i,a,b;
-    if(size==0) return;
-    for(i=0;i<size;i++){
-        a=values[i][0];
-        b=values[i][1];
-        game->board[a][b].value=values[i][3];
-        game->board[a][b].isPlayerMove=1;
-        printf("Cell <%d,%d> set to %d\n",values[i][0]+1,values[i][1]+1,values[i][3]);
-    }
-}
 void emptyBoard(Game*game){
     int i,j;
     for(i=0;i<DIM;i++){
@@ -412,7 +383,7 @@ void freeBoard(Game*game){
     free(game->board);
 }
 
-int     checkInvalid(Game* game, int x, int y, int value) {
+int checkInvalid(Game* game, int x, int y, int value) {
     int result;
     int temp = game->board[x][y].value;
     game->board[x][y].value = value;
