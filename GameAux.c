@@ -324,8 +324,9 @@ Cell ** copyCellBoard(Game * game){
     Cell ** board= createBoard(game->blockHeight,game->blockWidth);
     for(i=0;i<DIM;i++){
         for(j=0;j<DIM;j++){
+            if(game->board[i][j].value)
+                board[i][j].isPlayerMove=1;
             board[i][j].value=game->board[i][j].value;
-            board[i][j].isPlayerMove=game->board[i][j].isPlayerMove;
             board[i][j].isFixed=game->board[i][j].isFixed;
             board[i][j].isInValidInBlock=game->board[i][j].isInValidInBlock;
             board[i][j].isInValidInRow=game->board[i][j].isInValidInRow;
