@@ -68,7 +68,7 @@ int main() {
                 if (done)
                     printBoard(&game);
                 if (checkFullBoard(&game)&&game.mode==1&&done) {
-                    if (checkValidGame(&game)) {
+                    if (checkBoard(&game)) {
                         printf("Puzzle solved successfully\n");
                         game.mode = 0;
                     } else
