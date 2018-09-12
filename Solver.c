@@ -130,6 +130,7 @@ int countSolutions(Game* game) {
         }
 
     }
+    freeStack(stack,DIM*DIM);
     return counter;
 }
 
