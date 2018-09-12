@@ -1,4 +1,12 @@
-
+/**
+ * Exceptions Summary: This module handles the printing of all runtime errors that may occur.
+ *
+ * enum Exception: An enum that lists all possible runtime errors specified in the instructions pdf and more
+ *
+ * Functions:
+ *      printError - prints the relevant error according to the received arguments
+ *
+ * */
 
 #ifndef SUDOKU_SOFTWARE_PROJECT_EXCEPTIONS_H
 #define SUDOKU_SOFTWARE_PROJECT_EXCEPTIONS_H
@@ -26,6 +34,11 @@ typedef enum Exception{
     ILP_ERROR
 }Exception;
 
+/**
+ *
+ * @param game - A pointer to the current Game instance that contains all game info
+ * @param e - An enum instance that decides which error to print
+ */
 void printError(Game*game,Exception e);
 
 #endif

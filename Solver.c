@@ -86,7 +86,12 @@ void incrementXY(Game * game,int * x,int* y);
  */
 int findRightMove(Game* game, int x, int y, int from);
 
-
+/**
+ *
+ * @param game - a pointer to the current game object that contains all game info
+ * @param board - a 2d array that contains a copy (values only) of the current game board
+ * @return
+ */
 int ILPSolve(Game*game,int**board){
     GRBenv    *env;
     GRBmodel  *model;
