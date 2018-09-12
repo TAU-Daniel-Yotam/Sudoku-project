@@ -44,7 +44,6 @@ int main() {
                 done=solve(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
-                    printBoard(&game);
                 }
                 free(parsedCommand.strArg);
                 break;
@@ -52,7 +51,6 @@ int main() {
                 done=edit(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
-                    printBoard(&game);
                 }
                 free(parsedCommand.strArg);
                 break;
