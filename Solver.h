@@ -13,7 +13,19 @@
 #define SUBDIM2  (game->columns)
 #define DIM    (SUBDIM1*SUBDIM2)*/
 
+/**
+ *
+ * @param game - a pointer to the current game object that contains all game info
+ * @param board - a 2d array that contains a copy (values only) of the current game board
+ * @return 1 if solved, -1 if not feasible, 0 if an error occured
+ */
 int ILPSolve(Game*game,int**board);
-int detSolve(Game* game);
+
+/**
+ *
+ * @param game - a pointer to the current game object that contains all game info
+ * @return count - the number of solutions found for the given game
+ */
+int countSolutions(Game* game);
 
 #endif

@@ -24,25 +24,7 @@ List * createList(){
     list->pointer=NULL;
     return list;
 }
-/*check*/
-int printList(List * list){
-    Node * node;
-    for(node=list->head;node!=NULL;node=node->next){
-        printData(node->data,node->size);
-    }
-    return 1;
-}
-/*check*/
-int printData(int **data,int size){
-    int r,g;
-    for(r=0;r<size;r++) {
-        for ( g=0; g < 4; g++) {
-            printf("%d ", data[r][g]);
-        }
-        printf("\n");
-    }
-    return 1;
-}
+
 
 
 /*check*/

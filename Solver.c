@@ -71,27 +71,20 @@ void updateBoard(Game*game,int**board,double*obj);
 /**
  *
  * @param game - a pointer to the current game object that contains all game info
- * @param x
- * @param y
+ * @param x,y - indices in the game board
  */
 void incrementXY(Game * game,int * x,int* y);
 
 /**
  *
  * @param game - a pointer to the current game object that contains all game info
- * @param x
- * @param y
- * @param from
- * @return
+ * @param x,y - indices of the cell to find a legal value to
+ * @param from - a lower bound to the values to check if legal
+ * @return rightMove - the lowest legal value for the cell (above the lower bound)
  */
 int findRightMove(Game* game, int x, int y, int from);
 
-/**
- *
- * @param game - a pointer to the current game object that contains all game info
- * @param board - a 2d array that contains a copy (values only) of the current game board
- * @return
- */
+
 int ILPSolve(Game*game,int**board){
     GRBenv    *env;
     GRBmodel  *model;
@@ -301,7 +294,7 @@ void updateBoard(Game*game,int**board,double*obj){
     }
 }
 
-int detSolve(Game* game) {
+int countSolutions(Game* game) {
     int x,y,*data,counter,rightMove,value;
     Stack * stack =calloc(1, sizeof(Stack));
     init(stack,DIM*DIM);

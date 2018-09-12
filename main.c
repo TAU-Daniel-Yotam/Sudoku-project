@@ -100,7 +100,7 @@ int main() {
             case 13:
                 done=autofill(&game);
                 if (checkFullBoard(&game)&&game.mode==1&&done) {
-                    if (checkValidGame(&game)) {
+                    if (checkError(&game)) {
                         printf("Puzzle solved successfully\n");
                         game.mode = 0;
                     } else
