@@ -93,6 +93,7 @@ void freeNode(Node*n){
     for(i=0;i<n->size;i++){
         free(n->data[i]);
     }
+    free(n->data);
     free(n);
 }
 /*check*/
