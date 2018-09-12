@@ -44,5 +44,6 @@ void push(Stack * stack ,int x,int y);
  */
 int * pop(Stack * stack);
 
+void freeStack(Stack*stack, int size);
 
 #endif

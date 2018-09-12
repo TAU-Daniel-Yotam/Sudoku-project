@@ -296,7 +296,7 @@ void updateBoard(Game*game,int**board,double*obj){
 
 int countSolutions(Game* game) {
     int x,y,*data,counter,rightMove,value;
-    Stack * stack =calloc(1, sizeof(Stack));
+    Stack * stack =(Stack*)calloc(1, sizeof(Stack));
     init(stack,DIM*DIM);
     x=0;
     y=0;
@@ -332,6 +332,7 @@ int countSolutions(Game* game) {
         }
 
     }
+    freeStack(stack,DIM*DIM);
     return counter;
 }
 

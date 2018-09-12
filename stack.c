@@ -29,7 +29,13 @@ void push(Stack * stack ,int x,int y){
 int * pop(Stack * stack){
     stack->size--;
     return stack->array[stack->size];
+}
 
-
-
+void freeStack(Stack*stack, int size){
+    int i;
+    for(i=0;i<=size;i++){
+        free(stack->array[i]);
+    }
+    free(stack->array);
+    free(stack);
 }
