@@ -117,7 +117,7 @@ int validate(Game *game,int toPrint) {
         return 0;
     }
     if(toPrint)
-        printf("Validation passed board is solvable\n");
+        printf("Validation passed: board is solvable\n");
     freeMemory((void**)board,DIM);
     return 1;
 
@@ -167,8 +167,6 @@ int generate(Game*game,int x,int y){
     addLast(game->list,listData,y);
     return 1;
 }
-
-/*check*/
 int undo(Game * game) {
     int i;
     char from,to;
@@ -196,7 +194,7 @@ int undo(Game * game) {
     return 1;
 }
 
-/*check*/
+
 int redo(Game *game) {
     char from;
     char to;
@@ -226,7 +224,7 @@ int redo(Game *game) {
     }
     return 1;
 }
-/*check*/
+
 int save(Game *game, char *path) {
     FILE *file=fopen(path,"w");
     if (file == NULL) {
@@ -349,28 +347,28 @@ int autofill(Game*gamea){
     }
     return 1;
 }
-/*check*/
+
 int reset(Game *game) {
     int i;
-    int * move;
-    if(!game->list->length)
+    int *move;
+    if (!game->list->length)
         return 1;
-    while (game->list->pointer!=NULL) {
+    while (game->list->pointer != NULL) {
         for (i = 0; i < game->list->pointer->size; i++) {
             move = game->list->pointer->data[i];
             game->board[move[0]][move[1]].value = move[2];
             checkColumns(game, move[0]);
             checkRows(game, move[1]);
-            checkBlock(game,move[0],move[1]);
+            checkBlock(game, move[0], move[1]);
         }
-        game->list->pointer=game->list->pointer->previous;
+        game->list->pointer = game->list->pointer->previous;
     }
-    deleteTail(game->list,game->list->head);
-    deleteAtPosition(game->list,0);
+    deleteTail(game->list, game->list->head);
+    deleteAtPosition(game->list, 0);
     printf("Board reset\n");
     return 1;
 }
-/*check*/
+
 void exitGame(Game*game){
     freeGame(game);
 }

@@ -123,7 +123,7 @@ void checkBlock(Game * game,int x,int y){
     }
     freeMemory((void**)table,DIM);
 }
-/*check*/
+
 void freeMemory(void ** array,int size){
     int i;
     for(i=0;i<size;i++) {
@@ -216,7 +216,6 @@ int fillXvalues(Game*game,int x){
 }
 
 
-/*check*/
 int checkEmpty(Game*game){
     int i,j;
     for(i=0;i<DIM;i++){
@@ -279,7 +278,6 @@ int writeToFile(Game *game, FILE *file) {
     return 1;
 }
 
-/*check*/
 int**copyBoard(Game*game){
     int size,i,j;
     int**board;
@@ -346,10 +344,6 @@ void emptyBoard(Game*game){
     }
 }
 
-/**
- *
- * @param game - a pointer to the current Game instance
- */
 void updateCellValidity(Game*game) {
     int i, j;
     for (i = 0; i < DIM; i++) {
@@ -368,13 +362,13 @@ void updateCellValidity(Game*game) {
     }
 }
 
-/*check*/
+
 void freeGame(Game*game){
     freeBoard(game);
     freeList(game->list);
 }
 
-/*check*/
+
 void freeBoard(Game*game){
     int i;
     for(i=0;i<DIM;i++){
@@ -398,18 +392,7 @@ int checkInvalid(Game* game, int x, int y, int value) {
     return result;
 }
 
-/*
-void clearBoard(Game*game){
-    int i,j;
-    for(i=0;i<Line(game->blockWidth,game->blockHeight);i++){
-        for(j=0;j<Line(game->blockWidth,game->blockHeight);j++){
-            game->board[i][j].value=0;
-        }
-    }
 
-}
-
-*/
 int checkError(Game *game) {
 
     int i,j;
