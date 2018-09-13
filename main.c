@@ -106,6 +106,7 @@ int main() {
                 if (checkFullBoard(&game) && game.mode==1 && done) {
                     if (checkError(&game)) {
                         printf("Puzzle solved successfully\n");
+
                         game.mode = 0;
                     } else
                         printf("Puzzle solution erroneous\n");
