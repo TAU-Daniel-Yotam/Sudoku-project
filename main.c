@@ -47,6 +47,7 @@ int main() {
                 done=solve(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
+                    printBoard(&game);
                 }
                 free(parsedCommand.strArg);
                 break;
@@ -54,6 +55,7 @@ int main() {
                 done=edit(&game, parsedCommand.strArg);
                 if(done) {
                     updateCellValidity(&game);
+                    printBoard(&game);
                 }
                 free(parsedCommand.strArg);
                 break;
@@ -80,6 +82,7 @@ int main() {
                 break;
             case 7:
                 generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
+                printBoard(&game);
                 break;
             case 8:
                 undo(&game);
@@ -99,7 +102,8 @@ int main() {
                 break;
             case 13:
                 done=autofill(&game);
-                if (checkFullBoard(&game)&&game.mode==1&&done) {
+                printBoard(&game);
+                if (checkFullBoard(&game) && game.mode==1 && done) {
                     if (checkError(&game)) {
                         printf("Puzzle solved successfully\n");
                         game.mode = 0;

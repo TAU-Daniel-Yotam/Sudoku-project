@@ -1,7 +1,6 @@
 
 #include "Game.h"
 
-/*check*/
 int solve(Game* game, char * filePath){
     FILE * file;
     file = fopen(filePath,"r");
@@ -13,7 +12,6 @@ int solve(Game* game, char * filePath){
     fclose(file);
     return 1;
 }
-/*check*/
 int edit(Game * game, char * filePath){
     FILE * file;
     if (filePath!=NULL) {
@@ -33,7 +31,6 @@ int edit(Game * game, char * filePath){
     return 1;
 }
 
-/*check*/
 int mark_errors(Game* game, int arg){
     if(arg!=0 && arg!=1){
         printError(game,BINARY_RANGE_ERROR);
@@ -168,7 +165,6 @@ int generate(Game*game,int x,int y){
     }
     createListDataGenerate(game,listData);
     addLast(game->list,listData,y);
-    printBoard(game);
     return 1;
 }
 
@@ -352,7 +348,6 @@ int autofill(Game*gamea){
         addLast(game->list, cellsToFill, (int) count);
         /*freeMemory((void **) cellsToFill, (int) count) - this is freed by list functions;*/
     }
-    printBoard(game);
     return 1;
 }
 /*check*/
