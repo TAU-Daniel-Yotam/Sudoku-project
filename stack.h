@@ -1,20 +1,21 @@
 #ifndef STACK
 #define STACK
 /**
-* stack.h summary:
-*                 This module contains a Stack struct and functions that are related to the backtrack algorithm to solve Sudoku puzzles
-* Structs:
-* struct Stack                                 - contains objects -(x,y)- when x represents a column and y represents a row
-* Functions:
-* void init(Stack * stack ,int size)            -receives a pointer to Stack instance and initializes its values
-* void push(Stack * stack ,int x,int y)         -Pushes an item-(x,y)- onto the top of this Stack.
-* int * pop(Stack * stack)                      -Removes the object-(x,y)- at the top of this Stack and returns
- *                                              that object as the value of this function.
+ * stack.h summary:
+ * This module defines a Stack and functions that are related to the backtrack algorithm to solve Sudoku puzzles
+ *
+ * Structs:
+ * Stack - an array based stack
+ *
+ * Functions:
+ * init      - receives a pointer to Stack instance and initializes its fields and values
+ * push      - Pushes an item (x,y) into the top of the Stack.
+ * pop       - Removes the object (x,y) at the top of this Stack and returns it
+ * freeStack - frees all resources allocated for the stack
 */
 
-/**@property array- contains objects of the shape(x,y) - representing coordinates
- * @property size- current array size - The number of objects that the array contains
- * @property
+/**@property array - contains the data of the stack - a 2d array, array[i] = {x,y} where x,y are indices in the board
+ * @property size - current stack size - The number of objects pushed to the stack
  */
 typedef struct Stack{
     int ** array;
@@ -26,24 +27,28 @@ typedef struct Stack{
 /**
  *
  * @param stack - a pointer to a Stack instance
- * @param size -the size requested for the stack maximal size
+ * @param size - the maximal stack size
  */
 void init(Stack * stack ,int size);
 /**
- * @pre-the stack is not full
- * @param stack -a pointer to a Stack instance
- * @param x - x represent a column
- * @param y- y represent a row
+ * @pre - the stack is not full
+ * @param stack - a pointer to a Stack instance
+ * @param x,y - indices in the game board
  **/
 
 void push(Stack * stack ,int x,int y);
 /**
- * @pre-the stack is not empty
- * @param stack -a pointer to a Stack instance
- * @return -an object-(x,y)
+ * @pre - the stack is not empty
+ * @param stack - a pointer to a Stack instance
+ * @return an array {x,y} where x,y are indices in the board
  */
 int * pop(Stack * stack);
 
+/**
+ *
+ * @param stack - a pointer to the stack to be freed
+ * @param size - the size of the array allocated in the stack
+ */
 void freeStack(Stack*stack, int size);
 
 #endif

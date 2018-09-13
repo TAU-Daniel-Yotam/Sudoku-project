@@ -4,13 +4,7 @@
  *
  * Structs:
  *
- * Command: type:    -1 if invalid, or 1-15 according to the instructions
- *          numArgs: The number of expected arguments for the command
- *          intArgs: An array of size 3 that contains integer arguments for the command.
- *                   if a command of certain type expects less than 3 int arguments or
- *                   no int arguments, the value of unneeded cells will be -1
- *          strArgs: A pointer to a string argument for the command (like "save xxx") or NULL if
- *                   no string argument expected (like "set")
+ * Command - a struct that contains all the data that was parsed from a raw user input
  *
  * Functions:
  *
@@ -29,6 +23,15 @@
 #ifndef SUDOKU_SOFTWARE_PROJECT_PARSER_H
 #define SUDOKU_SOFTWARE_PROJECT_PARSER_H
 
+/**
+ * @property type - the command type: -1 if invalid, or 1-15 according to the instructions
+ * @property numArgs - The number of expected arguments for the command
+ * @property intArgs - An array of size 3 that contains integer arguments for the command.
+ *                   if a command of certain type expects less than 3 int arguments or
+ *                   no int arguments, the value of unneeded cells will be -1
+ * @property strArg - A pointer to a string argument for the command (like "save xxx") or NULL if
+ *                   no string argument expected (like "set")
+ */
 typedef struct Command{
     int type,numArgs;
     int* intArgs;

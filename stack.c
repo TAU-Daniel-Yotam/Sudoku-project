@@ -9,7 +9,7 @@ void init(Stack * stack,int size ){
         return;
     }
     for(i=0;i<size+1;i++){
-        array[i]=(int*)calloc(3, sizeof(int));
+        array[i]=(int*)calloc(2, sizeof(int));
         if (array[i]==NULL){
             printError(NULL,MEMORY_ALLOC_ERROR);
             return;

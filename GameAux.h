@@ -6,29 +6,29 @@
  *  This module contains all the auxiliary functions needed to execute the different game commands
  *
  * Functions:
- *  readFromFile -  Reads the information from the given file and updates the game  accordingly - dimensions, values, errors, etc.
- *  initGame - Releases resources of the previous game if such a game exists and updates the game according to the arguments
- *  createBoard - Creates a new empty sudoku game board instance according to given block dimensions
- *  printDashes - an auxiliary function for the "printBoard" function ,print dashes
- *  checkRange - Checks whether a given number is in a specific range according to the game parameters
- *  isInvalid - checks whether the value of a cell already appears in another cell in its row or in its block or column
- *  checkBlock - given coordinates of a cell, it updates the errors of the block in which it is located
- *  freeMemory - frees memory of a two-dimensional array (of any type)
- *  checkColumns - update the errors in specific columns
- *  checkRow - update the errors in specific rows
- *  fillXvalues - Fills x legal values in an empty given board
- *  emptyBoard -  Empties the board of a given game
+ *  readFromFile  -  Reads the information from the given file and updates the game  accordingly - dimensions, values, errors, etc.
+ *  initGame      - Releases resources of the previous game if such a game exists and updates the game according to the arguments
+ *  createBoard   - Creates a new empty sudoku game board instance according to given block dimensions
+ *  printDashes   - an auxiliary function for the "printBoard" function ,print dashes
+ *  checkRange    - Checks whether a given number is in a specific range according to the game parameters
+ *  isInvalid     - checks whether the value of a cell already appears in another cell in its row or in its block or column
+ *  checkBlock    - given coordinates of a cell, it updates the errors of the block in which it is located
+ *  freeMemory    - frees memory of a two-dimensional array (of any type)
+ *  checkColumns  - update the errors in specific columns
+ *  checkRow      - update the errors in specific rows
+ *  fillXvalues   - Fills x legal values in an empty given board
+ *  emptyBoard    -  Empties the board of a given game
  *  createListDataGenerate - Creates a 2d array to store in the moves list for future undo/redo commands
  *  updateGameBoard - Fills the board with trivial values after an 'autofill' command
- *  writeToFile - writes the dimensions of the game and its board in a file
- *  copyBoard - Creates a values-only copy of the game's board
+ *  writeToFile   - writes the dimensions of the game and its board in a file
+ *  copyBoard     - Creates a values-only copy of the game's board
  *  copyCellBoard - Creates a full copy of the game's board
  *  countPossibleValues - Counts the number of possible values in a given cell in the board
  *  updateCellValidity - updates the following fields for each cell-isInValidInRow,isInValidInColumns and isInValidInBlock.
- *  freeGame - Frees all game resources
- *  freeBoard - Frees the memory allocated for the game board (used in 'freeGame')
- *  checkInvalid - Checks whether the given value in the given cell will cause errors or not
- *  checkError - checks whether the value of any cell already appears in another cell in its row or in its block or column
+ *  freeGame      - Frees all game resources
+ *  freeBoard     - Frees the memory allocated for the game board (used in 'freeGame')
+ *  checkInvalid  - Checks whether the given value in the given cell will cause errors or not
+ *  checkError    - checks whether the value of any cell already appears in another cell in its row or in its block or column
 
 **/
 
@@ -52,13 +52,6 @@ int     readFromFile(FILE *file,Game * game,int mode);
  * @param blockWidth- the game's block width
  */
 void    initGame(Game * game,int mode,int blockHeight,int blockWidth);
-
-/**
- *
- * @param game - a pointer  to the current Game instance
- * @return - 1 if the borad is valid (has no errors) or 0 o.w
- */
-int     checkBoard(Game * game);
 
 /**
  *

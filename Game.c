@@ -346,7 +346,6 @@ int autofill(Game*gamea){
         }
         updateCellValidity(game);
         addLast(game->list, cellsToFill, (int) count);
-        /*freeMemory((void **) cellsToFill, (int) count) - this is freed by list functions;*/
     }
     return 1;
 }
