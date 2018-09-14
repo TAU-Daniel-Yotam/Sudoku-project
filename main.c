@@ -81,8 +81,9 @@ int main() {
                 validate(&game,1);
                 break;
             case 7:
-                generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
-                printBoard(&game);
+                done=generate(&game, parsedCommand.intArgs[0], parsedCommand.intArgs[1]);
+                if(done)
+                    printBoard(&game);
                 break;
             case 8:
                 undo(&game);
