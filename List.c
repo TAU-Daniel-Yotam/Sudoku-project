@@ -25,9 +25,7 @@ List * createList(){
     return list;
 }
 
-
-
-
+/* used by 'addLast function' */
 int deleteAtPosition(List *list,int pos) {
     int j;
     Node *node = list->head;
@@ -51,7 +49,7 @@ int deleteAtPosition(List *list,int pos) {
     return 1;
 }
 
-
+/* used by 'addLast function' */
 int deleteTail(List *list,Node * node){
     while(node->next!=NULL){
         Node * temp=node->next;
@@ -65,6 +63,7 @@ int deleteTail(List *list,Node * node){
     return 1;
 }
 
+/* add move and clear list tail after player's move */
 int addLast(List * list,int ** data,int size){
     Node * node;
     if(list->pointer!=list->tail){

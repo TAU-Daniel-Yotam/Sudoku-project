@@ -32,6 +32,7 @@ int readFromFile(FILE *file,Game * game,int mode) {
     return 1;
 }
 
+/* init current game instance */
 void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     if(game->board!=NULL){
         freeBoard(game);
@@ -44,6 +45,7 @@ void initGame(Game * game,int mode,int blockHeight,int blockWidth){
     game->list=createList();
 
 }
+
 Cell ** createBoard(int columns,int row){
     int i;
     Cell ** board;
@@ -62,6 +64,7 @@ Cell ** createBoard(int columns,int row){
     return board;
 }
 
+/* used in printBoard function */
 void printDashes(int blockWidth,int blockHeight){
     int j;
     for ( j=0;j<4*blockWidth*blockHeight+blockHeight +1;j++){
@@ -70,19 +73,17 @@ void printDashes(int blockWidth,int blockHeight){
             printf("\n");
     }
 }
-/*type:
- 0-x or y
- 1-z*/
 
+/*type: 0 for 0-N or 1 for 1-N */
 int checkRange(Game* game,int a,int type){
     if((a<0 || a > DIM) && type==1) return 0;
     if((a<=0 || a> DIM) && type==0) return 0;
     return 1;
 }
 
+/* return 1 if *NOT* valid */
 int isInvalid(Cell * cell){
 return cell->isInValidInColumns||cell->isInValidInBlock||cell->isInValidInRow;
-
 }
 
 void checkBlock(Game * game,int x,int y){
@@ -187,7 +188,7 @@ void checkRows(Game *game, int x) {
     free(line);
 }
 
-
+/* used by the 'generate' function */
 int fillXvalues(Game*game,int x){
     int tries,count,i,j,size;
     int value;
@@ -216,6 +217,7 @@ int fillXvalues(Game*game,int x){
 }
 
 
+/* used by the 'generate' function */
 int checkEmpty(Game*game){
     int i,j;
     for(i=0;i<DIM;i++){
@@ -226,6 +228,7 @@ int checkEmpty(Game*game){
     return 1;
 }
 
+/* used by the 'generate' function */
 void createListDataGenerate(Game*game,int**listData){
     int i,j,count;
     count=0;
@@ -278,6 +281,7 @@ int writeToFile(Game *game, FILE *file) {
     return 1;
 }
 
+/* creates a 'light' copy of the board - values only */
 int**copyBoard(Game*game){
     int size,i,j;
     int**board;
@@ -299,6 +303,8 @@ int**copyBoard(Game*game){
     }
     return board;
 }
+
+/* creates a 'deep' copy of the board - full cells properties */
 Cell ** copyCellBoard(Game * game){
     int i,j;
     Cell ** board= createBoard(game->blockHeight,game->blockWidth);
@@ -346,13 +352,13 @@ void emptyBoard(Game*game){
 
 void updateCellValidity(Game*game) {
     int i, j;
-    for (i = 0; i < DIM; i++) {
+    for (i = 0; i < DIM; i++) {/* check all columns */
         checkColumns(game, i);
     }
-    for (j = 0; j < DIM; j++) {
+    for (j = 0; j < DIM; j++) {/* check all rows */
         checkRows(game, j);
     }
-    for (i = 0; i < DIM; i++) {
+    for (i = 0; i < DIM; i++) { /* check all blocks */
         for (j = 0; j<DIM; j++) {
             if (i % game->blockHeight == 0 && j % game->blockWidth == 0) {
                 checkBlock(game, i, j);
@@ -377,18 +383,19 @@ void freeBoard(Game*game){
     free(game->board);
 }
 
+
 int checkInvalid(Game* game, int x, int y, int value) {
     int result;
     int temp = game->board[x][y].value;
-    game->board[x][y].value = value;
+    game->board[x][y].value = value; /* change the value */
+    checkBlock(game, x, y);
+    checkColumns(game, x); /* update validity */
+    checkRows(game, y);
+    result = isInvalid(&game->board[x][y]); /* check it's validity */
+    game->board[x][y].value = temp; /* change back to original value */
     checkBlock(game, x, y);
     checkColumns(game, x);
-    checkRows(game, y);
-    result = isInvalid(&game->board[x][y]);
-    game->board[x][y].value = temp;
-    checkBlock(game, x, y);
-    checkColumns(game, x);
-    checkRows(game, y);
+    checkRows(game, y); /* restore previous validity */
     return result;
 }
 

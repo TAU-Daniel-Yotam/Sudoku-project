@@ -79,7 +79,7 @@ int set(Game* game,int x,int y,int value){
         printError(game,CELL_FIXED_ERROR);
         return 0;
     }
-    listData=(int**)calloc(1, sizeof(int *));/* 0:x,1:y,2:from,3:to */
+    listData=(int**)calloc(1, sizeof(int *));/* list data format: 0:x,1:y,2:from,3:to */
     if(listData==NULL){
         printError(game,MEMORY_ALLOC_ERROR);
         return 0;
@@ -137,7 +137,7 @@ int generate(Game*game,int x,int y){
         printError(game,BOARD_NOT_EMPTY_ERROR);
         return 0;
     }
-    do {
+    do { /* fill X values and then solve the board */
         emptyBoard(game);
         tries += fillXvalues(game, x);
         if(tries==1001){
@@ -150,7 +150,7 @@ int generate(Game*game,int x,int y){
     }while (solved==-1);
     updateGameBoard(game,board);
     freeMemory((void**)board,DIM);
-    while(removed < DIM*DIM-y){
+    while(removed < DIM*DIM-y){ /* remove all but y cells */
         do {
             i = rand() % DIM;
             j = rand() % DIM;
@@ -278,7 +278,7 @@ int numSolution(Game * game){
     if(!checkError(game)) {
         printError(game, ERRONEOUS_BOARD_ERROR);
         return 0;
-    }
+    } /* create a copy of the game so changes won't affect the game */
     newGame=(Game*)calloc(1, sizeof(Game));
     newGame->blockWidth=game->blockWidth;
     newGame->blockHeight=game->blockHeight;
@@ -311,9 +311,10 @@ int autofill(Game*gamea){
     for(i=0;i<DIM;i++){
         for(j=0;j<DIM;j++){
             if(!game->board[i][j].value){/* if cell is empty */
-                countPossibleValues(game,num_val,i,j);
+                countPossibleValues(game,num_val,i,j); /* after execution: num_val[0]=number of possible values, num_val[1]=lowest possible value */
                 if(num_val[0]==1) {
                     if(first){
+                        /* cellsToFill is used both for filling trivial values and to store the move in the list */
                         cellsToFill=(int**)realloc(NULL, (sizeof(int*))*(++count));
                         first=0;
                     }
@@ -353,7 +354,7 @@ int reset(Game *game) {
     int *move;
     if (!game->list->length)
         return 1;
-    while (game->list->pointer != NULL) {
+    while (game->list->pointer != NULL) { /* undo all moves */
         for (i = 0; i < game->list->pointer->size; i++) {
             move = game->list->pointer->data[i];
             game->board[move[0]][move[1]].value = move[2];
@@ -363,7 +364,7 @@ int reset(Game *game) {
         }
         game->list->pointer = game->list->pointer->previous;
     }
-    deleteTail(game->list, game->list->head);
+    deleteTail(game->list, game->list->head); /* clear list */
     deleteAtPosition(game->list, 0);
     printf("Board reset\n");
     return 1;

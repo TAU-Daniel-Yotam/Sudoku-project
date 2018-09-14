@@ -12,10 +12,10 @@
  *  printDashes   - an auxiliary function for the "printBoard" function ,print dashes
  *  checkRange    - Checks whether a given number is in a specific range according to the game parameters
  *  isInvalid     - checks whether the value of a cell already appears in another cell in its row or in its block or column
- *  checkBlock    - given coordinates of a cell, it updates the errors of the block in which it is located
+ *  checkBlock    - given coordinates of a cell, the function updates the 'isInvalid' field of all the cells in the block which it's located in
  *  freeMemory    - frees memory of a two-dimensional array (of any type)
- *  checkColumns  - update the errors in specific columns
- *  checkRow      - update the errors in specific rows
+ *  checkColumns  - update the 'isInvalid' field in all cells in specific columns
+ *  checkRow      - update the 'isInvalid' field in all cells in specific rows
  *  fillXvalues   - Fills x legal values in an empty given board
  *  emptyBoard    -  Empties the board of a given game
  *  createListDataGenerate - Creates a 2d array to store in the moves list for future undo/redo commands

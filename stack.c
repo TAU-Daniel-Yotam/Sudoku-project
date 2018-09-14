@@ -1,6 +1,6 @@
 #include "stack.h"
 
-
+/* stack data format: array[i] = {x,y} where x,y are indices in the board*/
 void init(Stack * stack,int size ){
     int i;
     int ** array=(int **)calloc((unsigned int)size+1, sizeof(int * ));

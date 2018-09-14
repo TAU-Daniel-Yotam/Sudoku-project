@@ -38,32 +38,32 @@ char* getInput(int size,int*eof){
     char *str;
     int ch;
     int len = 0;
-    str = realloc(NULL, sizeof(char)*size);
+    str = realloc(NULL, sizeof(char)*size);/* allocate initial array to store input */
     if(!str) {
         printError(NULL, MEMORY_ALLOC_ERROR);
         return NULL;
     }
     while(EOF!=(ch=fgetc(stdin)) && ch != '\n'){
         if(len>256){
-            str[0]='t';
+            str[0]='t'; /* intentionally invalid command because input is longer than 256 chars */
             str[1]='\0';
             return str;
         }
         str[len++]=(char)ch;
         if(len==size){
-            str = realloc(str, sizeof(char)*(size*=2));
+            str = realloc(str, sizeof(char)*(size*=2)); /* if input is too long resize the array */
             if(!str) {
                 printError(NULL, MEMORY_ALLOC_ERROR);
                 return NULL;
             }
         }
     }
-    if(ch==EOF) {
+    if(ch==EOF) { /* handle EOF */
         *eof=1;
         printf("\n");
     }
     str[len++]='\0';
-    str = realloc(str, sizeof(char)*len);
+    str = realloc(str, sizeof(char)*len); /* resize to exact input size */
     if(!str) {
         printError(NULL, MEMORY_ALLOC_ERROR);
         return NULL;
@@ -74,14 +74,14 @@ char* getInput(int size,int*eof){
 int parseCommand(Game* game, char*command, Command* parsedCommand){
     char* word;
     int i;
-    initCommand(parsedCommand);
+    initCommand(parsedCommand); /* remove all leftovers from previous commands */
     i=0;
     if(strlen(command)>256){
         parsedCommand->type=-1;
         return -1;
     }
     word=strtok(command," \t\r\n");
-    while(word!=NULL){
+    while(word!=NULL){ /* parse command type */
         if(i==0){
             if(!strcmp(word,"solve")){
                 parsedCommand->type=1;
@@ -183,7 +183,7 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
             }
         }
         else if(i<=parsedCommand->numArgs){
-            parseArg(parsedCommand,word,i);
+            parseArg(parsedCommand,word,i); /* parse the given arguments */
         }
         i++;
         word=strtok(NULL," \t\r\n");
@@ -192,20 +192,19 @@ int parseCommand(Game* game, char*command, Command* parsedCommand){
     if(i==0 && word==NULL){
         parsedCommand->type=-1;
     }
-    if(!validateArgs(parsedCommand)){
+    if(!validateArgs(parsedCommand)){ /* make sure the command was given the correct number of arguments (ignoring extra arguments) */
         parsedCommand->type=-1;
     }
     return parsedCommand->type;
 }
 
-/* fixed case "set zsf sg g" -> value not in range  */
 int parseArg(Command* command, char* arg, int argIndex){
     unsigned int i;
     switch(command->type){
         case 3:
         case 5:
         case 7:
-        case 11:
+        case 11: /* all int arguments commands */
             for(i=0;i<strlen(arg);i++){
                 if(!isInt(arg[i])){
                     command->intArgs[argIndex-1]=-2;
@@ -218,7 +217,7 @@ int parseArg(Command* command, char* arg, int argIndex){
             break;
         case 1:
         case 2:
-        case 10:
+        case 10:/* all string argument commands */
             command->strArg=(char*)calloc(strlen(arg)+1, sizeof(char));
             if(command->strArg==NULL){
                 printError(NULL,MEMORY_ALLOC_ERROR);

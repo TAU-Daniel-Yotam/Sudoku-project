@@ -28,7 +28,7 @@ int main() {
             type = parseCommand(&game, command, &parsedCommand);
             free(command);
         }
-        else{
+        else{ /* EOF is interpreted as an exit command */
             printf("\n");
             command=(char*)calloc(5, sizeof(char));
             if(command==NULL){
@@ -42,7 +42,7 @@ int main() {
             printError(&game, INVALID_COMMAND_ERROR);
             continue;
         }
-        switch (type) {
+        switch (type) { /* which command to execute */
             case 1:
                 done=solve(&game, parsedCommand.strArg);
                 if(done) {

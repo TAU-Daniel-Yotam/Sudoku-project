@@ -164,7 +164,7 @@ int ILPSolve(Game*game,int**board){
         freeResources(env,model,val,obj,vtype,lb,ind);
         return 0;
     }
-    if(optimstatus==2){
+    if(optimstatus==2){/* if model solves successfully */
         /* Get the solved board */
         error = GRBgetdblattrarray(model, GRB_DBL_ATTR_X, 0, DIM*DIM*DIM, obj);
         if (error) {
@@ -294,6 +294,7 @@ void updateBoard(Game*game,int**board,double*obj){
     }
 }
 
+
 int countSolutions(Game* game) {
     int x,y,*data,counter,rightMove,value;
     Stack * stack =(Stack*)calloc(1, sizeof(Stack));
@@ -302,14 +303,14 @@ int countSolutions(Game* game) {
     y=0;
     value=0;
     counter=0;
-    push(stack,-2,-2);
+    push(stack,-2,-2); /* push a 'start marker' */
     while(x!=-2){
 
-        while(x!=-1&&(game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {
+        while(x!=-1 && (game->board[x][y].isFixed || (game->board[x][y].isPlayerMove))) {/* skip fixed or played cells */
             incrementXY(game, &x, &y);
             value=0;
         }
-        if (x==-1) {
+        if (x==-1) { /* solution found */
             counter += 1;
             data = pop(stack);
             x = data[0];
@@ -323,7 +324,7 @@ int countSolutions(Game* game) {
             value=0;
         }
 
-        else {
+        else { /* backtrack */
             game->board[x][y].value=0;
             data=pop(stack);
             x=data[0];
