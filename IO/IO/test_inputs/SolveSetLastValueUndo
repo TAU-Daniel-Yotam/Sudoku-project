@@ -1,0 +1,6 @@
+solve in
+set 6 6 3
+print_board
+undo
+mark_errors 0
+exit

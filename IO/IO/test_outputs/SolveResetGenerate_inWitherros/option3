@@ -1,0 +1,31 @@
+Sudoku
+------
+Enter your command:
+Enter your command:
+----------------------------
+|  1   2*|        |        |
+|  2*    |        |        |
+|        |  4     |        |
+----------------------------
+|        |      3 |        |
+|        |      5 |        |
+|        |        |  3.    |
+----------------------------
+Enter your command:
+ERROR: invalid command
+Enter your command:
+----------------------------
+|  1   2*|        |        |
+|  2*    |        |        |
+|        |  4     |        |
+----------------------------
+|        |      3 |        |
+|        |      5 |        |
+|        |        |  3.    |
+----------------------------
+Enter your command:
+Error: board contains erroneous values
+Enter your command:
+Board reset
+Enter your command:
+Exiting...

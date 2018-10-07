@@ -1,0 +1,18 @@
+Sudoku
+------
+Enter your command:
+-------------------
+|        |        |
+|        |        |
+-------------------
+|        |        |
+|        |        |
+-------------------
+Enter your command:
+Error: value not in range 0-4
+Enter your command:
+Error: value not in range 0-4
+Enter your command:
+Error: value not in range 0-4
+Enter your command:
+Exiting...
