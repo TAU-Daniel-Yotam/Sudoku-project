@@ -1,9 +1,0 @@
-solve in
-print_board
-mark_errors 0
-print_board
-mark_errors 1
-print_board
-mark_errors 0
-print_board
-exit

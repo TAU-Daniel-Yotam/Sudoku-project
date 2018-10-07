@@ -1,8 +1,0 @@
-solve in
-mark_errors hi
-mark_errors 10
-mark_errors 01
-mark_errors   -  1
-mark_errors 78
-mark_errors 2
-exit

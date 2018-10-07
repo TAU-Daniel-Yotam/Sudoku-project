@@ -1,8 +1,0 @@
-solve in
-set 4 4 6
-set 1 1 6
-undo
-undo
-set 1 1 5
-redo
-exit

@@ -1,7 +1,0 @@
-edit in
-set 4 4 3
-generate 3 3
-set 1 1 1
-autofill
-reset
-exit
